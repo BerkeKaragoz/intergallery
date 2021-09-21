@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Header,
-  Param,
-  StreamableFile,
-  Res,
-} from '@nestjs/common';
+import { Controller, Get, Param, StreamableFile, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { createReadStream } from 'fs';

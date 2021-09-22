@@ -1,0 +1,16 @@
+.form-container {
+  display: flex;
+}
+
+form {
+  margin: 0 auto;
+}
+
+mat-form-field {
+  display: block;
+}
+
+button[type="submit"] {
+  margin-left: 100%;
+  transform: translateX(-100%);
+}

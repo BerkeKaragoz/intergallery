@@ -1,12 +1,20 @@
-<header>
+<mat-toolbar color="primary">
   <h3>{{ title }}</h3>
+
+  <span class="spacer"></span>
 
   <nav>
     <ul>
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="browse">Browse</a></li>
+      <li>
+        <button mat-flat-button color="accent" routerLink="/">Home</button>
+      </li>
+      <li>
+        <button mat-flat-button color="accent" routerLink="browse">
+          Browse
+        </button>
+      </li>
     </ul>
   </nav>
-</header>
+</mat-toolbar>
 
 <router-outlet></router-outlet>

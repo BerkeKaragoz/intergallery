@@ -6,13 +6,12 @@ import ormconfig from 'ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FileController } from './file/file.controller';
-import { User } from './model/entities/user.entity';
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
 import { MediaController } from './media/media.controller';
 import { MediaService } from './media/media.service';
 import { Media } from './model/entities/media.entity';
 import { Source } from './model/entities/source.entity';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -22,9 +21,11 @@ import { Source } from './model/entities/source.entity';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(ormconfig),
-    TypeOrmModule.forFeature([User, Media, Source]),
+    TypeOrmModule.forFeature([Media, Source]),
+    AuthModule,
+    UserModule,
   ],
-  controllers: [AppController, FileController, UserController, MediaController],
-  providers: [AppService, UserService, MediaService],
+  controllers: [AppController, FileController, MediaController],
+  providers: [AppService, MediaService],
 })
 export class AppModule {}

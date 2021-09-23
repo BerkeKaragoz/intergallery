@@ -17,6 +17,10 @@ export class UserService {
     return this.usersRepository.findOneOrFail(id);
   }
 
+  getUserByUsername(username: string): Promise<User> {
+    return this.usersRepository.findOneOrFail({ username });
+  }
+
   createUser(name: string): Promise<User> {
     const newUser = this.usersRepository.create({ name });
 

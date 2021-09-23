@@ -14,7 +14,7 @@ export class MediaService {
 
   getAllMedia(): Promise<Media[]> {
     return this.mediaRepository.find({
-      relations: ['sources'],
+      relations: ['sources', 'owner'],
     });
   }
 

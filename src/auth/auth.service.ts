@@ -1,9 +1,9 @@
-import { UserService } from './../user/user.service';
 import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { pipe } from 'rxjs';
 
 const saltRounds = 12;
 
@@ -69,5 +69,9 @@ export class AuthService {
     });
 
     return this.usersRepository.save(newUser);
+  }
+
+  async getUserByUsername(username: string): Promise<User> {
+    return await this.usersRepository.findOne({ username });
   }
 }

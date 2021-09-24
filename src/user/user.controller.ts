@@ -24,6 +24,7 @@ export class UserController {
     return req.user;
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Get('all')
   getAllUsers(): Promise<User[]> {
     return this.userService.getAllUsers();

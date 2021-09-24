@@ -1,3 +1,4 @@
+import { UsernameValidationPipe } from './pipes/usernameValidation.pipe';
 import { AuthService } from './auth.service';
 import {
   Body,
@@ -6,6 +7,7 @@ import {
   UseGuards,
   Request,
   Get,
+  UsePipes,
 } from '@nestjs/common';
 import { User } from 'src/model/entities/user.entity';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -25,6 +27,7 @@ export class AuthController {
     return req.user;
   }
 
+  @UsePipes(UsernameValidationPipe)
   @Post('register')
   register(
     @Body('username') username,

@@ -12,7 +12,7 @@ export class FileController {
 
   @Get()
   file(): string {
-    return Math.random().toFixed(2) + ' File entry point: ' + this.servingPath;
+    return 'File entry point: ' + this.servingPath;
   }
 
   @Get('download/*')

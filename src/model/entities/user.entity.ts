@@ -9,16 +9,16 @@ import { Media } from './media.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: false, unique: true })
   username: string;
 
-  @Column({ nullable: false })
-  password: string;
+  @Column({ nullable: false, select: false })
+  passwordHash: string;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
   @CreateDateColumn()

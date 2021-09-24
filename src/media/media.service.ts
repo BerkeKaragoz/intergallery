@@ -24,7 +24,7 @@ export class MediaService {
 
   createMedia(
     name: string,
-    owner: number,
+    owner: string,
     sources: Array<Source>,
   ): Promise<Media> {
     const newMedia = this.mediaRepository.create({ name });

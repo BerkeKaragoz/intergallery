@@ -1,17 +1,42 @@
 <h1>Home</h1>
+<div [hidden]="(currentUser | async) == null">
+  <p>Current User:</p>
+  <pre>{{ currentUser | async | json }}</pre>
+</div>
 <div class="form-container">
-  <form [formGroup]="authForm">
-    <h2>Login / Register</h2>
-    <mat-form-field appearance="outline"
-      ><mat-label>Username</mat-label>
-      <input matInput type="text" formControlName="username" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
-      <input matInput type="password" formControlName="password" />
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Send</button>
+  <form
+    [formGroup]="authForm"
+    (ngSubmit)="submitHandler()"
+    [hidden]="(currentUser | async) != null"
+  >
+    <h2>Login</h2>
+    <div [hidden]="isFormSuccess">
+      <mat-form-field appearance="outline"
+        ><mat-label>Username</mat-label>
+        <input matInput required type="text" formControlName="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput required type="password" formControlName="password" />
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="authForm.invalid"
+      >
+        Send
+      </button>
+    </div>
+    <p *ngIf="isFormSuccess" class="success-notification">
+      Submitted successfully.
+    </p>
+
+    <pre>{{ authForm.value | json }}</pre>
   </form>
 </div>
 
-<pre>{{ authForm.value | json }}</pre>
+<button mat-raised-button (click)="getAllUsers()">Get All Users</button>
+
+<pre *ngFor="let user of users | async"> {{ user | json }}</pre>

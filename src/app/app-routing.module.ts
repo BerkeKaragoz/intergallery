@@ -1,14 +1,14 @@
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './core/auth/auth.guard';
 
 const routes: Routes = [
   {
     path: 'browse',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./browse/browse.module').then((m) => m.BrowseModule),
+      import('./pages/browse/browse.module').then((m) => m.BrowseModule),
   },
   {
     path: '',

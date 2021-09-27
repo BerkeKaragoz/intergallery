@@ -1,5 +1,7 @@
 <h1>Browse</h1>
-<button (click)="getMedia()">Get Media</button>
+<button mat-raised-button color="primary" (click)="getUserMedia()">
+  Get Media
+</button>
 
 <ol>
   <li *ngFor="let media of mediaList | async">{{ media | json }}</li>

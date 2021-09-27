@@ -1,8 +1,22 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Request,
+  Response,
+  UseGuards,
+} from '@nestjs/common';
 import { MediaService } from './media.service';
 import { Media } from 'src/model/entities/media.entity';
 import { Source } from 'src/model/entities/source.entity';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { Response as ExpressRes } from 'express';
+import { join } from 'path';
 
+@UseGuards(AuthenticatedGuard)
 @Controller('media')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
@@ -17,27 +31,38 @@ export class MediaController {
     return this.mediaService.getAllMedia();
   }
 
-  @Get('create/:ownerId/:name')
+  @Get('user')
+  getUserMedia(@Request() req): Promise<Media[]> {
+    return this.mediaService.getUserMedia(req.user);
+  }
+
+  @Get('/source/:mediaId')
+  async getMediaSource(
+    @Request() req,
+    @Response() res: ExpressRes,
+    @Param('mediaId') mediaId,
+    @Query('src') sourceIndex,
+  ) {
+    const source = await this.mediaService.getUserMediaSource(
+      req.user,
+      mediaId,
+      sourceIndex,
+    );
+
+    if (source.isLocal) {
+      const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
+      res.sendFile(fileAbsolutePath);
+    } else {
+      res.redirect(source.url);
+    }
+  }
+
+  @Post('create')
   createMedia(
-    @Param('ownerId') ownerId,
-    @Param('name') name,
-    @Query('sources') sources,
+    @Request() req,
+    @Body('name') name,
+    @Body('sources') sources,
   ): Promise<Media> {
-    const constructedSources: Array<Source> = [];
-
-    if (!Array.isArray(sources)) {
-      sources = [sources];
-    }
-
-    for (const url of sources) {
-      const cs = new Source();
-      cs.url = url;
-
-      cs.isLocal = !cs.url.startsWith('http');
-
-      constructedSources.push(cs);
-    }
-
-    return this.mediaService.createMedia(name, ownerId, constructedSources);
+    return this.mediaService.createMedia(name, req.user, sources);
   }
 }

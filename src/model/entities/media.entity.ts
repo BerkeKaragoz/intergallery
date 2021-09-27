@@ -5,13 +5,15 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 import { Source } from './source.entity';
 import { User } from './user.entity';
 
 export enum MediaType {
-  PICTURE = 0,
+  UNKNOWN = 0,
+  PICTURE = 1,
 }
 
 @Entity()
@@ -22,7 +24,7 @@ export class Media {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: MediaType.UNKNOWN })
   type: MediaType;
 
   @CreateDateColumn()
@@ -31,8 +33,16 @@ export class Media {
   @UpdateDateColumn()
   updateDate: Date;
 
-  @OneToMany(() => Source, (source) => source.media)
+  @RelationId((media: Media) => media.sources)
+  sourceIds: number[];
+
+  @OneToMany(() => Source, (source) => source.media, {
+    cascade: true,
+  })
   sources: Source[];
+
+  @RelationId((media: Media) => media.owner)
+  ownerId: string;
 
   @ManyToOne(() => User, (user) => user.mediaList)
   owner: User;

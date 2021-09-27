@@ -1,4 +1,4 @@
-import { LocalAuthGuard } from './../auth/local-auth.guard';
+import { LocalRegisterGuard } from '../auth/local-register.guard';
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from 'src/model/entities/user.entity';
@@ -12,7 +12,7 @@ export class UserController {
     return 'User entry point';
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalRegisterGuard)
   @Get('test')
   test(): string {
     return 'Has auth';

@@ -10,7 +10,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { User } from 'src/model/entities/user.entity';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalRegisterGuard } from './local-register.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +21,7 @@ export class AuthController {
     return 'Auth entry point.';
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalRegisterGuard)
   @Post('login')
   login(@Request() req): User {
     return req.user;

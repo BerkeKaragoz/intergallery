@@ -24,6 +24,8 @@ export class User {
   @CreateDateColumn()
   creationDate: Date;
 
-  @OneToMany(() => Media, (media) => media.owner)
+  @OneToMany(() => Media, (media) => media.owner, {
+    cascade: true,
+  })
   mediaList: Media[];
 }

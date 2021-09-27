@@ -12,6 +12,8 @@ export class Source {
   @Column()
   isLocal: boolean;
 
-  @ManyToOne(() => Media, (media) => media.sources)
+  @ManyToOne(() => Media, (media) => media.sources, {
+    onDelete: 'CASCADE',
+  })
   media: Media;
 }

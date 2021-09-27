@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 
+//This will be deleted, testing, experimental purposes only
 @Controller('file')
 export class FileController {
   servingPath = this.configService.get<string>('SERVING_PATH');

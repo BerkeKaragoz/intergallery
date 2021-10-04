@@ -11,7 +11,8 @@ import { UserEntity } from 'src/model/entities/user.entity';
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    TypeOrmModule.forFeature([UserEntity, AppSessionEntity]),
+    TypeOrmModule.forFeature([AppSessionEntity], 'session'),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],

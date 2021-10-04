@@ -1,3 +1,5 @@
+import { UserEntity } from 'src/model/entities/user.entity';
+import { AppSessionEntity } from './model/entities/session.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -20,7 +22,8 @@ import { UserModule } from './user/user.module';
       load: [config],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(ormconfig),
+    TypeOrmModule.forRoot(ormconfig.mainDBConfig),
+    TypeOrmModule.forRoot(ormconfig.sessionDBConfig),
     TypeOrmModule.forFeature([MediaEntity, SourceEntity]),
     AuthModule,
     UserModule,

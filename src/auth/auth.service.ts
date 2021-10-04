@@ -20,7 +20,7 @@ export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
-    @InjectRepository(AppSessionEntity)
+    @InjectRepository(AppSessionEntity, 'session')
     private sessionsRepository: Repository<AppSessionEntity>,
   ) {}
 

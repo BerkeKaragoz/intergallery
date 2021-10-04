@@ -16,7 +16,8 @@ async function bootstrap() {
     cors: !!process.env.DEVELOPMENT,
   });
 
-  const repository = getConnection().getRepository(SessionEntity);
+  const sessionRepository =
+    getConnection('session').getRepository(SessionEntity);
   const sess: session.SessionOptions = {
     name: process.env.SESSION_NAME, // fallbacks to: connect.sid
     secret:
@@ -27,7 +28,7 @@ async function bootstrap() {
       maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) || 3600000,
       secure: !process.env.DEVELOPMENT,
     },
-    store: new TypeormStore({ repository }),
+    store: new TypeormStore({ repository: sessionRepository }),
   };
 
   app.use(session(sess));

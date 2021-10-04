@@ -1,6 +1,7 @@
+import { CreateUserDto } from './../user/dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/model/entities/user.entity';
+import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -9,7 +10,8 @@ const saltRounds = 12;
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
@@ -55,7 +57,8 @@ export class AuthService {
     return await bcrypt.compare(plainPassword, encryptedPassword);
   }
 
-  async register(username: string, passwordInput: string): Promise<User> {
+  async register(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const { username, passwordInput } = createUserDto;
     const { passwordHash } = await this.hashPassword(passwordInput).catch(
       (err) => {
         throw err;
@@ -70,7 +73,7 @@ export class AuthService {
     return this.usersRepository.save(newUser);
   }
 
-  async getUserByUsername(username: string): Promise<User> {
+  async getUserByUsername(username: string): Promise<UserEntity> {
     return await this.usersRepository.findOne({ username });
   }
 }

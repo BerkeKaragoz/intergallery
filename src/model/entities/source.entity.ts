@@ -1,8 +1,8 @@
-import { Media } from './media.entity';
+import { MediaEntity } from './media.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-export class Source {
+@Entity('source')
+export class SourceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,8 +12,8 @@ export class Source {
   @Column()
   isLocal: boolean;
 
-  @ManyToOne(() => Media, (media) => media.sources, {
+  @ManyToOne(() => MediaEntity, (media) => media.sources, {
     onDelete: 'CASCADE',
   })
-  media: Media;
+  media: MediaEntity;
 }

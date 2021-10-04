@@ -8,16 +8,16 @@ import {
   RelationId,
   UpdateDateColumn,
 } from 'typeorm';
-import { Source } from './source.entity';
-import { User } from './user.entity';
+import { SourceEntity } from './source.entity';
+import { UserEntity } from './user.entity';
 
 export enum MediaType {
   UNKNOWN = 0,
   PICTURE = 1,
 }
 
-@Entity()
-export class Media {
+@Entity('media')
+export class MediaEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,17 +33,17 @@ export class Media {
   @UpdateDateColumn()
   updateDate: Date;
 
-  @RelationId((media: Media) => media.sources)
+  @RelationId((media: MediaEntity) => media.sources)
   sourceIds: number[];
 
-  @OneToMany(() => Source, (source) => source.media, {
+  @OneToMany(() => SourceEntity, (source) => source.media, {
     cascade: true,
   })
-  sources: Source[];
+  sources: SourceEntity[];
 
-  @RelationId((media: Media) => media.owner)
+  @RelationId((media: MediaEntity) => media.owner)
   ownerId: string;
 
-  @ManyToOne(() => User, (user) => user.mediaList)
-  owner: User;
+  @ManyToOne(() => UserEntity, (user) => user.mediaList)
+  owner: UserEntity;
 }

@@ -1,7 +1,7 @@
 import { LocalRegisterGuard } from '../auth/local-register.guard';
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { User } from 'src/model/entities/user.entity';
+import { UserEntity } from 'src/model/entities/user.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 @Controller('user')
 export class UserController {
@@ -20,13 +20,13 @@ export class UserController {
 
   @UseGuards(AuthenticatedGuard)
   @Get('get')
-  getUser(@Request() req): User {
+  getUser(@Request() req): UserEntity {
     return req.user;
   }
 
   @UseGuards(AuthenticatedGuard)
   @Get('all')
-  getAllUsers(): Promise<User[]> {
+  getAllUsers(): Promise<UserEntity[]> {
     return this.userService.getAllUsers();
   }
 }

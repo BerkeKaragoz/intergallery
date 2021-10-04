@@ -8,8 +8,8 @@ import { AppService } from './app.service';
 import { FileController } from './file/file.controller';
 import { MediaController } from './media/media.controller';
 import { MediaService } from './media/media.service';
-import { Media } from './model/entities/media.entity';
-import { Source } from './model/entities/source.entity';
+import { MediaEntity } from './model/entities/media.entity';
+import { SourceEntity } from './model/entities/source.entity';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
@@ -21,7 +21,7 @@ import { UserModule } from './user/user.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(ormconfig),
-    TypeOrmModule.forFeature([Media, Source]),
+    TypeOrmModule.forFeature([MediaEntity, SourceEntity]),
     AuthModule,
     UserModule,
   ],

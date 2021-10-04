@@ -5,10 +5,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
 } from 'typeorm';
-import { Media } from './media.entity';
+import { MediaEntity } from './media.entity';
 
-@Entity()
-export class User {
+@Entity('user')
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,8 +24,8 @@ export class User {
   @CreateDateColumn()
   creationDate: Date;
 
-  @OneToMany(() => Media, (media) => media.owner, {
+  @OneToMany(() => MediaEntity, (media) => media.owner, {
     cascade: true,
   })
-  mediaList: Media[];
+  mediaList: MediaEntity[];
 }

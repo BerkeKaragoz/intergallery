@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Media } from 'src/model/entities/media.entity';
-import { Source } from 'src/model/entities/source.entity';
-import { User } from 'src/model/entities/user.entity';
+import { MediaEntity } from 'src/model/entities/media.entity';
+import { SourceEntity } from 'src/model/entities/source.entity';
+import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -14,17 +14,19 @@ export class MediaService {
 
   constructor(
     private configService: ConfigService,
-    @InjectRepository(Media) private mediaRepository: Repository<Media>,
-    @InjectRepository(Source) private sourceRepository: Repository<Source>,
+    @InjectRepository(MediaEntity)
+    private mediaRepository: Repository<MediaEntity>,
+    @InjectRepository(SourceEntity)
+    private sourceRepository: Repository<SourceEntity>,
   ) {}
 
-  getAllMedia(): Promise<Media[]> {
+  getAllMedia(): Promise<MediaEntity[]> {
     return this.mediaRepository.find({
       relations: ['sources', 'owner'],
     });
   }
 
-  async getUserMedia(user: any): Promise<Media[]> {
+  async getUserMedia(user: any): Promise<MediaEntity[]> {
     const mediaList = await this.mediaRepository.find({
       where: { owner: user.id },
     });
@@ -32,7 +34,7 @@ export class MediaService {
     return mediaList;
   }
 
-  getMediaById(id: number): Promise<Media> {
+  getMediaById(id: number): Promise<MediaEntity> {
     return this.mediaRepository.findOneOrFail(id);
   }
 
@@ -40,7 +42,7 @@ export class MediaService {
     user: any,
     mediaId: number,
     sourceIndex = 0,
-  ): Promise<Source> {
+  ): Promise<SourceEntity> {
     const media = await this.mediaRepository.findOne(mediaId, {
       where: { owner: user.id },
       relations: ['sources'],
@@ -51,9 +53,9 @@ export class MediaService {
 
   createMedia(
     name: string,
-    owner: User,
-    sources: Array<Source>,
-  ): Promise<Media> {
+    owner: UserEntity,
+    sources: Array<SourceEntity>,
+  ): Promise<MediaEntity> {
     const newMedia = this.mediaRepository.create({ name });
     newMedia.owner = owner;
     newMedia.sources = sources;
@@ -61,13 +63,13 @@ export class MediaService {
     return this.mediaRepository.save(newMedia);
   }
 
-  async updateMedia(id: number, name: string): Promise<Media> {
+  async updateMedia(id: number, name: string): Promise<MediaEntity> {
     const media = await this.getMediaById(id);
     media.name = name;
     return this.mediaRepository.save(media);
   }
 
-  async deleteMedia(id: number): Promise<Media> {
+  async deleteMedia(id: number): Promise<MediaEntity> {
     const media = await this.getMediaById(id);
     return this.mediaRepository.remove(media);
   }

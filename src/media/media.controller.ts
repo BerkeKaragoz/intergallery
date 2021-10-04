@@ -10,8 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MediaService } from './media.service';
-import { Media } from 'src/model/entities/media.entity';
-import { Source } from 'src/model/entities/source.entity';
+import { MediaEntity } from 'src/model/entities/media.entity';
+import { SourceEntity } from 'src/model/entities/source.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Response as ExpressRes } from 'express';
 import { join } from 'path';
@@ -27,12 +27,12 @@ export class MediaController {
   }
 
   @Get('all')
-  getAllMedia(): Promise<Media[]> {
+  getAllMedia(): Promise<MediaEntity[]> {
     return this.mediaService.getAllMedia();
   }
 
   @Get('user')
-  getUserMedia(@Request() req): Promise<Media[]> {
+  getUserMedia(@Request() req): Promise<MediaEntity[]> {
     return this.mediaService.getUserMedia(req.user);
   }
 
@@ -62,7 +62,7 @@ export class MediaController {
     @Request() req,
     @Body('name') name,
     @Body('sources') sources,
-  ): Promise<Media> {
+  ): Promise<MediaEntity> {
     return this.mediaService.createMedia(name, req.user, sources);
   }
 }

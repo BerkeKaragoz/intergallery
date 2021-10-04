@@ -5,12 +5,12 @@ import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/model/entities/user.entity';
+import { UserEntity } from 'src/model/entities/user.entity';
 
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],

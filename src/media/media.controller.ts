@@ -15,7 +15,8 @@ import { SourceEntity } from 'src/model/entities/source.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Response as ExpressRes } from 'express';
 import { join } from 'path';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('media')
 @UseGuards(AuthenticatedGuard)
 @Controller('media')
 export class MediaController {

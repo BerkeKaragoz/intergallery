@@ -5,6 +5,11 @@ import * as passport from 'passport';
 import { getConnection } from 'typeorm';
 import { AppSessionEntity as SessionEntity } from './model/entities/session.entity';
 import { TypeormStore } from 'typeorm-store';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerCustomOptions,
+} from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -26,6 +31,21 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  const documentConfig = new DocumentBuilder()
+    .setTitle('Intergallery API')
+    .setDescription('')
+    .setVersion('0.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, documentConfig);
+
+  const swaggerOptions: SwaggerCustomOptions = {
+    customSiteTitle: 'Intergallery | API Documentation',
+    customCss: '.swagger-ui .topbar { display: none }',
+  };
+
+  SwaggerModule.setup('api', app, document, swaggerOptions);
 
   await app.listen(3000);
 }

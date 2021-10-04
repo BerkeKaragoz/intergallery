@@ -1,4 +1,4 @@
-import { CreateUserDto } from './../user/dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/model/entities/user.entity';
@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { username, passwordInput } = createUserDto;
+    const { username, password: passwordInput } = createUserDto;
     const { passwordHash } = await this.hashPassword(passwordInput).catch(
       (err) => {
         throw err;

@@ -1,5 +1,5 @@
 import { AuthenticatedGuard } from './authenticated.guard';
-import { UsernameValidationPipe } from './pipes/usernameValidation.pipe';
+import { UsernameValidationPipe } from './pipe/usernameValidation.pipe';
 import { AuthService } from './auth.service';
 import {
   Body,
@@ -15,8 +15,9 @@ import {
 import { UserEntity } from 'src/model/entities/user.entity';
 import { LocalRegisterGuard } from './local-register.guard';
 import { Response } from 'express';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-
+import { CreateUserDto } from 'src/auth/dto/create-user.dto';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -27,7 +28,7 @@ export class AuthController {
   }
 
   @UseGuards(LocalRegisterGuard)
-  @Post('login')
+  @Post('login') // Creates new session
   login(@Request() req): UserEntity {
     return req.user;
   }
@@ -49,11 +50,7 @@ export class AuthController {
 
   @UsePipes(UsernameValidationPipe)
   @Post('register')
-  register(
-    @Body('username') username,
-    @Body('password') password,
-  ): Promise<UserEntity> {
-    const dto = new CreateUserDto(username, password);
+  register(@Body() dto: CreateUserDto): Promise<UserEntity> {
     return this.authService.register(dto);
   }
 }

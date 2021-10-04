@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { SourceEntity } from './source.entity';
 import { UserEntity } from './user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export enum MediaType {
   UNKNOWN = 0,
@@ -18,6 +19,7 @@ export enum MediaType {
 
 @Entity('media')
 export class MediaEntity {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 

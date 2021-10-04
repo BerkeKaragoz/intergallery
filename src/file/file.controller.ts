@@ -3,8 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
+import { ApiTags } from '@nestjs/swagger';
 
 //This will be deleted, testing, experimental purposes only
+@ApiTags('file')
 @Controller('file')
 export class FileController {
   servingPath = this.configService.get<string>('SERVING_PATH');

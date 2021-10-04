@@ -1,8 +1,9 @@
 import { MediaEntity } from './media.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-
+import { ApiProperty } from '@nestjs/swagger';
 @Entity('source')
 export class SourceEntity {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 

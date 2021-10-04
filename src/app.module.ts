@@ -16,7 +16,7 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env.local',
+      envFilePath: ['.env', '.env.local'],
       load: [config],
       isGlobal: true,
     }),

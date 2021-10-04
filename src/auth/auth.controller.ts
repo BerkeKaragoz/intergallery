@@ -11,21 +11,17 @@ import {
   Res,
   UsePipes,
   Session,
+  Req,
 } from '@nestjs/common';
 import { UserEntity } from 'src/model/entities/user.entity';
 import { LocalRegisterGuard } from './local-register.guard';
-import { Response } from 'express';
+import { Request as ExpressReq, Response as ExpressRes } from 'express';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-  @Get()
-  hello(): string {
-    return 'Auth entry point.';
-  }
 
   @UseGuards(LocalRegisterGuard)
   @Post('login') // Creates new session
@@ -35,19 +31,32 @@ export class AuthController {
 
   @UseGuards(AuthenticatedGuard)
   @Get('logout')
-  logout(@Session() sess, @Res() res: Response) {
-    //domain:
-    sess.destroy(() => {
-      res.cookie('connect.sid', '', {
+  logout(
+    @Session() sess,
+    @Req() req: ExpressReq,
+    @Res() res: ExpressRes,
+  ): void {
+    const referrer = req.headers.referer;
+
+    this.authService.logout(sess, () => {
+      res.cookie(process.env.SESSION_NAME || 'connect.sid', '', {
         path: '/',
         httpOnly: true,
         maxAge: 0,
         expires: new Date(0),
       });
+
+      // Return to referrer if there is one
+      if (referrer) res.redirect(referrer);
+
       res.end();
     });
   }
 
+  @ApiCreatedResponse({
+    description: 'User has been registered.',
+    type: UserEntity,
+  })
   @UsePipes(UsernameValidationPipe)
   @Post('register')
   register(@Body() dto: CreateUserDto): Promise<UserEntity> {

@@ -1,3 +1,4 @@
+import { AppSessionEntity } from './../model/entities/session.entity';
 import { SessionSerializer } from './session.serializer';
 import { LocalStrategy } from './local.stategy';
 import { Module } from '@nestjs/common';
@@ -10,7 +11,7 @@ import { UserEntity } from 'src/model/entities/user.entity';
 @Module({
   imports: [
     PassportModule.register({ session: true }),
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, AppSessionEntity]),
   ],
   providers: [AuthService, LocalStrategy, SessionSerializer],
   controllers: [AuthController],

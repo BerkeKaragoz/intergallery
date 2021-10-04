@@ -17,13 +17,16 @@ async function bootstrap() {
   });
 
   const repository = getConnection().getRepository(SessionEntity);
-
   const sess: session.SessionOptions = {
+    name: process.env.SESSION_NAME, // fallbacks to: connect.sid
     secret:
       process.env.SESSION_SECRET || (!!process.env.DEVELOPMENT && 'Asecret'),
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 3600000, secure: !process.env.DEVELOPMENT },
+    cookie: {
+      maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) || 3600000,
+      secure: !process.env.DEVELOPMENT,
+    },
     store: new TypeormStore({ repository }),
   };
 

@@ -9,9 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HeaderComponent } from '../../components/header/header.component';
 
 @NgModule({
-  declarations: [BrowseComponent],
+  declarations: [BrowseComponent, HeaderComponent],
   imports: [
     CommonModule,
     BrowseRoutingModule,
@@ -21,6 +23,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonModule,
     MatFormFieldModule,
     MatToolbarModule,
+    MatCheckboxModule,
   ],
 })
 export class BrowseModule {}

@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthGuard } from './core/auth/auth.guard';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -27,6 +28,7 @@ import { AuthGuard } from './core/auth/auth.guard';
     MatButtonModule,
     MatFormFieldModule,
     MatToolbarModule,
+    MatIconModule,
   ],
   providers: [AuthGuard, AuthService],
   bootstrap: [AppComponent],

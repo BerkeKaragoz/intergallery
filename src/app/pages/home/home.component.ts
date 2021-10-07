@@ -1,3 +1,5 @@
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
@@ -11,7 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   readonly BASE_URL = 'http://localhost:3000';
-  currentUser = this._authService.getUser();
+  currentUser = this._authService.getUser$();
   users: Observable<any> = new Observable();
   @Input() authForm!: FormGroup;
 
@@ -21,6 +23,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private router: Router,
     private _authService: AuthService
   ) {}
 
@@ -31,27 +34,39 @@ export class HomeComponent implements OnInit {
     });
 
     //this.authForm.valueChanges.subscribe(console.log);
+    this.redirectAuthorized();
+  }
+
+  redirectAuthorized() {
+    this.currentUser.subscribe((user) => {
+      if (user) {
+        this.router.navigateByUrl('/browse');
+      }
+    });
   }
 
   async submitHandler() {
     if (this.authForm.valid) {
-      this.isFormLoading = true;
+      this.authForm.disable();
 
-      const formValue = this.authForm.value;
+      console.log('Sent: ', this.authForm.value);
 
-      try {
-        this.isFormSuccess = true;
-        console.log('Sent: ', formValue);
+      //I know
+      this.currentUser = this._authService.loginUser(this.authForm.value);
 
-        this.currentUser = this._authService.loginUser(formValue);
+      this.currentUser.subscribe(
+        (res) => {
+          console.log(res);
+          this.redirectAuthorized();
+          this.authForm.enable();
+        },
+        (err) => {
+          this.isFormSuccess = false;
 
-        console.log(this.currentUser);
-      } catch (err) {
-        this.isFormSuccess = false;
-        console.error(err);
-      }
-
-      this.isFormLoading = false;
+          console.error('Form', err);
+          this.authForm.enable();
+        }
+      );
     } else {
       console.error('The form is not valid!');
     }

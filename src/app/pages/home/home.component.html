@@ -1,3 +1,51 @@
+<div class="login-root">
+  <div class="login-background screen-centered">
+    <h1 class="bg-title">Intergallery</h1>
+  </div>
+
+  <div class="login-box screen-centered login-box-color backdrop-filter">
+    <div class="box-container">
+      <h1 class="login-title">Login</h1>
+      <p class="login-subtitle">Welcome! Login to access Intergallery.</p>
+      <form [formGroup]="authForm" (ngSubmit)="submitHandler()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" required formControlName="username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" required formControlName="password" />
+        </mat-form-field>
+        <div class="split-container">
+          <a class="mat-primary forgot-password" href="/reset-password"
+            >Forgot Password?</a
+          >
+          <button
+            mat-flat-button
+            color="accent"
+            type="submit"
+            [disabled]="authForm.invalid || authForm.disabled"
+          >
+            Continue <mat-icon class="button-icon">keyboard_tab</mat-icon>
+          </button>
+        </div>
+      </form>
+      <div class="login-divider split-container">
+        <hr />
+        <span>or</span>
+      </div>
+      <div class="end-align">
+        <button mat-flat-button color="primary">
+          Sign up
+          <mat-icon class="button-icon"> app_registration</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
 <h1>Home</h1>
 <div [hidden]="(currentUser | async) == null">
   <p>Current User:</p>
@@ -40,3 +88,4 @@
 <button mat-raised-button (click)="getAllUsers()">Get All Users</button>
 
 <pre *ngFor="let user of users | async"> {{ user | json }}</pre>
+-->

@@ -9,6 +9,7 @@ import { catchError, retry } from 'rxjs/operators';
 export class MediaService {
   private readonly _baseUrl = 'http://localhost:3000';
   private readonly _userMediaUrl = this._baseUrl + '/media/user';
+  private readonly _createMediaUrl = this._baseUrl + '/media';
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +32,12 @@ export class MediaService {
   getUserMedia() {
     return this.http
       .get(this._userMediaUrl, { withCredentials: true })
+      .pipe(retry(3), catchError(this.handleError));
+  }
+
+  createMedia(name: string, sources: Array<any>) {
+    return this.http
+      .post(this._createMediaUrl, { name, sources }, { withCredentials: true })
       .pipe(retry(3), catchError(this.handleError));
   }
 }

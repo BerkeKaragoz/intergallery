@@ -1,6 +1,7 @@
 import { MediaService } from '../../core/media/media.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-browse',
@@ -8,14 +9,28 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./browse.component.scss'],
 })
 export class BrowseComponent implements OnInit {
-  urls = [];
-
-  mediaList: any;
   readonly ROOT_URL = 'http://localhost:3000';
 
-  constructor(private http: HttpClient, private mediaService: MediaService) {}
+  @Input() mediaForm!: FormGroup;
+
+  isFormLoading = false;
+  isFormSuccess = false;
+
+  mediaList: any;
+
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private mediaService: MediaService
+  ) {}
 
   ngOnInit(): void {
+    this.mediaForm = this.fb.group({
+      name: ['', Validators.required],
+      url: ['', Validators.required],
+      isLocal: [true, Validators.required],
+    });
+
     this.getUserMedia();
   }
 
@@ -25,5 +40,41 @@ export class BrowseComponent implements OnInit {
 
   getMediaSource(media: any) {
     return this.ROOT_URL + '/media/source/' + media.id;
+  }
+
+  async submitHandler() {
+    if (this.mediaForm.valid) {
+      this.isFormLoading = true;
+
+      const formValue = this.mediaForm.value;
+
+      try {
+        this.isFormSuccess = true;
+        console.log('Sent: ', formValue);
+
+        const name = formValue.name;
+        const sources = [
+          {
+            url: formValue.url,
+            isLocal: formValue.isLocal,
+          },
+        ];
+
+        this.mediaService
+          .createMedia(name, sources)
+          .toPromise()
+          .then((res) => {
+            console.log(res);
+            this.getUserMedia();
+          });
+      } catch (err) {
+        this.isFormSuccess = false;
+        console.error(err);
+      }
+
+      this.isFormLoading = false;
+    } else {
+      console.error('The form is not valid!');
+    }
   }
 }

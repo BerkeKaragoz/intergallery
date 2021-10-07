@@ -1,0 +1,15 @@
+@import "~@angular/material/theming";
+
+$primary-palette: mat-palette($mat-pink, 500, A100, A400);
+$accent-palette: mat-palette($mat-cyan, 200, 100, 900);
+
+$warn-palette: mat-palette($mat-red);
+
+$app-theme: mat-dark-theme($primary-palette, $accent-palette, $warn-palette);
+
+$primary-color: mat-get-color-from-palette($primary-palette, "default");
+$accent-color: mat-get-color-from-palette($accent-palette, "default");
+$secondary-color: #efefff;
+$background-color: #303030;
+
+$warn-color: mat-get-color-from-palette($warn-palette, "default");

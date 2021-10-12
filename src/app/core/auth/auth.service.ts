@@ -1,58 +1,57 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { UserEntity, UserIdentification } from './../user/user.entity';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Observer, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { BehaviorSubject, concat, Observable, Subject } from 'rxjs';
+import URL from '../consts/url';
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
-type User = {
-  id: string;
-  username: string;
-  name: string | null;
-  creationDate: string;
-} | null;
-
-//TODO tbm proper
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly _baseUrl = 'http://localhost:3000';
-  private readonly _registerUrl = this._baseUrl + '/auth/register';
-  private readonly _loginUrl = this._baseUrl + '/auth/login';
-  private readonly _getUserUrl = this._baseUrl + '/user/get';
+  readonly user$ = new BehaviorSubject<UserEntity | null>(null);
 
-  private _user$ = new Observable<User>();
+  readonly fetchUser$ = this.http.get<UserEntity>(URL.GETUSER, {
+    withCredentials: true,
+  });
 
   constructor(private http: HttpClient) {
     this.fetchUser();
   }
 
   registerUser(user: any) {
-    return this.http.post<any>(this._registerUrl, user, {
+    const $ = this.http.post<UserEntity>(URL.REGISTER, user, {
       withCredentials: true,
     });
+
+    $.subscribe((data) => {
+      this.user$.next(data);
+    });
+
+    return $;
   }
 
   loginUser(user: any) {
-    this._user$ = this.http.post<any>(this._loginUrl, user, {
+    const $ = this.http.post<UserEntity>(URL.LOGIN, user, {
       withCredentials: true,
     });
-    return this._user$;
+
+    $.subscribe((data) => {
+      this.user$.next(data);
+    });
+
+    return $;
   }
 
   isLoggedIn() {
-    //TODO
-    return this._user$;
+    return !!this.user$.getValue()?.id;
   }
 
   fetchUser() {
-    this._user$ = this.http.get<User>(this._getUserUrl, {
-      withCredentials: true,
+    this.fetchUser$.subscribe((data) => {
+      this.user$.next(data);
     });
 
-    return this._user$;
-  }
-
-  getUser$() {
-    return this._user$;
+    return this.fetchUser$;
   }
 }

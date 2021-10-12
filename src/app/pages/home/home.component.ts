@@ -1,10 +1,10 @@
-import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import URL from 'src/app/core/consts/url';
 
 @Component({
   selector: 'app-home',
@@ -12,8 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  readonly BASE_URL = 'http://localhost:3000';
-  currentUser = this._authService.getUser$();
+  currentUser$ = this._authService.user$;
   users: Observable<any> = new Observable();
   @Input() authForm!: FormGroup;
 
@@ -25,7 +24,13 @@ export class HomeComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private _authService: AuthService
-  ) {}
+  ) {
+    this.currentUser$.subscribe((data) => {
+      if (data) {
+        this.router.navigateByUrl('/browse');
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.authForm = this.fb.group({
@@ -34,30 +39,17 @@ export class HomeComponent implements OnInit {
     });
 
     //this.authForm.valueChanges.subscribe(console.log);
-    this.redirectAuthorized();
-  }
-
-  redirectAuthorized() {
-    this.currentUser.subscribe((user) => {
-      if (user) {
-        this.router.navigateByUrl('/browse');
-      }
-    });
   }
 
   async submitHandler() {
     if (this.authForm.valid) {
       this.authForm.disable();
 
-      console.log('Sent: ', this.authForm.value);
+      console.log('Sent', this.authForm.value);
 
-      //I know
-      this.currentUser = this._authService.loginUser(this.authForm.value);
-
-      this.currentUser.subscribe(
+      this._authService.loginUser(this.authForm.value).subscribe(
         (res) => {
-          console.log(res);
-          this.redirectAuthorized();
+          console.log('Received User', res);
           this.authForm.enable();
         },
         (err) => {
@@ -73,7 +65,7 @@ export class HomeComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.users = this.http.get(this.BASE_URL + '/user/all', {
+    this.users = this.http.get(URL.BASE + '/user/all', {
       withCredentials: true,
     });
   }

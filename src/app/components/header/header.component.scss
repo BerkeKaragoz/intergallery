@@ -14,3 +14,12 @@ h3 {
 li {
   margin-left: 1rem;
 }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

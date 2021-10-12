@@ -1,13 +1,12 @@
 <mat-toolbar color="primary">
-  <h3>{{ title }}</h3>
+  <h3 class="title">
+    <a routerLink="/">{{ title }}</a>
+  </h3>
 
   <span class="spacer"></span>
 
   <nav>
     <ul>
-      <li>
-        <button mat-flat-button color="accent" routerLink="/">Home</button>
-      </li>
       <li>
         <button mat-flat-button color="accent" routerLink="browse">
           Browse
@@ -15,7 +14,7 @@
       </li>
       <li>
         <a href="http://localhost:3000/auth/logout">
-          <button mat-flat-button color="accent">Logout</button>
+          <button mat-button color="accent">Logout</button>
         </a>
       </li>
     </ul>

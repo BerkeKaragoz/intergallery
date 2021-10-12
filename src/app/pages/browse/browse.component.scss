@@ -1,5 +1,7 @@
 .image {
   height: 250px;
+  display: inline-block;
+  background-color: red;
 }
 
 .form-container {
@@ -26,4 +28,9 @@ button[type="submit"] {
   background-color: green;
   padding: 8px;
   border-radius: 4px;
+}
+
+.media-item {
+  display: inline;
+  list-style: none;
 }

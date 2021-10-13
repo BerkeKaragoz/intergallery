@@ -1,4 +1,11 @@
-## Description
+## Intergallery's Server
+<div align="center">
+  
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f9ab2aa397264f94aae41e4cfeb14a74)](https://app.codacy.com/gh/BerkeKaragoz/Intergallery-Server?utm_source=github.com&utm_medium=referral&utm_content=BerkeKaragoz/Intergallery-Server&utm_campaign=Badge_Grade_Settings)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BerkeKaragoz/Intergallery-Server)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/BerkeKaragoz/Intergallery-Server.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/BerkeKaragoz/Intergallery-Server/alerts/)
+
+</div>
 
 ![image](https://user-images.githubusercontent.com/34271483/136295333-2abd98ec-3e7d-4e2b-9c45-6ae13abb1f96.png)
 

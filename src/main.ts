@@ -27,6 +27,7 @@ async function bootstrap() {
     cookie: {
       maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) || 3600000,
       secure: !process.env.DEVELOPMENT,
+      sameSite: 'lax',
     },
     store: new TypeormStore({ repository: sessionRepository }),
   };

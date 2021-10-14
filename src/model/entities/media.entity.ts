@@ -15,6 +15,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export enum MediaType {
   UNKNOWN = 0,
   PICTURE = 1,
+  VIDEO = 2,
 }
 
 @Entity('media')
@@ -46,6 +47,6 @@ export class MediaEntity {
   @RelationId((media: MediaEntity) => media.owner)
   ownerId: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.mediaList)
+  @ManyToOne(() => UserEntity, (user) => user.mediaList, { nullable: false })
   owner: UserEntity;
 }

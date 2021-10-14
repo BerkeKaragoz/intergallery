@@ -1,3 +1,4 @@
+import { CreateMediaDto, CreateMediaInputDto } from './dto/create-media.dto';
 import {
   Body,
   Controller,
@@ -11,21 +12,18 @@ import {
 } from '@nestjs/common';
 import { MediaService } from './media.service';
 import { MediaEntity } from 'src/model/entities/media.entity';
-import { SourceEntity } from 'src/model/entities/source.entity';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { Response as ExpressRes } from 'express';
 import { join } from 'path';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBasicAuth } from '@nestjs/swagger';
+import { User } from 'src/core/decorator/user.decorator';
+
 @ApiTags('media')
+@ApiBasicAuth()
 @UseGuards(AuthenticatedGuard)
 @Controller('media')
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
-
-  @Get()
-  get(): string {
-    return 'Media entry point';
-  }
 
   @Get('all')
   getAllMedia(): Promise<MediaEntity[]> {
@@ -58,12 +56,13 @@ export class MediaController {
     }
   }
 
-  @Post('create')
+  @Post()
   createMedia(
-    @Request() req,
-    @Body('name') name,
-    @Body('sources') sources,
+    @User() user,
+    @Body() dto: CreateMediaInputDto,
   ): Promise<MediaEntity> {
-    return this.mediaService.createMedia(name, req.user, sources);
+    const { name, sources } = dto;
+    console.log(dto);
+    return this.mediaService.createMedia({ name, owner: user, sources });
   }
 }

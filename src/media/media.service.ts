@@ -5,11 +5,10 @@ import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
 import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateMediaDto } from './dto/create-media.dto';
 
 @Injectable()
 export class MediaService {
-  private readonly _hostUrl = 'http://localhost:3000'; //TODO temp
-
   servingPath = this.configService.get<string>('SERVING_PATH');
 
   constructor(
@@ -51,11 +50,9 @@ export class MediaService {
     return media.sources[sourceIndex];
   }
 
-  createMedia(
-    name: string,
-    owner: UserEntity,
-    sources: Array<SourceEntity>,
-  ): Promise<MediaEntity> {
+  createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
+    const { name, owner, sources } = dto;
+
     const newMedia = this.mediaRepository.create({ name });
     newMedia.owner = owner;
     newMedia.sources = sources;

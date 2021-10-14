@@ -45,11 +45,13 @@
 
 <ul>
   <li class="media-item" *ngFor="let media of mediaList | async">
-    <img
-      class="image"
+    <a
       *ngIf="media.type === 0 || media.type === 1"
-      [src]="getMediaSource(media)"
-    />
+      [href]="getMediaSource(media)"
+      target="_blank"
+    >
+      <img class="image" [src]="getMediaSource(media)" />
+    </a>
     <video class="image" *ngIf="media.type === 2" controls>
       <source [src]="getMediaSource(media)" />
     </video>

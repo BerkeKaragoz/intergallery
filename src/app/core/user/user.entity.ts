@@ -1,9 +1,23 @@
-export type UserEntity = {
+export interface UserEntity {
   id: string;
   username: string;
   name: string | null;
   creationDate: string;
-};
+}
+
+export class User implements UserEntity {
+  id: string;
+  username: string;
+  name: string | null;
+  creationDate: string;
+
+  constructor(id = '', username = '', name = '', creationDate = '') {
+    this.id = id;
+    this.username = username;
+    this.name = name;
+    this.creationDate = creationDate;
+  }
+}
 
 export type UserIdentification = {
   id: string;

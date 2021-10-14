@@ -1,17 +1,17 @@
-import { UserEntity, UserIdentification } from './../user/user.entity';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, concat, Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { shareReplay, tap } from 'rxjs/operators';
 import URL from '../consts/url';
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { User, UserIdentification } from './../user/user.entity';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  readonly user$ = new BehaviorSubject<UserEntity | null>(null);
+  readonly user$ = new BehaviorSubject<User>(new User());
 
-  readonly fetchUser$ = this.http.get<UserEntity>(URL.GETUSER, {
+  readonly fetchUser$ = this.http.get<User>(URL.GETUSER, {
     withCredentials: true,
   });
 
@@ -19,28 +19,30 @@ export class AuthService {
     this.fetchUser();
   }
 
-  registerUser(user: any) {
-    const $ = this.http.post<UserEntity>(URL.REGISTER, user, {
-      withCredentials: true,
-    });
-
-    $.subscribe((data) => {
-      this.user$.next(data);
-    });
-
-    return $;
+  registerUser(user: UserIdentification) {
+    return this.http
+      .post<User>(URL.REGISTER, user, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((data) => {
+          this.user$.next(data);
+        }),
+        shareReplay()
+      );
   }
 
-  loginUser(user: any) {
-    const $ = this.http.post<UserEntity>(URL.LOGIN, user, {
-      withCredentials: true,
-    });
-
-    $.subscribe((data) => {
-      this.user$.next(data);
-    });
-
-    return $;
+  loginUser(user: UserIdentification) {
+    return this.http
+      .post<User>(URL.LOGIN, user, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((data) => {
+          this.user$.next(data);
+        }),
+        shareReplay()
+      );
   }
 
   isLoggedIn() {

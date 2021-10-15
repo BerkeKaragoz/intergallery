@@ -10,10 +10,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HeaderComponent } from '../../components/header/header.component';
+import { HeaderComponent } from '../../components/layout/header/header.component';
+import { ContainerComponent } from '../../components/atomic/container/container.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
-  declarations: [BrowseComponent, HeaderComponent],
+  declarations: [BrowseComponent, HeaderComponent, ContainerComponent],
   imports: [
     CommonModule,
     BrowseRoutingModule,
@@ -24,6 +26,7 @@ import { HeaderComponent } from '../../components/header/header.component';
     MatFormFieldModule,
     MatToolbarModule,
     MatCheckboxModule,
+    LayoutModule,
   ],
 })
 export class BrowseModule {}

@@ -1,59 +1,64 @@
 <app-header title="Intergallery"></app-header>
+<app-container>
+  <h1>Browse</h1>
 
-<h1>Browse</h1>
-
-<div class="form-container">
-  <form [formGroup]="mediaForm" (ngSubmit)="submitHandler()" autocomplete="off">
-    <h2>Create Media</h2>
-    <div [hidden]="isFormSuccess">
-      <mat-form-field appearance="outline"
-        ><mat-label>Name</mat-label>
-        <input matInput required type="text" formControlName="name" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>URL</mat-label>
-        <input matInput required type="url" formControlName="url" />
-      </mat-form-field>
-      <mat-checkbox color="primary" formControlName="isLocal"
-        >Local</mat-checkbox
-      >
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="mediaForm.invalid"
-      >
-        Create
-      </button>
-    </div>
-    <p *ngIf="isFormSuccess" class="success-notification">
-      Submitted successfully.
-    </p>
-
-    <pre>{{ mediaForm.value | json }}</pre>
-  </form>
-</div>
-
-<button mat-raised-button color="primary" (click)="getUserMedia()">
-  Get Media
-</button>
-
-<ol>
-  <li *ngFor="let media of mediaList | async">{{ media | json }}</li>
-</ol>
-
-<ul>
-  <li class="media-item" *ngFor="let media of mediaList | async">
-    <a
-      *ngIf="media.type === 0 || media.type === 1"
-      [href]="getMediaSource(media)"
-      target="_blank"
+  <div class="form-container">
+    <form
+      [formGroup]="mediaForm"
+      (ngSubmit)="submitHandler()"
+      autocomplete="off"
     >
-      <img class="image" [src]="getMediaSource(media)" />
-    </a>
-    <video class="image" *ngIf="media.type === 2" controls>
-      <source [src]="getMediaSource(media)" />
-    </video>
-  </li>
-</ul>
+      <h2>Create Media</h2>
+      <div [hidden]="isFormSuccess">
+        <mat-form-field appearance="outline"
+          ><mat-label>Name</mat-label>
+          <input matInput required type="text" formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>URL</mat-label>
+          <input matInput required type="url" formControlName="url" />
+        </mat-form-field>
+        <mat-checkbox color="primary" formControlName="isLocal"
+          >Local</mat-checkbox
+        >
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="mediaForm.invalid"
+        >
+          Create
+        </button>
+      </div>
+      <p *ngIf="isFormSuccess" class="success-notification">
+        Submitted successfully.
+      </p>
+
+      <pre>{{ mediaForm.value | json }}</pre>
+    </form>
+  </div>
+
+  <button mat-raised-button color="primary" (click)="getUserMedia()">
+    Get Media
+  </button>
+
+  <ol>
+    <li *ngFor="let media of mediaList | async">{{ media | json }}</li>
+  </ol>
+
+  <ul>
+    <li class="media-item" *ngFor="let media of mediaList | async">
+      <a
+        *ngIf="media.type === 0 || media.type === 1"
+        [href]="getMediaSource(media)"
+        target="_blank"
+      >
+        <img class="image" [src]="getMediaSource(media)" />
+      </a>
+      <video class="image" *ngIf="media.type === 2" controls>
+        <source [src]="getMediaSource(media)" />
+      </video>
+    </li>
+  </ul>
+</app-container>

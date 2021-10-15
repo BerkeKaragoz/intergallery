@@ -1,6 +1,6 @@
+import URL from './../../core/consts/url';
 import { MediaService } from '../../core/media/media.service';
 import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -9,8 +9,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./browse.component.scss'],
 })
 export class BrowseComponent implements OnInit {
-  readonly ROOT_URL = 'http://localhost:3000';
-
   @Input() mediaForm!: FormGroup;
 
   isFormLoading = false;
@@ -18,11 +16,7 @@ export class BrowseComponent implements OnInit {
 
   mediaList: any;
 
-  constructor(
-    private http: HttpClient,
-    private fb: FormBuilder,
-    private mediaService: MediaService
-  ) {}
+  constructor(private fb: FormBuilder, private mediaService: MediaService) {}
 
   ngOnInit(): void {
     this.mediaForm = this.fb.group({
@@ -39,7 +33,7 @@ export class BrowseComponent implements OnInit {
   }
 
   getMediaSource(media: any) {
-    return this.ROOT_URL + '/media/source/' + media.id;
+    return URL.BASE + '/media/source/' + media.id;
   }
 
   async submitHandler() {

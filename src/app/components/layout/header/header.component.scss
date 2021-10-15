@@ -1,0 +1,53 @@
+@use "../../../styles/colors.scss" as *;
+
+$height: 50px;
+
+mat-toolbar {
+  position: fixed;
+  width: 100%;
+  height: $height;
+  z-index: 10;
+  background-color: rgba($primary-color, 0.8);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content-spacer {
+  display: block;
+  height: $height;
+}
+
+.username {
+  font-size: medium;
+  font-weight: normal;
+}
+
+nav,
+ul,
+li,
+h3 {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-left: 1rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

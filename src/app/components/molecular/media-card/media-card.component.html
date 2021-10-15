@@ -1,0 +1,14 @@
+<a [href]="getMediaSource()" target="_blank" [ngSwitch]="media.type">
+  <video *ngSwitchCase="mediaType.VIDEO" class="media">
+    <source [src]="getMediaSource()" />
+  </video>
+  <img
+    *ngSwitchDefault
+    class="media"
+    [src]="getMediaSource()"
+    [alt]="media.name"
+  />
+  <div class="subtitle">
+    <span>{{ media.name }}</span>
+  </div>
+</a>

@@ -2,6 +2,8 @@
 @use "~@angular/material" as mat;
 @use "./app/styles/colors.scss";
 @use "./app/styles/breakpoints.scss";
+@use "./app/styles/shapes.scss";
+@use "./app/styles/global.scss";
 
 @include mat.core();
 

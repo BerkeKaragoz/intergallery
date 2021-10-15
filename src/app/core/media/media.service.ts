@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import MediaEntity from './media.entity';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +32,17 @@ export class MediaService {
 
   getUserMedia() {
     return this.http
-      .get(this._userMediaUrl, { withCredentials: true })
+      .get<Array<MediaEntity>>(this._userMediaUrl, { withCredentials: true })
       .pipe(retry(3), catchError(this.handleError));
   }
 
   createMedia(name: string, sources: Array<any>) {
     return this.http
-      .post(this._createMediaUrl, { name, sources }, { withCredentials: true })
+      .post<MediaEntity>(
+        this._createMediaUrl,
+        { name, sources },
+        { withCredentials: true }
+      )
       .pipe(retry(3), catchError(this.handleError));
   }
 }

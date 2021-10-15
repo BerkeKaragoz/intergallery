@@ -13,9 +13,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HeaderComponent } from '../../components/layout/header/header.component';
 import { ContainerComponent } from '../../components/atomic/container/container.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MediaCardComponent } from 'src/app/components/molecular/media-card/media-card.component';
 
 @NgModule({
-  declarations: [BrowseComponent, HeaderComponent, ContainerComponent],
+  declarations: [
+    BrowseComponent,
+    HeaderComponent,
+    ContainerComponent,
+    MediaCardComponent,
+  ],
   imports: [
     CommonModule,
     BrowseRoutingModule,

@@ -1,8 +1,4 @@
-.image {
-  height: 250px;
-  display: inline-block;
-  background-color: red;
-}
+@use "../../styles/breakpoints.scss" as *;
 
 .form-container {
   display: flex;
@@ -30,7 +26,30 @@ button[type="submit"] {
   border-radius: 4px;
 }
 
-.media-item {
-  display: inline;
+$min-media-width: 150px;
+$media-grid-gap-h: 20px;
+
+.media-grid {
+  display: grid;
+  padding: 0px;
   list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax($min-media-width, 1fr));
+  grid-auto-rows: minmax(100px, calc(#{$min-media-width} + 2rem));
+  gap: 0.8rem $media-grid-gap-h;
+}
+
+@media screen and (min-width: $small-breakpoint) {
+  .media-tall {
+    grid-row: span 2 / auto;
+  }
+
+  .media-wide {
+    grid-column: span 2 / auto;
+  }
+}
+
+@media screen and (min-width: ($min-media-width + $media-grid-gap-h) * 5) {
+  .media-grid {
+    grid-template-columns: repeat(5, minmax($min-media-width, 1fr));
+  }
 }

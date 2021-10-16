@@ -17,7 +17,6 @@ a {
 }
 
 .media {
-  background-color: #fff1;
   display: block;
   overflow: hidden;
   width: 100%;
@@ -33,7 +32,7 @@ a {
   position: relative;
   bottom: $subtitle-height;
   margin-bottom: -$subtitle-height;
-  height: $subtitle-height;
+  max-height: $subtitle-height;
   flex-shrink: 0;
   line-height: $subtitle-height / 2;
   overflow: hidden;

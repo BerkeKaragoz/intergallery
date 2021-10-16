@@ -6,3 +6,21 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+img {
+  background-color: #fff1;
+}
+
+img[alt] {
+  text-align: center;
+  font-weight: lighter;
+  font-size: large;
+}
+
+img[alt]::before {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 1.125rem #fff;
+}

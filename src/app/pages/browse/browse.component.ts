@@ -2,6 +2,8 @@ import URL from './../../core/consts/url';
 import { MediaService } from '../../core/media/media.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import MediaEntity from 'src/app/core/media/media.entity';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-browse',
@@ -14,7 +16,7 @@ export class BrowseComponent implements OnInit {
   isFormLoading = false;
   isFormSuccess = false;
 
-  mediaList: any;
+  mediaList: Observable<Array<MediaEntity>> | undefined;
 
   constructor(private fb: FormBuilder, private mediaService: MediaService) {}
 
@@ -32,7 +34,7 @@ export class BrowseComponent implements OnInit {
     this.mediaList = this.mediaService.getUserMedia();
   }
 
-  getMediaSource(media: any) {
+  getMediaSource(media: MediaEntity) {
     return URL.BASE + '/media/source/' + media.id;
   }
 

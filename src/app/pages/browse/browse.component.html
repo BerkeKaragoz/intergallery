@@ -1,6 +1,17 @@
 <app-header title="Intergallery"></app-header>
 <app-container>
-  <h1>Browse</h1>
+  <ul class="media-grid">
+    <li
+      *ngFor="let media of mediaList | async"
+      class="media-grid-item"
+      [ngClass]="{
+        'media-tall': media.name === '02',
+        'media-wide': media.name === '03'
+      }"
+    >
+      <app-media-card [media]="media"></app-media-card>
+    </li>
+  </ul>
 
   <div class="form-container">
     <form
@@ -46,19 +57,4 @@
   <ol>
     <li *ngFor="let media of mediaList | async">{{ media | json }}</li>
   </ol>
-
-  <ul>
-    <li class="media-item" *ngFor="let media of mediaList | async">
-      <a
-        *ngIf="media.type === 0 || media.type === 1"
-        [href]="getMediaSource(media)"
-        target="_blank"
-      >
-        <img class="image" [src]="getMediaSource(media)" />
-      </a>
-      <video class="image" *ngIf="media.type === 2" controls>
-        <source [src]="getMediaSource(media)" />
-      </video>
-    </li>
-  </ul>
 </app-container>

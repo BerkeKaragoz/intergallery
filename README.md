@@ -1,4 +1,6 @@
 ## Intergallery's Server
+Client: https://github.com/BerkeKaragoz/Intergallery (Angular, Currently private)
+
 <div align="center">
   
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f9ab2aa397264f94aae41e4cfeb14a74)](https://app.codacy.com/gh/BerkeKaragoz/Intergallery-Server?utm_source=github.com&utm_medium=referral&utm_content=BerkeKaragoz/Intergallery-Server&utm_campaign=Badge_Grade_Settings)

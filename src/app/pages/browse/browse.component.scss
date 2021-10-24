@@ -1,4 +1,6 @@
 @use "../../styles/breakpoints.scss" as *;
+@use "../../styles/shapes.scss" as *;
+@use "../../styles/colors.scss" as *;
 
 .form-container {
   display: flex;
@@ -32,13 +34,61 @@ $media-grid-gap-h: 20px;
 .media-grid {
   display: grid;
   padding: 0px;
+  margin: $border-radius * 4 0;
   list-style: none;
   grid-template-columns: repeat(auto-fit, minmax($min-media-width, 1fr));
   grid-auto-rows: minmax(100px, calc(#{$min-media-width} + 2rem));
   gap: 0.8rem $media-grid-gap-h;
 }
 
+.browse-container {
+  display: flex;
+}
+
+$sidebar-width: 175px;
+$sidebar-margin: 40px;
+
+.sidebar {
+  display: none;
+}
+
+.vertical-divider {
+  position: absolute;
+  display: inline-block;
+  height: calc(100vh - 150px);
+  right: 0;
+  top: 50px - $border-radius * 2;
+}
+
+.file-drop {
+  border: 2px dashed $secondary-color;
+  border-radius: $border-radius;
+  margin: $border-radius * 4 0;
+  color: rgba($secondary-color, 0.8);
+  text-align: center;
+  user-select: none;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 0 0 $border-radius 0;
+  user-select: none;
+}
+
+.sidebar-text {
+  font-size: 1rem;
+}
+
 @media screen and (min-width: $small-breakpoint) {
+  .media-container {
+    margin-left: $sidebar-width + $sidebar-margin;
+  }
+
   .media-tall {
     grid-row: span 2 / auto;
   }
@@ -46,9 +96,17 @@ $media-grid-gap-h: 20px;
   .media-wide {
     grid-column: span 2 / auto;
   }
+
+  .sidebar {
+    display: block;
+    position: fixed;
+    padding: $border-radius * 4 $border-radius * 4 $border-radius * 4 0;
+    min-width: $sidebar-width;
+    height: 100%;
+  }
 }
 
-@media screen and (min-width: ($min-media-width + $media-grid-gap-h) * 5) {
+@media screen and (min-width: (($min-media-width + $media-grid-gap-h) * 5) + $sidebar-width + $sidebar-margin) {
   .media-grid {
     grid-template-columns: repeat(5, minmax($min-media-width, 1fr));
   }

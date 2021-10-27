@@ -1,0 +1,57 @@
+@use "../../../styles/breakpoints.scss" as *;
+@use "../../../styles/shapes.scss" as *;
+@use "../../../styles/colors.scss" as *;
+
+$sidebar-width: 175px;
+$sidebar-margin: $border-radius * 5;
+
+:host {
+  display: none;
+}
+
+.vertical-divider {
+  position: absolute;
+  display: inline-block;
+  height: calc(100vh - 150px);
+  right: 0;
+  top: 50px - $border-radius * 2;
+}
+
+.file-drop {
+  border: 2px dashed $secondary-color;
+  border-radius: $border-radius;
+  margin: $border-radius * 4 0;
+  color: rgba($secondary-color, 0.8);
+  text-align: center;
+  user-select: none;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-label {
+  font-weight: 500;
+  font-size: small;
+  margin: 0 0 $border-radius 0;
+  user-select: none;
+}
+
+.sidebar-text {
+  font-size: 0.9rem;
+}
+
+//If desktop
+@media screen and (min-width: $small-breakpoint) {
+  :host {
+    display: block;
+    position: fixed;
+    padding: $sidebar-margin $sidebar-margin $sidebar-margin 0;
+    width: $sidebar-width - $sidebar-margin;
+    height: 100%;
+    background-color: rgba($background-color, 0.8);
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    z-index: 1;
+  }
+}

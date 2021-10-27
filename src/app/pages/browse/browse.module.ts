@@ -15,6 +15,7 @@ import { ContainerComponent } from '../../components/atomic/container/container.
 import { LayoutModule } from '@angular/cdk/layout';
 import { MediaCardComponent } from 'src/app/components/molecular/media-card/media-card.component';
 import { MatIconModule } from '@angular/material/icon';
+import { BrowseSidebarComponent } from 'src/app/components/layout/browse-sidebar/browse-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     HeaderComponent,
     ContainerComponent,
     MediaCardComponent,
+    BrowseSidebarComponent,
   ],
   imports: [
     CommonModule,

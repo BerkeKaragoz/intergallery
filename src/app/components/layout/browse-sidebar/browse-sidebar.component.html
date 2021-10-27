@@ -1,0 +1,33 @@
+<button mat-flat-button color="accent" style="width: 100%">
+  Add Media
+  <mat-icon>add_photo_alternate</mat-icon>
+</button>
+
+<div class="file-drop">Drop files here.</div>
+
+<div *ngIf="hoveredMedia !== null" class="media-info">
+  <span class="sidebar-label">Name</span>
+  <p class="sidebar-text">{{ hoveredMedia.name }}</p>
+  <span class="sidebar-label">Type</span>
+  <p class="sidebar-text" style="text-transform: capitalize">
+    {{ mediaType[hoveredMedia.type].toLocaleLowerCase() }}
+  </p>
+  <span class="sidebar-label">Creation Date</span>
+  <p class="sidebar-text">
+    {{ hoveredMedia.creationDate | date }}
+  </p>
+  <span *ngIf="hoveredMedia.updateDate !== hoveredMedia.creationDate">
+    <span class="sidebar-label">Last Update Date</span>
+    <p class="sidebar-text">
+      {{ hoveredMedia.creationDate | date }}
+    </p>
+  </span>
+  <span *ngIf="hoveredMedia.sourceIds.length > 1">
+    <span class="sidebar-label"># of Sources</span>
+    <p class="sidebar-text">
+      {{ hoveredMedia.sourceIds.length }}
+    </p>
+  </span>
+</div>
+
+<hr class="vertical-divider" />

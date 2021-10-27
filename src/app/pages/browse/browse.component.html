@@ -1,18 +1,7 @@
 <app-header title="Intergallery"></app-header>
 <div style="padding: 0 16px">
   <app-container class="browse-container">
-    <div class="sidebar">
-      <button mat-flat-button color="accent" style="width: 100%">
-        Add Media
-        <mat-icon>add_photo_alternate</mat-icon>
-      </button>
-      <div class="file-drop">Drop files here.</div>
-      <div class="media-info">
-        <h4 class="sidebar-label">Name</h4>
-        <p class="sidebar-text">Lorem ipsum</p>
-      </div>
-      <hr class="vertical-divider" />
-    </div>
+    <app-browse-sidebar [hoveredMedia]="hoveredMedia"></app-browse-sidebar>
     <div class="media-container">
       <ul class="media-grid">
         <li
@@ -23,7 +12,10 @@
             'media-wide': media.name === '03'
           }"
         >
-          <app-media-card [media]="media"></app-media-card>
+          <app-media-card
+            [media]="media"
+            (mouseenter)="setHoveredMedia(media)"
+          ></app-media-card>
         </li>
       </ul>
 

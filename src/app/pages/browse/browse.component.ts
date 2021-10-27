@@ -17,6 +17,7 @@ export class BrowseComponent implements OnInit {
   isFormSuccess = false;
 
   mediaList: Observable<Array<MediaEntity>> | undefined;
+  hoveredMedia: MediaEntity | null = null;
 
   constructor(private fb: FormBuilder, private mediaService: MediaService) {}
 
@@ -36,6 +37,10 @@ export class BrowseComponent implements OnInit {
 
   getMediaSource(media: MediaEntity) {
     return URL.BASE + '/media/source/' + media.id;
+  }
+
+  setHoveredMedia(media: MediaEntity | null) {
+    this.hoveredMedia = media;
   }
 
   async submitHandler() {

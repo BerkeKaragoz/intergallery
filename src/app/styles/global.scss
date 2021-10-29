@@ -24,3 +24,7 @@ img[alt]::before {
   justify-content: center;
   text-shadow: 0 0 1.125rem #fff;
 }
+
+.mat-form-field-flex:hover {
+  cursor: text;
+}

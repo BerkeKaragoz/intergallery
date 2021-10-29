@@ -6,17 +6,29 @@ import { AuthGuard } from './core/auth/auth.guard';
 const routes: Routes = [
   {
     path: 'browse',
+    pathMatch: 'full',
     canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/browse/browse.module').then((m) => m.BrowseModule),
   },
   {
-    path: '',
+    path: 'login',
+    pathMatch: 'full',
     component: HomeComponent,
   },
   {
+    path: 'register',
+    pathMatch: 'full',
+    component: HomeComponent,
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
+  {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'login',
   },
 ];
 

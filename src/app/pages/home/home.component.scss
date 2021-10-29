@@ -24,7 +24,7 @@ a:hover {
 
 .login-box {
   border-radius: 12px;
-  height: 500px;
+  min-height: 500px;
   max-width: 500px;
   min-width: 325px;
   width: 100vw;
@@ -100,7 +100,7 @@ mat-form-field {
   margin-right: -6px;
 }
 
-.forgot-password {
+.caption {
   font-size: smaller;
 }
 

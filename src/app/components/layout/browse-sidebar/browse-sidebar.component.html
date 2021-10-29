@@ -8,10 +8,12 @@
 <div *ngIf="hoveredMedia !== null" class="media-info">
   <span class="sidebar-label">Name</span>
   <p class="sidebar-text">{{ hoveredMedia.name }}</p>
-  <span class="sidebar-label">Type</span>
-  <p class="sidebar-text" style="text-transform: capitalize">
-    {{ mediaType[hoveredMedia.type].toLocaleLowerCase() }}
-  </p>
+  <span *ngIf="hoveredMedia.type !== mediaType.UNKNOWN">
+    <span class="sidebar-label">Type</span>
+    <p class="sidebar-text" style="text-transform: capitalize">
+      {{ mediaType[hoveredMedia.type].toLocaleLowerCase() }}
+    </p>
+  </span>
   <span class="sidebar-label">Creation Date</span>
   <p class="sidebar-text">
     {{ hoveredMedia.creationDate | date }}

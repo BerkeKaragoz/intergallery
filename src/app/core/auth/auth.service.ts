@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 import URL from '../consts/url';
-import { User, UserIdentification } from './../user/user.entity';
+import { User, UserAuth, UserIdentification } from './../user/user.entity';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class AuthService {
     this.fetchUser();
   }
 
-  registerUser(user: UserIdentification) {
+  registerUser(user: UserAuth) {
     return this.http
       .post<User>(URL.REGISTER, user, {
         withCredentials: true,
@@ -32,7 +32,7 @@ export class AuthService {
       );
   }
 
-  loginUser(user: UserIdentification) {
+  loginUser(user: UserAuth) {
     return this.http
       .post<User>(URL.LOGIN, user, {
         withCredentials: true,

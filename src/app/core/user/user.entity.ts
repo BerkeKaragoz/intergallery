@@ -24,4 +24,9 @@ export type UserIdentification = {
   password: string;
 };
 
+export type UserAuth = {
+  username: string;
+  password: string;
+};
+
 export default UserEntity;

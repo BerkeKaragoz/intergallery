@@ -1,3 +1,4 @@
+import { UserAuth, UserIdentification } from './../../core/user/user.entity';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -5,7 +6,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import URL from 'src/app/core/consts/url';
+import sameValidatorFactory from 'src/app/core/form/validator/same.validator';
 
+enum ModalTab {
+  LOGIN = 0,
+  REGISTER = 1,
+}
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -14,10 +20,10 @@ import URL from 'src/app/core/consts/url';
 export class HomeComponent implements OnInit {
   currentUser$ = this._authService.user$;
   users: Observable<any> = new Observable();
-  @Input() authForm!: FormGroup;
+  @Input() loginForm!: FormGroup;
+  @Input() registerForm!: FormGroup;
 
-  isFormLoading = false;
-  isFormSuccess = false;
+  modalTab: ModalTab = ModalTab.LOGIN;
 
   constructor(
     private fb: FormBuilder,
@@ -33,30 +39,63 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authForm = this.fb.group({
+    this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
 
+    this.registerForm = this.fb.group(
+      {
+        username: ['', Validators.required],
+        password: ['', Validators.required],
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: sameValidatorFactory('password', 'confirmPassword') }
+    );
+
     //this.authForm.valueChanges.subscribe(console.log);
   }
 
-  async submitHandler() {
-    if (this.authForm.valid) {
-      this.authForm.disable();
+  async loginHandler() {
+    if (this.loginForm.valid) {
+      this.loginForm.disable();
 
-      console.log('Sent', this.authForm.value);
+      console.log('Sent', this.loginForm.value);
 
-      this._authService.loginUser(this.authForm.value).subscribe(
+      this._authService.loginUser(this.loginForm.value).subscribe(
         (res) => {
           console.log('Received User', res);
-          this.authForm.enable();
+          this.loginForm.enable();
         },
         (err) => {
-          this.isFormSuccess = false;
-
           console.error('Form', err);
-          this.authForm.enable();
+          this.loginForm.enable();
+        }
+      );
+    } else {
+      console.error('The form is not valid!');
+    }
+  }
+
+  async registerHandler() {
+    if (this.registerForm.valid) {
+      this.registerForm.disable();
+
+      console.log('Sent', this.registerForm.value);
+
+      const newUser: UserAuth = {
+        username: this.registerForm.value.username,
+        password: this.registerForm.value.password,
+      };
+
+      this._authService.registerUser(newUser).subscribe(
+        (res) => {
+          console.log('Received User', res);
+          this.registerForm.enable();
+        },
+        (err) => {
+          console.error('Form', err);
+          this.registerForm.enable();
         }
       );
     } else {
@@ -68,5 +107,13 @@ export class HomeComponent implements OnInit {
     this.users = this.http.get(URL.BASE + '/user/all', {
       withCredentials: true,
     });
+  }
+
+  goToRegister() {
+    this.modalTab = ModalTab.REGISTER;
+  }
+
+  goToLogin() {
+    this.modalTab = ModalTab.LOGIN;
   }
 }

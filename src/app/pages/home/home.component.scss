@@ -132,6 +132,9 @@ mat-form-field {
     position: static;
     transform: translate(0, 0);
     margin: auto;
+    border-radius: 0px;
+    border-top: 1px solid #fff0;
+    border-bottom: 1px solid #fff0;
   }
   .bg-title {
     visibility: hidden;

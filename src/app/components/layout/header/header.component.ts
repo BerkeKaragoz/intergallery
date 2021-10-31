@@ -10,6 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
   currentUser: User;
+  isMenuOpen: boolean;
   @Input() title: string;
 
   constructor(authService: AuthService) {
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit {
     authService.user$.subscribe((u) => {
       this.currentUser = u;
     });
+    this.isMenuOpen = false;
   }
 
   ngOnInit(): void {}

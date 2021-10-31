@@ -14,6 +14,7 @@
         >
           <app-media-card
             [media]="media"
+            [ngClass]="{ 'hovered-media': hoveredMedia?.id === media.id }"
             (mouseenter)="setHoveredMedia(media)"
           ></app-media-card>
         </li>

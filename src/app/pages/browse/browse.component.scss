@@ -47,6 +47,10 @@ $media-grid-gap-h: $border-radius * 4;
   display: flex;
 }
 
+.hovered-media {
+  outline: 1px solid rgba($secondary-color, 0.25);
+}
+
 $sidebar-width: 175px;
 $sidebar-margin: $border-radius * 5;
 

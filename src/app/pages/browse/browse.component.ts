@@ -1,10 +1,13 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import URL from './../../core/consts/url';
 import { MediaService } from '../../core/media/media.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import MediaEntity from 'src/app/core/media/media.entity';
 import { Observable, of } from 'rxjs';
+
+const initialPage = 1;
+const initialPerPage = 20;
 
 @Component({
   selector: 'app-browse',
@@ -17,11 +20,14 @@ export class BrowseComponent implements OnInit {
   isFormLoading = false;
   isFormSuccess = false;
 
+  page = initialPage;
+  perPage = initialPerPage;
+
   mediaList$: Observable<Array<MediaEntity>> | undefined;
   hoveredMedia: MediaEntity | null = null;
 
   constructor(
-    private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private mediaService: MediaService
   ) {}
@@ -33,10 +39,18 @@ export class BrowseComponent implements OnInit {
       isLocal: [true, Validators.required],
     });
 
-    this.getUserMedia();
+    this.route.queryParams.subscribe((params) => {
+      const pageParam = +params['page'];
+      const perPageParam = +params['perPage'];
+
+      this.page = isNaN(pageParam) ? initialPage : pageParam;
+      this.perPage = isNaN(perPageParam) ? initialPage : perPageParam;
+
+      this.getUserMedia(this.page, this.perPage);
+    });
   }
 
-  getUserMedia(page = 1, perPage = 20) {
+  getUserMedia(page = initialPage, perPage = initialPerPage) {
     this.mediaService.getUserMedia(page, perPage).subscribe((res) => {
       console.log(res);
       this.mediaList$ = of(res.data);

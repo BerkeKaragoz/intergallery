@@ -3,7 +3,7 @@
 *.secret
 
 # Angular v13
-.angular
+/.angular/cache
 
 # compiled output
 /dist

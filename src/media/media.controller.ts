@@ -17,6 +17,7 @@ import { Response as ExpressRes } from 'express';
 import { join } from 'path';
 import { ApiTags, ApiBasicAuth } from '@nestjs/swagger';
 import { User } from 'src/core/decorator/user.decorator';
+import { UserMediaDTO } from './dto/user-media.dto';
 
 @ApiTags('media')
 @ApiBasicAuth()
@@ -31,8 +32,12 @@ export class MediaController {
   }
 
   @Get('user')
-  getUserMedia(@Request() req): Promise<MediaEntity[]> {
-    return this.mediaService.getUserMedia(req.user);
+  getUserMedia(
+    @User() user,
+    @Query('page') page,
+    @Query('perPage') perPage,
+  ): Promise<UserMediaDTO> {
+    return this.mediaService.getUserMedia(user, +page, +perPage);
   }
 
   @Get('/source/:mediaId')

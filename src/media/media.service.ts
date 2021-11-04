@@ -1,11 +1,12 @@
+import { UserEntity } from 'src/model/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
-import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateMediaDto } from './dto/create-media.dto';
+import { UserMediaDTO } from './dto/user-media.dto';
 
 @Injectable()
 export class MediaService {
@@ -25,12 +26,20 @@ export class MediaService {
     });
   }
 
-  async getUserMedia(user: any): Promise<MediaEntity[]> {
-    const mediaList = await this.mediaRepository.find({
+  async getUserMedia(
+    user: UserEntity,
+    page = 1,
+    perPage = 20,
+  ): Promise<UserMediaDTO> {
+    const [mediaList, total] = await this.mediaRepository.findAndCount({
       where: { owner: user.id },
+      take: perPage,
+      skip: (page - 1) * perPage,
     });
 
-    return mediaList;
+    const dto = new UserMediaDTO(mediaList, total, page, perPage);
+
+    return dto;
   }
 
   getMediaById(id: number): Promise<MediaEntity> {

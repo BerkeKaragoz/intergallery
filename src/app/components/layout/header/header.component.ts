@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  currentUser: User;
+  currentUser: User | null;
   isMenuOpen: boolean;
   @Input() title: string;
 

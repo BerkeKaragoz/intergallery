@@ -27,7 +27,6 @@ import { BrowseSidebarComponent } from 'src/app/components/layout/browse-sidebar
   ],
   imports: [
     CommonModule,
-    BrowseRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -37,6 +36,8 @@ import { BrowseSidebarComponent } from 'src/app/components/layout/browse-sidebar
     MatCheckboxModule,
     MatIconModule,
     LayoutModule,
+    BrowseRoutingModule,
   ],
+  bootstrap: [BrowseComponent],
 })
 export class BrowseModule {}

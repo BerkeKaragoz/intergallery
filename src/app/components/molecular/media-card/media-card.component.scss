@@ -27,7 +27,7 @@ a {
   border-radius: $border-radius;
   //margin-bottom: calc(#{$subtitle-height} + #{$border-radius});
   flex-shrink: 0;
-  //object-position: top;
+  object-position: center 16.666%; //top portion of rule of thirds (6 vertical slices for css)
   user-select: none;
 }
 

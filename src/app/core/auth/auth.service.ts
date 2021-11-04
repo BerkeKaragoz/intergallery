@@ -9,14 +9,14 @@ import { User, UserAuth, UserIdentification } from './../user/user.entity';
   providedIn: 'root',
 })
 export class AuthService {
-  readonly user$ = new BehaviorSubject<User>(new User());
+  readonly user$ = new BehaviorSubject<User | null>(null);
 
   readonly fetchUser$ = this.http.get<User>(URL.GETUSER, {
     withCredentials: true,
   });
 
   constructor(private http: HttpClient) {
-    this.fetchUser();
+    //this.fetchUser();
   }
 
   registerUser(user: UserAuth) {
@@ -55,5 +55,11 @@ export class AuthService {
     });
 
     return this.fetchUser$;
+  }
+
+  canActivate() {
+    const isLoggedIn = this.isLoggedIn();
+
+    return !!isLoggedIn;
   }
 }

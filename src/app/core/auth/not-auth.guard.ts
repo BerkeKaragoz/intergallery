@@ -5,16 +5,16 @@ import { CanActivate, Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class NotAuthGuard implements CanActivate {
   constructor(private _authService: AuthService, private _router: Router) {}
 
   canActivate() {
-    const canActivate = this._authService.canActivate();
+    const canActivate = !this._authService.canActivate();
 
-    console.log('AuthGuard: ', canActivate);
+    console.log('NotAuthGuard: ', canActivate);
 
     if (!canActivate) {
-      //this._router.navigate(['/login']); //or wherever the login page is
+      //this._router.navigate(['/']);
     }
 
     return canActivate;

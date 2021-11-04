@@ -1,34 +1,31 @@
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './core/auth/auth.guard';
+import { NotAuthGuard } from './core/auth/not-auth.guard';
 
 const routes: Routes = [
   {
-    path: 'browse',
-    pathMatch: 'full',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./pages/browse/browse.module').then((m) => m.BrowseModule),
-  },
-  {
     path: 'login',
     pathMatch: 'full',
+    canActivate: [NotAuthGuard],
     component: HomeComponent,
   },
   {
     path: 'register',
     pathMatch: 'full',
+    canActivate: [NotAuthGuard],
     component: HomeComponent,
   },
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'login',
-  },
+  // App component handles these
+  // {
+  //   path: '',
+  //   pathMatch: 'full',
+  //   redirectTo: 'login',
+  // },
   {
     path: '**',
-    redirectTo: 'login',
+    component: NotFoundComponent,
   },
 ];
 

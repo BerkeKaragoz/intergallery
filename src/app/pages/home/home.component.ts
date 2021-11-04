@@ -33,11 +33,11 @@ export class HomeComponent implements OnInit {
     private location: Location,
     private _authService: AuthService
   ) {
-    this.currentUser$.subscribe((data) => {
-      if (data) {
-        this.router.navigateByUrl('/browse');
-      }
-    });
+    // this.currentUser$.subscribe((data) => {
+    //   if (data) {
+    //     this.router.navigateByUrl('/browse');
+    //   }
+    // });
 
     switch (router.url.substr(1).toUpperCase()) {
       case ModalTab[ModalTab.REGISTER]:
@@ -75,6 +75,7 @@ export class HomeComponent implements OnInit {
       this._authService.loginUser(this.loginForm.value).subscribe(
         (res) => {
           console.log('Received User', res);
+          this.router.navigateByUrl('/browse');
           this.loginForm.enable();
         },
         (err) => {

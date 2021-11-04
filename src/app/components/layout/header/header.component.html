@@ -13,7 +13,7 @@
             <button mat-button>Logout</button>
           </a>
         </li>
-        <li>
+        <li *ngIf="currentUser !== null">
           <button mat-flat-button color="accent">
             {{ currentUser.username }}
           </button>
@@ -49,8 +49,8 @@
         <button mat-stroked-button>Logout</button>
       </a>
     </li>
-    <hr />
-    <li>
+    <li *ngIf="currentUser !== null">
+      <hr />
       <button mat-stroked-button>
         {{ currentUser.username }}
       </button>

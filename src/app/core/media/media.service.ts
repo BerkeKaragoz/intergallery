@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import UserMediaDTO from './dto/userMedia.dto';
 import MediaEntity from './media.entity';
 
 @Injectable({
@@ -30,9 +31,15 @@ export class MediaService {
     return throwError('Something bad happened; please try again later.');
   }
 
-  getUserMedia() {
+  getUserMedia(page = 1, perPage = 20) {
     return this.http
-      .get<Array<MediaEntity>>(this._userMediaUrl, { withCredentials: true })
+      .get<UserMediaDTO>(this._userMediaUrl, {
+        withCredentials: true,
+        params: {
+          page,
+          perPage,
+        },
+      })
       .pipe(retry(3), catchError(this.handleError));
   }
 

@@ -5,7 +5,7 @@
     <div class="media-container">
       <ul class="media-grid">
         <li
-          *ngFor="let media of mediaList | async"
+          *ngFor="let media of mediaList$ | async"
           class="media-grid-item"
           [ngClass]="{
             'media-tall': media.name === '02',
@@ -19,7 +19,6 @@
           ></app-media-card>
         </li>
       </ul>
-
       <div class="form-container">
         <form
           [formGroup]="mediaForm"
@@ -62,7 +61,7 @@
       </button>
 
       <ol>
-        <li *ngFor="let media of mediaList | async">{{ media | json }}</li>
+        <li *ngFor="let media of mediaList$ | async">{{ media | json }}</li>
       </ol>
     </div>
   </app-container>

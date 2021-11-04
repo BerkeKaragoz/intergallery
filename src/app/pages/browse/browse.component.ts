@@ -1,9 +1,10 @@
+import { Router } from '@angular/router';
 import URL from './../../core/consts/url';
 import { MediaService } from '../../core/media/media.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import MediaEntity from 'src/app/core/media/media.entity';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-browse',
@@ -16,10 +17,14 @@ export class BrowseComponent implements OnInit {
   isFormLoading = false;
   isFormSuccess = false;
 
-  mediaList: Observable<Array<MediaEntity>> | undefined;
+  mediaList$: Observable<Array<MediaEntity>> | undefined;
   hoveredMedia: MediaEntity | null = null;
 
-  constructor(private fb: FormBuilder, private mediaService: MediaService) {}
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private mediaService: MediaService
+  ) {}
 
   ngOnInit(): void {
     this.mediaForm = this.fb.group({
@@ -31,8 +36,11 @@ export class BrowseComponent implements OnInit {
     this.getUserMedia();
   }
 
-  getUserMedia() {
-    this.mediaList = this.mediaService.getUserMedia();
+  getUserMedia(page = 1, perPage = 20) {
+    this.mediaService.getUserMedia(page, perPage).subscribe((res) => {
+      console.log(res);
+      this.mediaList$ = of(res.data);
+    });
   }
 
   getMediaSource(media: MediaEntity) {

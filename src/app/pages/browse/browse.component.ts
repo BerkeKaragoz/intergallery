@@ -44,7 +44,7 @@ export class BrowseComponent implements OnInit {
       const perPageParam = +params['perPage'];
 
       this.page = isNaN(pageParam) ? initialPage : pageParam;
-      this.perPage = isNaN(perPageParam) ? initialPage : perPageParam;
+      this.perPage = isNaN(perPageParam) ? initialPerPage : perPageParam;
 
       this.getUserMedia(this.page, this.perPage);
     });

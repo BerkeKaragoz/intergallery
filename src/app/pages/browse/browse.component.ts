@@ -22,6 +22,7 @@ export class BrowseComponent implements OnInit {
 
   page = initialPage;
   perPage = initialPerPage;
+  totalPages: number = -1;
 
   mediaList$: Observable<Array<MediaEntity>> | undefined;
   hoveredMedia: MediaEntity | null = null;
@@ -54,6 +55,7 @@ export class BrowseComponent implements OnInit {
     this.mediaService.getUserMedia(page, perPage).subscribe((res) => {
       console.log(res);
       this.mediaList$ = of(res.data);
+      this.totalPages = +res.totalPages;
     });
   }
 

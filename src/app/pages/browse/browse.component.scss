@@ -51,6 +51,46 @@ $media-grid-gap-h: $border-radius * 4;
   outline: 1px solid rgba($secondary-color, 0.25);
 }
 
+.media-list-footer {
+  display: block;
+  text-align: center;
+}
+
+.page-buttons {
+  display: inline-block;
+}
+
+.page-buttons > button,
+.page-buttons > span {
+  margin: $border-radius;
+}
+
+//I just wanted to do this progress slider thing
+$page-divider-width: 124px;
+.page-divider-container {
+  width: $page-divider-width;
+  overflow: hidden;
+  display: flex;
+  margin: auto;
+}
+
+.page-divider {
+  width: 100%;
+  margin-top: $border-radius * 4;
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+  border-right: 0;
+  //border: 0;
+  //height: 1px;
+  color: rgba($primary-color, 0.5);
+}
+
+.page-progress {
+  color: rgba($primary-color, 0.8);
+  width: 0%;
+}
+
 $sidebar-width: 175px;
 $sidebar-margin: $border-radius * 5;
 

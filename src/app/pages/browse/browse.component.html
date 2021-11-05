@@ -19,6 +19,42 @@
           ></app-media-card>
         </li>
       </ul>
+      <div class="media-list-footer">
+        <div class="page-buttons">
+          <div class="page-divider-container">
+            <hr
+              class="page-divider page-progress"
+              [style]="'width: ' + (page * 100) / totalPages + '%'"
+            />
+            <hr
+              class="page-divider"
+              [style]="'width: ' + (100 - (page * 100) / totalPages) + '%'"
+            />
+          </div>
+          <button
+            mat-button
+            [disabled]="page <= 1"
+            [routerLink]="['.']"
+            [preserveFragment]="true"
+            [queryParams]="{ page: page - 1 }"
+            [queryParamsHandling]="'merge'"
+          >
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          <span>{{ page }}</span>
+          <button
+            mat-button
+            [disabled]="page + 1 > totalPages"
+            [routerLink]="['.']"
+            [preserveFragment]="true"
+            [queryParams]="{ page: page + 1 }"
+            [queryParamsHandling]="'merge'"
+          >
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+        </div>
+      </div>
+
       <div class="form-container">
         <form
           [formGroup]="mediaForm"

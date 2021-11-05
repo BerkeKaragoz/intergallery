@@ -1,6 +1,6 @@
-@use "../../../styles/breakpoints.scss" as *;
-@use "../../../styles/shapes.scss" as *;
-@use "../../../styles/colors.scss" as *;
+@use "../../../../styles/breakpoints.scss" as *;
+@use "../../../../styles/shapes.scss" as *;
+@use "../../../../styles/colors.scss" as *;
 
 $sidebar-width: 175px;
 $sidebar-margin: $border-radius * 5;

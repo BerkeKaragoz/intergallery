@@ -1,4 +1,4 @@
-import { MediaType } from './../../../core/media/media.entity';
+import { MediaType } from '../../../../core/media/media.entity';
 import { Component, Input, OnInit } from '@angular/core';
 import MediaEntity from 'src/app/core/media/media.entity';
 

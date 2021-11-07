@@ -21,6 +21,9 @@ enum ModalTab {
 export class HomeComponent implements OnInit {
   currentUser$ = this._authService.user$;
   users: Observable<any> = new Observable();
+  showLoginPassword: boolean;
+  showRegisterPassword: boolean;
+  showConfirmPassword: boolean;
   @Input() loginForm!: FormGroup;
   @Input() registerForm!: FormGroup;
 
@@ -38,6 +41,10 @@ export class HomeComponent implements OnInit {
     //     this.router.navigateByUrl('/browse');
     //   }
     // });
+
+    this.showLoginPassword = false;
+    this.showRegisterPassword = false;
+    this.showConfirmPassword = false;
 
     switch (router.url.substr(1).toUpperCase()) {
       case ModalTab[ModalTab.REGISTER]:

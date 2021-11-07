@@ -14,7 +14,24 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput type="password" required formControlName="password" />
+        <input
+          matInput
+          [type]="showLoginPassword ? 'text' : 'password'"
+          required
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showLoginPassword = !showLoginPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showLoginPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showLoginPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
       </mat-form-field>
       <div class="split-container">
         <a class="mat-primary caption" href="/reset-password"
@@ -54,17 +71,46 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput type="password" required formControlName="password" />
+        <input
+          matInput
+          [type]="showRegisterPassword ? 'text' : 'password'"
+          required
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showRegisterPassword = !showRegisterPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showRegisterPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showRegisterPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Confirm Password</mat-label>
         <input
           matInput
-          type="password"
+          [type]="showConfirmPassword ? 'text' : 'password'"
           required
           formControlName="confirmPassword"
         />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showConfirmPassword = !showConfirmPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showConfirmPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showConfirmPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
       </mat-form-field>
 
       <div class="split-container">

@@ -9,12 +9,15 @@ $sidebar-margin: $border-radius * 5;
   display: none;
 }
 
+$divider-top-distance: 50px - $border-radius * 2;
+$divider-height-subs: 150px;
+$divider-bottom-distance: $divider-height-subs - $divider-top-distance;
 .vertical-divider {
   position: absolute;
   display: inline-block;
-  height: calc(100vh - 150px);
+  height: calc(100% - $divider-height-subs);
   right: 0;
-  top: 50px - $border-radius * 2;
+  top: $divider-top-distance;
 }
 
 .file-drop {
@@ -41,14 +44,28 @@ $sidebar-margin: $border-radius * 5;
   font-size: 0.9rem;
 }
 
+.top-container {
+  display: block;
+  width: 100%;
+}
+
+.bottom-container {
+  margin-bottom: ($sidebar-margin * -3) + $divider-bottom-distance;
+  text-align: end;
+}
+
+$header-height: 50px;
 //If desktop
 @media screen and (min-width: $small-breakpoint) {
   :host {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: column;
     position: fixed;
     padding: $sidebar-margin $sidebar-margin $sidebar-margin 0;
     width: $sidebar-width - $sidebar-margin;
-    height: 100%;
+    height: calc(100% - $header-height - $sidebar-margin * 2);
     background-color: rgba($background-color, 0.8);
     overflow-x: hidden;
     overflow-wrap: break-word;

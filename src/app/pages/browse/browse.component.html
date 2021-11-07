@@ -1,7 +1,12 @@
 <app-header title="Intergallery"></app-header>
 <div style="padding: 0 16px">
   <app-container class="browse-container">
-    <app-browse-sidebar [hoveredMedia]="hoveredMedia"></app-browse-sidebar>
+    <app-browse-sidebar
+      [hoveredMedia]="hoveredMedia"
+      [page]="page"
+      [totalPages]="totalPages"
+      [perPage]="perPage"
+    ></app-browse-sidebar>
     <div class="media-container">
       <ul class="media-grid">
         <li

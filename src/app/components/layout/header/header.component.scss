@@ -126,7 +126,7 @@ hr {
     height: $height * 0.75;
     width: $height * 0.75;
     min-width: $height * 0.75;
-    outline: none;
+    outline: 3px solid rgba($primary-color, 0.8);
   }
 }
 

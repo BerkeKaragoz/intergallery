@@ -9,6 +9,9 @@ import MediaEntity from 'src/app/core/media/media.entity';
 })
 export class BrowseSidebarComponent implements OnInit {
   @Input() hoveredMedia: MediaEntity | null = null;
+  @Input() page: number | null = null;
+  @Input() totalPages: number | null = null;
+  @Input() perPage: number | null = null;
 
   mediaType = MediaType;
 

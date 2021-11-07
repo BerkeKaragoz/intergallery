@@ -1,35 +1,44 @@
-<button mat-flat-button color="accent" style="width: 100%">
-  Add Media
-  <mat-icon>add_photo_alternate</mat-icon>
-</button>
+<div class="top-container">
+  <button mat-flat-button color="accent" style="width: 100%">
+    Add Media
+    <mat-icon>add_photo_alternate</mat-icon>
+  </button>
 
-<div class="file-drop">Drop files here.</div>
+  <div class="file-drop">Drop files here.</div>
 
-<div *ngIf="hoveredMedia !== null" class="media-info">
-  <span class="sidebar-label">Name</span>
-  <p class="sidebar-text">{{ hoveredMedia.name }}</p>
-  <span *ngIf="hoveredMedia.type !== mediaType.UNKNOWN">
-    <span class="sidebar-label">Type</span>
-    <p class="sidebar-text" style="text-transform: capitalize">
-      {{ mediaType[hoveredMedia.type].toLocaleLowerCase() }}
-    </p>
-  </span>
-  <span class="sidebar-label">Creation Date</span>
-  <p class="sidebar-text">
-    {{ hoveredMedia.creationDate | date }}
-  </p>
-  <span *ngIf="hoveredMedia.updateDate !== hoveredMedia.creationDate">
-    <span class="sidebar-label">Last Update Date</span>
+  <div *ngIf="hoveredMedia !== null" class="media-info">
+    <span class="sidebar-label">Name</span>
+    <p class="sidebar-text">{{ hoveredMedia.name }}</p>
+    <span *ngIf="hoveredMedia.type !== mediaType.UNKNOWN">
+      <span class="sidebar-label">Type</span>
+      <p class="sidebar-text" style="text-transform: capitalize">
+        {{ mediaType[hoveredMedia.type].toLocaleLowerCase() }}
+      </p>
+    </span>
+    <span class="sidebar-label">Creation Date</span>
     <p class="sidebar-text">
       {{ hoveredMedia.creationDate | date }}
     </p>
-  </span>
-  <span *ngIf="hoveredMedia.sourceIds.length > 1">
-    <span class="sidebar-label"># of Sources</span>
-    <p class="sidebar-text">
-      {{ hoveredMedia.sourceIds.length }}
-    </p>
-  </span>
+    <span *ngIf="hoveredMedia.updateDate !== hoveredMedia.creationDate">
+      <span class="sidebar-label">Last Update Date</span>
+      <p class="sidebar-text">
+        {{ hoveredMedia.creationDate | date }}
+      </p>
+    </span>
+    <span *ngIf="hoveredMedia.sourceIds.length > 1">
+      <span class="sidebar-label"># of Sources</span>
+      <p class="sidebar-text">
+        {{ hoveredMedia.sourceIds.length }}
+      </p>
+    </span>
+  </div>
+</div>
+
+<div class="bottom-container">
+  <p *ngIf="false">{{ perPage }} per page</p>
+  <p *ngIf="totalPages !== null && page !== null">
+    Page {{ page }} of {{ totalPages }}
+  </p>
 </div>
 
 <hr class="vertical-divider" />

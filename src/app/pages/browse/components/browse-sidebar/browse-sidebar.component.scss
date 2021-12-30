@@ -3,13 +3,13 @@
 @use "../../../../styles/colors.scss" as *;
 
 $sidebar-width: 175px;
-$sidebar-margin: $border-radius * 5;
+$sidebar-margin: $space * 5;
 
 :host {
   display: none;
 }
 
-$divider-top-distance: 50px - $border-radius * 2;
+$divider-top-distance: 50px - $space * 2;
 $divider-height-subs: 150px;
 $divider-bottom-distance: $divider-height-subs - $divider-top-distance;
 .vertical-divider {
@@ -23,7 +23,7 @@ $divider-bottom-distance: $divider-height-subs - $divider-top-distance;
 .file-drop {
   border: 2px dashed $secondary-color;
   border-radius: $border-radius;
-  margin: $border-radius * 4 0;
+  margin: $space * 4 0;
   color: rgba($secondary-color, 0.8);
   text-align: center;
   user-select: none;
@@ -36,7 +36,7 @@ $divider-bottom-distance: $divider-height-subs - $divider-top-distance;
 .sidebar-label {
   font-weight: 500;
   font-size: small;
-  margin: 0 0 $border-radius 0;
+  margin: 0 0 $space 0;
   user-select: none;
 }
 

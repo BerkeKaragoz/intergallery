@@ -53,7 +53,7 @@ hr {
   border: none;
   height: 1px;
   background-color: rgba($secondary-color, 0.6);
-  margin: $border-radius 0px;
+  margin: $space 0px;
 }
 
 .close-icon {
@@ -96,7 +96,7 @@ hr {
     width: 100%;
     background-color: rgba($primary-color, 0.8);
     z-index: 9;
-    padding: $border-radius * 2 16px $border-radius 16px; //mat-toolbar
+    padding: $space * 2 16px $space 16px; //mat-toolbar
     box-sizing: border-box;
     visibility: hidden;
     opacity: 0;

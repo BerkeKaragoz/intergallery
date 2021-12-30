@@ -26,13 +26,17 @@ export class AppComponent {
 
         this.isLoading = false;
 
-        this.router.navigate([initialRoute.path], {
-          preserveFragment: true,
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
-          queryParams: new DefaultUrlSerializer().parse(initialRoute.query)
-            .queryParams,
-        });
+        this.router
+          .navigate([initialRoute.path], {
+            preserveFragment: true,
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+            queryParams: new DefaultUrlSerializer().parse(initialRoute.query)
+              .queryParams,
+          })
+          .then(() => {
+            console.log('Navigated to: ', initialRoute.path);
+          });
       },
       (err) => {
         this.isLoading = false;

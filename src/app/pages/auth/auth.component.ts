@@ -1,4 +1,4 @@
-import { UserAuth } from './../../core/user/user.entity';
+import { UserAuth } from '../../core/user/user.entity';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -14,11 +14,11 @@ enum ModalTab {
   REGISTER = 1,
 }
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'app-auth',
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class AuthComponent implements OnInit {
   currentUser$ = this._authService.user$;
   users: Observable<any> = new Observable();
   showLoginPassword: boolean;

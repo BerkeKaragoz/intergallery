@@ -58,8 +58,6 @@ export class AuthService {
   }
 
   canActivate() {
-    const isLoggedIn = this.isLoggedIn();
-
-    return !!isLoggedIn;
+    return this.isLoggedIn();
   }
 }

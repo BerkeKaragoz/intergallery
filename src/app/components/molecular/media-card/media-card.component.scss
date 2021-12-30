@@ -25,7 +25,7 @@ a {
   height: 100%;
   object-fit: cover;
   border-radius: $border-radius;
-  //margin-bottom: calc(#{$subtitle-height} + #{$border-radius});
+  //margin-bottom: calc(#{$subtitle-height} + #{$space});
   flex-shrink: 0;
   object-position: center 16.666%; //top portion of rule of thirds (6 vertical slices for css)
   user-select: none;
@@ -62,6 +62,6 @@ $subtitle-padding: $subtitle-height / 4;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  margin: $border-radius;
+  margin: $space;
   text-shadow: 0px 1px 3px #202;
 }

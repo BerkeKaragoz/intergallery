@@ -1,5 +1,5 @@
 import { MediaType } from '../../../../core/media/media.entity';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import MediaEntity from 'src/app/core/media/media.entity';
 
 @Component({
@@ -16,6 +16,10 @@ export class BrowseSidebarComponent implements OnInit {
   mediaType = MediaType;
 
   constructor() {}
+
+  openDialog() {
+    console.log('kilk');
+  }
 
   ngOnInit(): void {}
 }

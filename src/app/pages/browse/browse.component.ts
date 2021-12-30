@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import URL from './../../core/consts/url';
 import { MediaService } from '../../core/media/media.service';
 import { Component, Input, OnInit } from '@angular/core';
@@ -7,7 +7,7 @@ import MediaEntity from 'src/app/core/media/media.entity';
 import { Observable, of } from 'rxjs';
 
 const initialPage = 1;
-const initialPerPage = 20;
+const initialPerPage = 25;
 
 @Component({
   selector: 'app-browse',

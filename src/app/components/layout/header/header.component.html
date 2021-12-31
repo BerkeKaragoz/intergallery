@@ -25,6 +25,7 @@
       class="mobile-only main-icon-button"
       mat-flat-button
       color="accent"
+      (click)="openDialog()"
       [ngClass]="{ 'minimized-icon-button': isMenuOpen }"
     >
       <mat-icon>add_photo_alternate</mat-icon>

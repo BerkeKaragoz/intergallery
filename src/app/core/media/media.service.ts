@@ -1,3 +1,4 @@
+import { CreateSourceDTO } from './dto/source.dto';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
@@ -43,7 +44,7 @@ export class MediaService {
       .pipe(retry(3), catchError(this.handleError));
   }
 
-  createMedia(name: string, sources: Array<any>) {
+  createMedia(name: string, sources: Array<CreateSourceDTO>) {
     return this.http
       .post<MediaEntity>(
         this._createMediaUrl,

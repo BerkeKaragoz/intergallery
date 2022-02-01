@@ -1,5 +1,7 @@
 ## Intergallery's Server
-Client: https://github.com/BerkeKaragoz/Intergallery (Angular, Currently private)
+Client: *Currently not on GitHub, soon™.* (React, Redux, MUI)
+
+Angular Prototype Client: https://github.com/BerkeKaragoz/Intergallery-Angular-Prototype
 
 <div align="center">
   
@@ -8,8 +10,10 @@ Client: https://github.com/BerkeKaragoz/Intergallery (Angular, Currently private
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/BerkeKaragoz/Intergallery-Server.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/BerkeKaragoz/Intergallery-Server/alerts/)
 
 </div>
+<h3>From Figma:</h3>
 
 ![image](https://user-images.githubusercontent.com/34271483/136295333-2abd98ec-3e7d-4e2b-9c45-6ae13abb1f96.png)
+![image](https://user-images.githubusercontent.com/34271483/151973572-34a46b8e-c4b9-4fab-ae24-424b9e899a7c.png)
 
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>

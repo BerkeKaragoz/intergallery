@@ -1,6 +1,7 @@
 # Intergallery Angular Client Prototype
 
 ![image](https://user-images.githubusercontent.com/34271483/151972500-79a4f984-3e01-405c-8dd9-9fc08c22824a.png)
+![image](https://user-images.githubusercontent.com/34271483/151973123-6940e55a-0981-46f9-98af-621edb73f7e6.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.6.
 

@@ -84,13 +84,19 @@ export class AuthService {
       passwordHash,
     });
 
-    return this.usersRepository.save(newUser).catch((err) => {
-      if (err.errno === 19) {
-        throw new ConflictException(`The "${username}" username is taken.`);
-      }
-      console.error(username, err.driverError);
-      throw new InternalServerErrorException(null, err.driverError);
-    });
+    return this.usersRepository
+      .save(newUser)
+      .then((res) => {
+        delete res.passwordHash;
+        return res;
+      })
+      .catch((err) => {
+        if (err.errno === 19) {
+          throw new ConflictException(`The "${username}" username is taken.`);
+        }
+        console.error(username, err.driverError);
+        throw new InternalServerErrorException(null, err.driverError);
+      });
   }
 
   async getUserByUsername(username: string): Promise<UserEntity> {

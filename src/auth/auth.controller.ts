@@ -58,7 +58,10 @@ export class AuthController {
   })
   @UsePipes(UsernameValidationPipe)
   @Post('register')
-  register(@Body() dto: CreateUserDto): Promise<UserEntity> {
-    return this.authService.register(dto);
+  register(@Req() req, @Body() dto: CreateUserDto): Promise<UserEntity> {
+    return this.authService.register(dto).then((data) => {
+      req.logIn(data, (err) => err);
+      return data;
+    });
   }
 }

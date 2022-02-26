@@ -1,22 +1,22 @@
-import React from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { fetchGetUser, fetchLoginUser } from "@/redux/slice/userSlice";
+import AddMediaModal from "@/components/AddMediaModal";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import Image from "@/components/Image";
+import Main from "@/components/Main";
+import { API_BASE_URL } from "@/lib/api";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/apiSlice";
+import { fetchGetUser } from "@/redux/slice/userSlice";
 import {
-  Container,
   ImageList,
   ImageListItem,
   ImageListItemBar,
   LinearProgress,
   Paper,
 } from "@mui/material";
-import { API_BASE_URL } from "@/lib/api";
-import Image from "@/components/Image";
-import Main from "@/components/Main";
+import React from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router";
 import AuthPage from "./auth";
-import Footer from "@/components/Footer";
 
 export const AuthenticatedContainer: React.FC<{}> = (props) => {
   const { children } = props;
@@ -100,6 +100,7 @@ export const MainPage = () => {
       </ImageList>
       <pre>{JSON.stringify(userState, null, 2)}</pre>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <AddMediaModal />
     </Main>
   );
 };

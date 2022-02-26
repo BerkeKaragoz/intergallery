@@ -15,8 +15,15 @@ export const apiSlice = createApi({
       // The URL for the request is '/fakeApi/posts'
       query: () => "/media/user",
     }),
+    postMedia: builder.mutation({
+      query: (media) => ({
+        url: "/media",
+        method: "POST",
+        body: media,
+      }),
+    }),
   }),
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetMediaQuery } = apiSlice;
+export const { useGetMediaQuery, usePostMediaMutation } = apiSlice;

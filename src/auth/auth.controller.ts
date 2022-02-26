@@ -6,7 +6,6 @@ import {
   Controller,
   Post,
   UseGuards,
-  Request,
   Get,
   Res,
   UsePipes,
@@ -25,7 +24,7 @@ export class AuthController {
 
   @UseGuards(LocalRegisterGuard)
   @Post('login') // Creates new session
-  login(@Request() req): UserEntity {
+  login(@Req() req): UserEntity {
     return req.user;
   }
 

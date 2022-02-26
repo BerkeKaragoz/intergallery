@@ -26,18 +26,21 @@ export class AuthService {
 
   async validateUser(dto: ValidateUserDto): Promise<UserEntity | null> {
     const { username, password } = dto;
-    const user = await this.usersRepository
-      .createQueryBuilder('user')
-      .where('user.username = :username', { username })
-      .addSelect('user.passwordHash')
-      .getOneOrFail();
 
-    if (!user) {
-      //do sth
-    } else if (await this.checkPassword(password, user.passwordHash)) {
-      delete user.passwordHash; // never forget to handle it
+    try {
+      const user = await this.usersRepository
+        .createQueryBuilder('user')
+        .where('user.username = :username', { username })
+        .addSelect('user.passwordHash')
+        .getOneOrFail();
 
-      return user;
+      if (await this.checkPassword(password, user.passwordHash)) {
+        delete user.passwordHash; // never forget to handle it
+
+        return user;
+      }
+    } catch (ex) {
+      //console.error(ex);
     }
 
     return null;

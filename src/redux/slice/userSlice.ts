@@ -12,6 +12,17 @@ export interface UserEntity {
 
 interface UserState extends BaseReducerState<UserEntity> {}
 
+export const fetchRegisterUser = createAsyncThunk(
+  "user/fetchRegisterUser",
+  (user: { username: string; password: string }, { rejectWithValue }) => {
+    return postRequest(API_BASE_URL + "/auth/register", user, {
+      withCredentials: true,
+    })
+      .then((res) => res.data as UserEntity)
+      .catch((err) => rejectWithValue(err.message));
+  },
+);
+
 export const fetchLoginUser = createAsyncThunk(
   "user/fetchLoginUser",
   (user: { username: string; password: string }, { rejectWithValue }) => {
@@ -51,6 +62,9 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchRegisterUser.fulfilled, (state, action) => {
+        state.data = action.payload;
+      })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
         state.data = action.payload;
       })

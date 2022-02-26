@@ -1,6 +1,8 @@
-import Main from "@/components/Main";
+import AppLink from "@/components/AppLink";
 import { useAppDispatch } from "@/redux/hooks";
-import { fetchLoginUser } from "@/redux/slice/userSlice";
+import { fetchLoginUser, fetchRegisterUser } from "@/redux/slice/userSlice";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
   Button,
   Container,
@@ -10,82 +12,225 @@ import {
   Stack,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
+import { useLocation } from "react-router";
 import * as Yup from "yup";
-import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
+
+const REGISTER_HASH = "#sign-up";
 
 const loginFormSchema = Yup.object({
-  username: Yup.string().default("").min(2).required(),
-  password: Yup.string().default("").min(3).required(),
+  username: Yup.string().default("").required(),
+  password: Yup.string().default("").required(),
 });
 
-const LoginForm = () => {
+const LoginBox = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <Formik
-      initialValues={loginFormSchema.getDefault()}
-      validationSchema={loginFormSchema}
-      onSubmit={(values) => {
-        dispatch(fetchLoginUser(values));
-      }}
-      validateOnMount={true}
-    >
-      {({ errors, isValid }) => (
-        <Form>
-          <Stack spacing={4}>
-            <Field
-              as={TextField}
-              name="username"
-              label="Username"
-              required
-              autoComplete="off"
-              spellCheck={false}
-              helperText={<ErrorMessage name="username" />}
-              error={Boolean(errors.username)}
-            />
-            <Field
-              as={TextField}
-              type="password"
-              name="password"
-              label="Password"
-              required
-              autoComplete="off"
-              spellCheck={false}
-              helperText={<ErrorMessage name="password" />}
-              error={Boolean(errors.password)}
-            />
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Link href="/forgot-password" variant="caption">
-                Forgot Password?
-              </Link>
-              <Button
-                variant="contained"
-                type="submit"
-                color="secondary"
-                disabled={!isValid}
-                endIcon={<KeyboardTabIcon />}
+    <Stack spacing={4} sx={{ textAlign: "center" }}>
+      <Box mb={-2}>
+        <Typography variant="h5" component="h1" mb={1}>
+          Login
+        </Typography>
+        <Typography variant="subtitle1" component="p">
+          Welcome! Login to access Intergallery.
+        </Typography>
+      </Box>
+      <Formik
+        initialValues={loginFormSchema.getDefault()}
+        validationSchema={loginFormSchema}
+        onSubmit={(values) => {
+          dispatch(fetchLoginUser(values));
+        }}
+        validateOnMount={true}
+      >
+        {({ errors, isValid }) => (
+          <Form>
+            <Stack spacing={4}>
+              <Field
+                as={TextField}
+                name="username"
+                label="Username"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                //helperText={<ErrorMessage name="username" />}
+                //error={Boolean(errors.username)}
+              />
+              <Field
+                as={TextField}
+                type="password"
+                name="password"
+                label="Password"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                //helperText={<ErrorMessage name="password" />}
+                //error={Boolean(errors.password)}
+              />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                Continue
-              </Button>
+                <Link href="/forgot-password" variant="caption">
+                  Forgot Password?
+                </Link>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  color="secondary"
+                  disabled={!isValid}
+                  endIcon={<KeyboardTabIcon />}
+                >
+                  Continue
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
-        </Form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+      <Box sx={{ display: "flex", "& > span": { lineHeight: "13px" } }}>
+        <Divider
+          sx={{
+            flexShrink: 1,
+            width: "100%",
+            mr: 2,
+            alignSelf: "center",
+          }}
+        />
+        <span>or</span>
+      </Box>
+
+      <Box sx={{ textAlign: "right" }}>
+        <Button
+          component={AppLink}
+          href={REGISTER_HASH}
+          variant="contained"
+          endIcon={<AppRegistrationIcon />}
+        >
+          Sign up
+        </Button>
+      </Box>
+    </Stack>
+  );
+};
+
+const registerFormSchema = Yup.object({
+  Username: Yup.string().default("").min(3).required(),
+  Password: Yup.string().default("").min(7).required(),
+  "Confirm Password": Yup.string()
+    .default("")
+    .min(7)
+    .required()
+    .oneOf([Yup.ref("Password"), null], "Passwords must match"),
+});
+
+const RegisterBox = () => {
+  const dispatch = useAppDispatch();
+
+  return (
+    <Stack spacing={4} sx={{ textAlign: "center" }}>
+      <Box mb={-2}>
+        <Typography variant="h5" component="h1" mb={1}>
+          Sign Up
+        </Typography>
+        <Typography variant="subtitle1" component="p">
+          Welcome! It's simple and fast.
+        </Typography>
+      </Box>
+      <Formik
+        initialValues={registerFormSchema.getDefault()}
+        validationSchema={registerFormSchema}
+        onSubmit={(values) => {
+          dispatch(
+            fetchRegisterUser({
+              username: values.Username,
+              password: values.Password,
+            }),
+          );
+        }}
+        validateOnMount={true}
+      >
+        {({ errors, isValid, touched }) => (
+          <Form>
+            <Stack spacing={3}>
+              <Field
+                as={TextField}
+                name="Username"
+                label="Username"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                helperText={<ErrorMessage name="Username" />}
+                error={touched.Username && Boolean(errors.Username)}
+              />
+              <Field
+                as={TextField}
+                type="password"
+                name="Password"
+                label="Password"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                helperText={<ErrorMessage name="Password" />}
+                error={touched.Password && Boolean(errors.Password)}
+              />
+              <Field
+                as={TextField}
+                type="password"
+                name="Confirm Password"
+                label="Confirm Password"
+                required
+                autoComplete="off"
+                spellCheck={false}
+                helperText={<ErrorMessage name="Confirm Password" />}
+                error={
+                  touched["Confirm Password"] &&
+                  Boolean(errors["Confirm Password"])
+                }
+              />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Button
+                  component={AppLink}
+                  href="#"
+                  color="secondary"
+                  variant="outlined"
+                >
+                  I have an account
+                </Button>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  disabled={!isValid}
+                  endIcon={<KeyboardTabIcon />}
+                >
+                  Sign Up
+                </Button>
+              </Stack>
+            </Stack>
+          </Form>
+        )}
+      </Formik>
+
+      <Typography variant="caption" align="right">
+        By clicking Sign Up, you agree to our Terms, Data Policy and Cookie
+        Policy.
+      </Typography>
+    </Stack>
   );
 };
 
 const AuthPage = () => {
+  const { hash } = useLocation();
+
   return (
     <Box component="main">
       <Box
@@ -172,35 +317,7 @@ const AuthPage = () => {
         ]}
       >
         <Container maxWidth="xs">
-          <Stack spacing={4} sx={{ textAlign: "center" }}>
-            <Box mb={-2}>
-              <Typography variant="h5" component="h1" mb={1}>
-                Login
-              </Typography>
-              <Typography variant="subtitle1" component="p">
-                Welcome! Login to access Intergallery.
-              </Typography>
-            </Box>
-            <LoginForm />
-
-            <Box sx={{ display: "flex", "& > span": { lineHeight: "13px" } }}>
-              <Divider
-                sx={{
-                  flexShrink: 1,
-                  width: "100%",
-                  mr: 2,
-                  alignSelf: "center",
-                }}
-              />
-              <span>or</span>
-            </Box>
-
-            <Box sx={{ textAlign: "right" }}>
-              <Button variant="contained" endIcon={<AppRegistrationIcon />}>
-                Sign up
-              </Button>
-            </Box>
-          </Stack>
+          {hash !== REGISTER_HASH ? <LoginBox /> : <RegisterBox />}
         </Container>
       </Paper>
     </Box>

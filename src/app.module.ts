@@ -1,5 +1,3 @@
-import { UserEntity } from 'src/model/entities/user.entity';
-import { AppSessionEntity } from './model/entities/session.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';

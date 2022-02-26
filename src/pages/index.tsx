@@ -24,7 +24,15 @@ export const AuthenticatedContainer: React.FC<{}> = (props) => {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(fetchGetUser());
+    try {
+      const lastLoginData = JSON.parse(
+        window.localStorage.getItem("lastLogin") ?? "{}",
+      );
+
+      //TODO remove the item when logging out
+
+      if (lastLoginData["id"]) dispatch(fetchGetUser());
+    } catch (ex) {}
   }, []);
 
   if (userState.isLoading) return <LinearProgress />;

@@ -41,7 +41,13 @@ export const fetchGetUser = createAsyncThunk(
       withCredentials: true,
     })
       .then((res) => res.data as UserEntity)
-      .catch((err) => rejectWithValue(err.message));
+      .catch((err) => {
+        try {
+          window.localStorage.removeItem("lastLogin");
+        } catch (ex) {}
+
+        return rejectWithValue(err.message);
+      });
   },
 );
 
@@ -64,9 +70,17 @@ export const userSlice = createSlice({
     builder
       .addCase(fetchRegisterUser.fulfilled, (state, action) => {
         state.data = action.payload;
+        window.localStorage.setItem(
+          "lastLogin",
+          JSON.stringify({ id: state.data.id, date: new Date() }),
+        );
       })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
         state.data = action.payload;
+        window.localStorage.setItem(
+          "lastLogin",
+          JSON.stringify({ id: state.data.id, date: new Date() }),
+        );
       })
       .addCase(fetchGetUser.fulfilled, (state, action) => {
         state.data = action.payload;

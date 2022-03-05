@@ -1,18 +1,38 @@
-import React from "react";
-import { Route, Routes } from "react-router";
-import AuthenticatedContainer from "@/pages";
+import getDesignTokens from "@/theme";
 import {
   createTheme,
   CssBaseline,
+  LinearProgress,
   PaletteMode,
   ThemeProvider,
 } from "@mui/material";
-import getDesignTokens from "@/theme";
+import React from "react";
+import RoutesNonAuth from "./RoutesNonAuth";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { fetchGetUser } from "./redux/slice/userSlice";
+import RoutesAuth from "./RoutesAuth";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>("dark");
+  const userState = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    try {
+      const lastLoginData = JSON.parse(
+        window.localStorage.getItem("lastLogin") ?? "{}",
+      );
+
+      //TODO remove the item when logging out
+
+      if (lastLoginData["id"]) dispatch(fetchGetUser());
+    } catch (ex) {}
+  }, []);
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method
@@ -32,11 +52,19 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Routes>
-          <Route path="/*" element={<AuthenticatedContainer />} />
-          <Route path="/test" element={<h1>Testing Page</h1>} />
-          <Route path="*" element={<h1>404 Not Found, Not Expected</h1>} />
-        </Routes>
+        <ErrorBoundary>
+          {userState.isLoading ? (
+            <LinearProgress />
+          ) : userState.data.id ? (
+            <>
+              <Header user={userState.data} />
+              <RoutesAuth />
+              <Footer />
+            </>
+          ) : (
+            <RoutesNonAuth />
+          )}
+        </ErrorBoundary>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

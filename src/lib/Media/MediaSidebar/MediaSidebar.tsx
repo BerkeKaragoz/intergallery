@@ -2,14 +2,27 @@ import { Box } from "@mui/system";
 import AddMediaDialog, {
   AddMediaDialogProps,
 } from "@/lib/Media/AddMediaDialog";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
 import Dropzone from "react-dropzone";
 import useModal from "@/hooks/useModal/useModal";
 import { useState } from "react";
-import { MediaDTO } from "@/lib/Media";
+import { MediaDTO, MediaType } from "@/lib/Media";
+
+const MediaInfo = ({
+  label,
+  info,
+}: {
+  label?: React.ReactNode;
+  info?: React.ReactNode;
+}) => (
+  <>
+    <Typography variant="h6" component="p" children={label} />
+    <Typography variant="body2" children={info} mb={2} />
+  </>
+);
 
 type Props = {
-  highlightedMedia?: MediaDTO;
+  highlightedMedia?: MediaDTO | null;
 };
 
 const MediaSidebar: React.FC<Props> = (props) => {
@@ -75,7 +88,31 @@ const MediaSidebar: React.FC<Props> = (props) => {
             </Box>
           )}
         </Dropzone>
-        {JSON.stringify(highlightedMedia, null, 2)}
+        {highlightedMedia && (
+          <Box>
+            <MediaInfo label="Name" info={highlightedMedia.name} />
+            {highlightedMedia.type !== MediaType.UNKNOWN && (
+              <MediaInfo label="Type" info={MediaType[highlightedMedia.type]} />
+            )}
+            <MediaInfo
+              label="Creation Date"
+              info={new Date(highlightedMedia.creationDate).toString()}
+            />
+            {highlightedMedia.updateDate !== highlightedMedia.creationDate && (
+              <MediaInfo
+                label="Last Update Date"
+                info={new Date(highlightedMedia.updateDate).toString()}
+              />
+            )}
+            {highlightedMedia.sourceIds?.length > 1 && (
+              <MediaInfo
+                label="# of Sources"
+                info={highlightedMedia.sourceIds.length}
+              />
+            )}
+            <MediaInfo label="Owner ID" info={highlightedMedia.ownerId} />
+          </Box>
+        )}
         {children}
       </Box>
       <Divider flexItem orientation={"vertical"} sx={{ my: 5, opacity: 0.5 }} />

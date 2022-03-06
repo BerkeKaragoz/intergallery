@@ -18,7 +18,8 @@ const MainPage = () => {
     useGetMediaQuery({}, {});
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const [highlightedMedia, setHighlightedMedia] = React.useState<any>({});
+  const [highlightedMedia, setHighlightedMedia] =
+    React.useState<MediaDTO | null>(null);
 
   const highlightHandler = (item: any) => () => {
     setHighlightedMedia(item);

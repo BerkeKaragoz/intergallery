@@ -1,5 +1,5 @@
 ## Intergallery's Server
-Client: *Currently not on GitHub, soon™.* (React, Redux, MUI)
+Client: https://github.com/BerkeKaragoz/intergallery-client
 
 Angular Prototype Client: https://github.com/BerkeKaragoz/Intergallery-Angular-Prototype
 

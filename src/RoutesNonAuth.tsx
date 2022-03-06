@@ -7,7 +7,7 @@ const RoutesNonAuth = () => (
     <Route index element={<Navigate to="/auth" />} />
     <Route path="/auth" element={<AuthPage />}></Route>
     <Route path="/test" element={<h1>Testing Page</h1>} />
-    <Route path="*" element={<h1>404 Not Found, Not Expected</h1>} />
+    <Route path="*" element={<h1>404 Not Found</h1>} />
   </Routes>
 );
 

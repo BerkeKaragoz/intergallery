@@ -1,6 +1,6 @@
-import AddMediaModal from "@/components/AddMediaModal";
+import BrowseSidebar from "@/components/BrowseSidebar";
 import Image from "@/components/Image";
-import Main from "@/components/Main";
+import Page from "@/components/Page";
 import { API_BASE_URL } from "@/lib/api";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/apiSlice";
@@ -17,9 +17,14 @@ const MainPage = () => {
     useGetMediaQuery({}, {});
   const userState = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const [highlightedMedia, setHighlightedMedia] = React.useState<any>({});
+
+  const highlightHandler = (item: any) => () => {
+    setHighlightedMedia(item);
+  };
 
   return (
-    <Main>
+    <Page>
       <ImageList variant="quilted" cols={5} rowHeight={256} gap={16}>
         {Array.isArray(data?.data) &&
           data.data.map((item: any) => (
@@ -27,6 +32,8 @@ const MainPage = () => {
               key={item.id}
               component={Paper}
               variant="outlined"
+              onFocus={highlightHandler(item)}
+              onPointerEnter={highlightHandler(item)}
               sx={{ borderRadius: 2, overflow: "hidden" }}
             >
               <a
@@ -44,10 +51,13 @@ const MainPage = () => {
             </ImageListItem>
           ))}
       </ImageList>
-      <pre>{JSON.stringify(userState, null, 2)}</pre>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <AddMediaModal />
-    </Main>
+      <details>
+        <pre>{JSON.stringify(userState, null, 2)}</pre>
+      </details>
+      <details>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      </details>
+    </Page>
   );
 };
 

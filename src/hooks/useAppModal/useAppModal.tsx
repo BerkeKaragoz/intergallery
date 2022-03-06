@@ -7,7 +7,7 @@ type ModalHookReturns<T> = [T, () => void, () => void];
  *
  * @returns [Component, openHandler, closeHandler]
  */
-const useModal = () => {
+const useAppModal = () => {
   const [open, setOpen] = useState(false);
 
   const openHandler = () => {
@@ -27,4 +27,4 @@ const useModal = () => {
   >;
 };
 
-export default useModal;
+export default useAppModal;

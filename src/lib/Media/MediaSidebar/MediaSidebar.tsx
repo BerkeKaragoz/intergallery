@@ -4,9 +4,10 @@ import AddMediaDialog, {
 } from "@/lib/Media/AddMediaDialog";
 import { Button, Divider, Typography } from "@mui/material";
 import Dropzone from "react-dropzone";
-import useModal from "@/hooks/useModal/useModal";
+import useAppModal from "@/hooks/useAppModal";
 import { useState } from "react";
 import { MediaDTO, MediaType } from "@/lib/Media";
+import AppDropzone from "@/components/AppDropzone";
 
 const MediaInfo = ({
   label,
@@ -30,7 +31,7 @@ const MediaSidebar: React.FC<Props> = (props) => {
   const [addMediaValues, setAddMediaValues] = useState<
     AddMediaDialogProps["initialValues"]
   >({});
-  const [AddMediaModal, openAddMedia, closeAddMedia] = useModal();
+  const [AddMediaModal, openAddMedia, closeAddMedia] = useAppModal();
 
   return (
     <>
@@ -58,36 +59,14 @@ const MediaSidebar: React.FC<Props> = (props) => {
         >
           Add Media
         </Button>
-        <Dropzone
+        <AppDropzone
           onDrop={(acceptedFiles) => {
             console.log(acceptedFiles);
             setAddMediaValues({ URL: acceptedFiles[0].name, "Is Local": true });
             openAddMedia();
           }}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <Box
-              sx={{
-                borderWidth: 2,
-                borderStyle: "dashed",
-                borderColor: "gray",
-                borderRadius: 2,
-                p: 2,
-                my: 2,
-                textAlign: "center",
-                cursor: "pointer",
-                transition: "0.2s",
-                "&:hover": {
-                  backgroundColor: "#0003",
-                },
-              }}
-              {...getRootProps()}
-            >
-              <input {...getInputProps()} />
-              <p>Drop files here.</p>
-            </Box>
-          )}
-        </Dropzone>
+        />
+
         {highlightedMedia && (
           <Box>
             <MediaInfo label="Name" info={highlightedMedia.name} />

@@ -24,7 +24,7 @@ const MainPage = () => {
   };
 
   return (
-    <Page>
+    <Page sidebar={<BrowseSidebar highlightedMedia={highlightedMedia} />}>
       <ImageList variant="quilted" cols={5} rowHeight={256} gap={16}>
         {Array.isArray(data?.data) &&
           data.data.map((item: any) => (

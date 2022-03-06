@@ -17,9 +17,11 @@ import { Nullable } from "@/lib/types";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-const Header: React.FC<{
+type Props = {
   user: Partial<Nullable<UserEntity>>;
-}> = (props) => {
+};
+
+const Header: React.FC<Props> = (props) => {
   const { user } = props;
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -167,4 +169,6 @@ const Header: React.FC<{
     </>
   );
 };
+
+export type { Props as HeaderProps };
 export default Header;

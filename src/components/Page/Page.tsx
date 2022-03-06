@@ -19,4 +19,5 @@ const Page: React.FC<Props> = (props) => {
   );
 };
 
+export type { Props as PageProps };
 export default Page;

@@ -45,4 +45,6 @@ class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
+export type { State as ErrorBoundaryState };
+export type { Props as ErrorBoundaryProps };
 export default ErrorBoundary;

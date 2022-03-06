@@ -1,7 +1,8 @@
-import BrowseSidebar from "@/components/BrowseSidebar";
+import MediaSidebar from "@/lib/Media/MediaSidebar";
 import Image from "@/components/Image";
 import Page from "@/components/Page";
 import { API_BASE_URL } from "@/lib/api";
+import { MediaDTO } from "@/lib/Media";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/apiSlice";
 import {
@@ -24,10 +25,10 @@ const MainPage = () => {
   };
 
   return (
-    <Page sidebar={<BrowseSidebar highlightedMedia={highlightedMedia} />}>
+    <Page sidebar={<MediaSidebar highlightedMedia={highlightedMedia} />}>
       <ImageList variant="quilted" cols={5} rowHeight={256} gap={16}>
-        {Array.isArray(data?.data) &&
-          data.data.map((item: any) => (
+        {data && Array.isArray(data.data) ? (
+          data.data.map((item) => (
             <ImageListItem
               key={item.id}
               component={Paper}
@@ -49,7 +50,10 @@ const MainPage = () => {
                 <ImageListItemBar title={item.name} subtitle={item.id} />
               </a>
             </ImageListItem>
-          ))}
+          ))
+        ) : (
+          <p>Empty.</p>
+        )}
       </ImageList>
       <details>
         <pre>{JSON.stringify(userState, null, 2)}</pre>

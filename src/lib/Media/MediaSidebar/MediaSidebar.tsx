@@ -1,17 +1,18 @@
 import { Box } from "@mui/system";
 import AddMediaDialog, {
   AddMediaDialogProps,
-} from "@/components/AddMediaDialog";
+} from "@/lib/Media/AddMediaDialog";
 import { Button, Divider } from "@mui/material";
 import Dropzone from "react-dropzone";
 import useModal from "@/hooks/useModal/useModal";
 import { useState } from "react";
+import { MediaDTO } from "@/lib/Media";
 
 type Props = {
-  highlightedMedia?: any;
+  highlightedMedia?: MediaDTO;
 };
 
-const BrowseSidebar: React.FC<Props> = (props) => {
+const MediaSidebar: React.FC<Props> = (props) => {
   const { highlightedMedia, children } = props;
   const [addMediaValues, setAddMediaValues] = useState<
     AddMediaDialogProps["initialValues"]
@@ -22,7 +23,13 @@ const BrowseSidebar: React.FC<Props> = (props) => {
     <>
       <Box
         component="aside"
-        sx={{ mx: 2, width: 256, flexShrink: 0, overflow: "auto" }}
+        sx={{
+          mx: 2,
+          width: 256,
+          flexShrink: 0,
+          wordWrap: "break-word",
+          overflowX: "hidden",
+        }}
       >
         <AddMediaModal fullWidth>
           <AddMediaDialog
@@ -76,5 +83,5 @@ const BrowseSidebar: React.FC<Props> = (props) => {
   );
 };
 
-export type { Props as BrowseSidebarProps };
-export default BrowseSidebar;
+export type { Props as MediaSidebarProps };
+export default MediaSidebar;

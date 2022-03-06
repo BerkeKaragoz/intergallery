@@ -2,15 +2,9 @@ import { API_BASE_URL } from "@/lib/api";
 import { BaseReducerState } from "@/redux/store";
 import { getRequest, postRequest } from "@/lib/requests";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { UserDTO } from "@/lib/User";
 
-export interface UserEntity {
-  id: string;
-  username: string;
-  name: string;
-  creationDate: string;
-}
-
-interface UserState extends BaseReducerState<UserEntity> {}
+interface UserState extends BaseReducerState<UserDTO> {}
 
 export const fetchRegisterUser = createAsyncThunk(
   "user/fetchRegisterUser",
@@ -18,7 +12,7 @@ export const fetchRegisterUser = createAsyncThunk(
     return postRequest(API_BASE_URL + "/auth/register", user, {
       withCredentials: true,
     })
-      .then((res) => res.data as UserEntity)
+      .then((res) => res.data as UserDTO)
       .catch((err) => rejectWithValue(err.message));
   },
 );
@@ -29,7 +23,7 @@ export const fetchLoginUser = createAsyncThunk(
     return postRequest(API_BASE_URL + "/auth/login", user, {
       withCredentials: true,
     })
-      .then((res) => res.data as UserEntity)
+      .then((res) => res.data as UserDTO)
       .catch((err) => rejectWithValue(err.message));
   },
 );
@@ -40,7 +34,7 @@ export const fetchGetUser = createAsyncThunk(
     return getRequest(API_BASE_URL + "/user/get", {
       withCredentials: true,
     })
-      .then((res) => res.data as UserEntity)
+      .then((res) => res.data as UserDTO)
       .catch((err) => {
         try {
           window.localStorage.removeItem("lastLogin");

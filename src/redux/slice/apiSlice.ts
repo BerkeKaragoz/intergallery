@@ -1,4 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
+import { CreateMediaInputDTO, MediaDTO, MediaEntity } from "@/lib/Media";
+import { PaginatedDTO } from "@/lib/types";
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -11,11 +13,11 @@ export const apiSlice = createApi({
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
     // The `getPosts` endpoint is a "query" operation that returns data
-    getMedia: builder.query({
+    getMedia: builder.query<PaginatedDTO<MediaDTO>, {}>({
       // The URL for the request is '/fakeApi/posts'
       query: () => "/media/user",
     }),
-    postMedia: builder.mutation({
+    postMedia: builder.mutation<MediaEntity, CreateMediaInputDTO>({
       query: (media) => ({
         url: "/media",
         method: "POST",

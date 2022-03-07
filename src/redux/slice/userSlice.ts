@@ -4,7 +4,7 @@ import { getRequest, postRequest } from "@/lib/requests";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { UserDTO } from "@/lib/User";
 
-interface UserState extends BaseReducerState<UserDTO> {}
+export interface UserState extends BaseReducerState<UserDTO> {}
 
 export const fetchRegisterUser = createAsyncThunk(
   "user/fetchRegisterUser",

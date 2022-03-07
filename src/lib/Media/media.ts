@@ -1,5 +1,6 @@
 import { SourceEntity } from "../Source";
 import { CreateSourceDTO } from "../Source/source";
+import { PaginatedDTO } from "../types";
 import { UserEntity } from "../User";
 
 export enum MediaType {
@@ -29,3 +30,6 @@ export interface MediaDTO
 export interface CreateMediaInputDTO extends Pick<MediaDTO, "name"> {
   sources: CreateSourceDTO[];
 }
+
+export interface GetMediaInputDTO
+  extends Partial<Pick<PaginatedDTO, "page" | "perPage">> {}

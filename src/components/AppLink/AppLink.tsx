@@ -6,13 +6,14 @@ import {
 
 type Props = Omit<RouterLinkProps, "to"> & { href: RouterLinkProps["to"] };
 
-// You don't need to use this one as it just replaces the components in the theme
-const AppLink = React.forwardRef<any, Props>((props, ref) => {
+/**
+ * You don't need to use this component as it just replaces
+ * the components in the them
+ */
+const AppLink = React.forwardRef<HTMLAnchorElement, Props>((props, ref) => {
   const { href, ...other } = props;
   // Map href (MUI) -> to (react-router)
-  return (
-    <RouterLink data-testid="custom-link" ref={ref} to={href} {...other} />
-  );
+  return <RouterLink ref={ref} to={href} {...other} />;
 });
 
 export type { Props as AppLinkProps };

@@ -14,6 +14,7 @@ import RoutesAuth from "./RoutesAuth";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { useLocation } from "react-router";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -48,6 +49,8 @@ function App() {
   // Update the theme only if the mode changes
   const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
+  const loc = useLocation();
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -58,11 +61,11 @@ function App() {
           ) : userState.data.id ? (
             <>
               <Header user={userState.data} />
-              <RoutesAuth />
+              <RoutesAuth location={loc} />
               <Footer />
             </>
           ) : (
-            <RoutesNonAuth />
+            <RoutesNonAuth location={loc} />
           )}
         </ErrorBoundary>
       </ThemeProvider>

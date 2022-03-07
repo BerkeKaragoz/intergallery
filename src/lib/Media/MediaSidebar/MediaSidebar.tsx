@@ -8,6 +8,7 @@ import useAppModal from "@/hooks/useAppModal";
 import { useState } from "react";
 import { MediaDTO, MediaType } from "@/lib/Media";
 import AppDropzone from "@/components/AppDropzone";
+import { UserState } from "@/redux/slice/userSlice";
 
 const MediaInfo = ({
   label,
@@ -24,10 +25,11 @@ const MediaInfo = ({
 
 type Props = {
   highlightedMedia?: MediaDTO | null;
+  userId?: UserState["data"]["id"];
 };
 
 const MediaSidebar: React.FC<Props> = (props) => {
-  const { highlightedMedia, children } = props;
+  const { highlightedMedia, userId, children } = props;
   const [addMediaValues, setAddMediaValues] = useState<
     AddMediaDialogProps["initialValues"]
   >({});
@@ -89,7 +91,9 @@ const MediaSidebar: React.FC<Props> = (props) => {
                 info={highlightedMedia.sourceIds.length}
               />
             )}
-            <MediaInfo label="Owner ID" info={highlightedMedia.ownerId} />
+            {userId !== highlightedMedia.ownerId && (
+              <MediaInfo label="Owner ID" info={highlightedMedia.ownerId} />
+            )}
           </Box>
         )}
         {children}

@@ -1,15 +1,18 @@
 import { API_BASE_URL } from "@/lib/api";
-import { useAppSelector } from "@/redux/hooks";
+import { Button, Container } from "@mui/material";
 import React from "react";
 
 const Footer = () => {
-  const userState = useAppSelector((state) => state.user);
-
   return (
-    <footer>
-      <hr />
-      {userState.data.id && <a href={API_BASE_URL + "/auth/logout"}>Logout</a>}
-    </footer>
+    <Container component="footer" maxWidth="xl">
+      <Button
+        variant="outlined"
+        component="a"
+        href={API_BASE_URL + "/auth/logout"}
+      >
+        Logout
+      </Button>
+    </Container>
   );
 };
 

@@ -10,7 +10,7 @@ const Page: React.FC<Props> = (props) => {
   const { children, sidebar } = props;
 
   return (
-    <Box sx={{ display: "flex", width: "100%" }}>
+    <Box sx={{ display: "flex", width: "100%", flexGrow: 1 }}>
       {sidebar && sidebar}
       <Container component={"main"} maxWidth={"xl"} sx={{ mt: 2 }}>
         {children}

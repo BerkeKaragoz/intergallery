@@ -2,10 +2,12 @@ import { apiSlice } from "./slice/apiSlice";
 import { Nullable } from "./../lib/types";
 import { userReducer } from "./slice/userSlice";
 import { configureStore } from "@reduxjs/toolkit";
+import { mediaReducer } from "./slice/mediaSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    media: mediaReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

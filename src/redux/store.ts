@@ -1,17 +1,15 @@
-import { apiSlice } from "./slice/apiSlice";
+import { mediaApiSlice } from "./slice/mediaApiSlice";
 import { Nullable } from "./../lib/types";
 import { userReducer } from "./slice/userSlice";
 import { configureStore } from "@reduxjs/toolkit";
-import { mediaReducer } from "./slice/mediaSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    media: mediaReducer,
-    [apiSlice.reducerPath]: apiSlice.reducer,
+    [mediaApiSlice.reducerPath]: mediaApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    getDefaultMiddleware().concat(mediaApiSlice.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
@@ -19,10 +17,13 @@ export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 
-export interface BaseReducerState<T> {
+export type BaseReducerState<T = void> = {
   error: null | string;
   isLoading: boolean;
-  data: Nullable<T>;
-}
+} & (T extends void
+  ? {}
+  : {
+      data: Nullable<T>;
+    });
 
 export default store;

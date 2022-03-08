@@ -10,11 +10,11 @@ export enum MediaType {
 }
 
 export interface MediaEntity {
-  id: number;
+  id: string;
   name: string;
   type: MediaType;
-  creationDate: Date;
-  updateDate: Date;
+  creationDate: string | Date;
+  updateDate: string | Date;
   sourceIds: number[];
   sources: SourceEntity[];
   ownerId: string;
@@ -31,5 +31,4 @@ export interface CreateMediaInputDTO extends Pick<MediaDTO, "name"> {
   sources: CreateSourceDTO[];
 }
 
-export interface GetMediaInputDTO
-  extends Partial<Pick<PaginatedDTO, "page" | "perPage">> {}
+export type GetMediaInputDTO = Partial<Pick<PaginatedDTO, "page" | "perPage">>;

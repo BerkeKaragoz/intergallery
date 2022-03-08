@@ -1,7 +1,7 @@
 import { MediaEntity } from "../Media/media";
 
 export interface SourceEntity {
-  id: number;
+  id: string;
   url: string;
   isLocal: boolean;
   media: MediaEntity;

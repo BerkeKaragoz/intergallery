@@ -1,4 +1,4 @@
-import { usePostMediaMutation } from "@/redux/slice/apiSlice";
+import { usePostMediaMutation } from "@/redux/slice/mediaApiSlice";
 import {
   Checkbox,
   CircularProgress,
@@ -28,7 +28,7 @@ type Props = {
 const AddMediaDialog: React.FC<Props> = (props) => {
   const { cancelHandler = () => {}, initialValues = {} } = props;
 
-  const [addNewMedia, { isLoading }] = usePostMediaMutation();
+  const [postMedia, { isLoading }] = usePostMediaMutation();
 
   return (
     <Formik
@@ -38,7 +38,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
       }}
       validationSchema={addMediaSchema}
       onSubmit={(values) => {
-        addNewMedia({
+        postMedia({
           name: values.URL,
           sources: [{ url: values.URL, isLocal: values["Is Local"] }],
         })

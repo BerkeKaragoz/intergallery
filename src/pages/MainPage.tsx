@@ -5,19 +5,24 @@ import { API_BASE_URL } from "@/lib/api";
 import { MediaDTO } from "@/lib/Media";
 import { GetMediaInputDTO } from "@/lib/Media/media";
 import MediaSidebar from "@/lib/Media/MediaSidebar";
+import { createQuery } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { mediaApiSlice } from "@/redux/slice/mediaApiSlice";
 import {
+  CircularProgress,
+  FormControl,
   ImageList,
   ImageListItem,
   ImageListItemBar,
-  LinearProgress,
+  InputLabel,
+  MenuItem,
   Pagination,
   Paper,
+  Select,
 } from "@mui/material";
-import React, { useState } from "react";
+import { Box } from "@mui/system";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { createSearchParams } from "react-router-dom";
 
 const DEFAULT_PERPAGE = 20;
 const DEFAULT_PAGE = 1;
@@ -25,16 +30,14 @@ const DEFAULT_PAGE = 1;
 const MainPage = () => {
   const query = useQuery();
   const navigate = useNavigate();
-  const [mediaPerPage, setMediaPerPage] = useState<GetMediaInputDTO["perPage"]>(
-    +(query.get("perPage") ?? DEFAULT_PERPAGE),
-  );
   const [mediaPage, setMediaPage] = useState<GetMediaInputDTO["page"]>(
     +(query.get("page") ?? DEFAULT_PAGE),
   );
-  const [mediaTotalPage, setMediaTotalPage] = useState<number | undefined>(
-    undefined,
+  const [mediaPerPage, setMediaPerPage] = useState<GetMediaInputDTO["perPage"]>(
+    +(query.get("perPage") ?? DEFAULT_PERPAGE),
   );
 
+  const isFirstRender = useRef(true);
   const { data: mediaFetchData, isLoading: isMediaLoading } =
     mediaApiSlice.useGetMediaQuery({
       page: mediaPage,
@@ -50,30 +53,30 @@ const MainPage = () => {
   };
 
   React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setMediaPage(+(query.get("page") ?? DEFAULT_PAGE));
+    setMediaPerPage(+(query.get("perPage") ?? DEFAULT_PERPAGE));
+  }, [query]);
+
+  React.useEffect(() => {
     //console.log({ media });
     if (mediaFetchData) {
-      setMediaTotalPage(mediaFetchData.totalPages);
       setMediaPage(mediaFetchData.page);
       setMediaPerPage(mediaFetchData.perPage);
     }
   }, [mediaFetchData]);
 
+  // TODO validate page
   React.useEffect(() => {
-    const mediaParams: GetMediaInputDTO = {
-      perPage: mediaPerPage,
-      page: mediaPage,
-    };
-
     navigate(
       {
-        search: `?${createSearchParams({
-          ...(mediaParams.page !== DEFAULT_PAGE
-            ? { page: `${mediaParams.page}` }
-            : {}),
-          ...(mediaParams.perPage !== DEFAULT_PERPAGE
-            ? { perPage: `${mediaParams.perPage}` }
-            : {}),
-        } as Record<keyof GetMediaInputDTO, string>)}`,
+        search: createQuery<keyof GetMediaInputDTO>(
+          ["page", mediaPage, mediaPage !== DEFAULT_PAGE],
+          ["perPage", mediaPerPage, mediaPerPage !== DEFAULT_PERPAGE],
+        ),
       },
       { replace: true },
     );
@@ -85,11 +88,34 @@ const MainPage = () => {
         <MediaSidebar
           userId={userState.data.id}
           highlightedMedia={highlightedMedia}
-        />
+        >
+          <Box sx={{ textAlign: "end" }}>
+            <FormControl sx={{ minWidth: "72px" }}>
+              <InputLabel id="sidebar-per-page-label">Per Page</InputLabel>
+              <Select
+                labelId="sidebar-per-page-label"
+                id="sidebar-per-page"
+                value={mediaPerPage}
+                label="Per Page"
+                onChange={({ target }) => {
+                  if (target.value && target.value !== mediaPerPage)
+                    setMediaPerPage(target.value as number); // value is controlled
+                }}
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </MediaSidebar>
       }
     >
       {isMediaLoading ? (
-        <LinearProgress color="secondary" />
+        <Box sx={{ textAlign: "center", mb: 2 }}>
+          <CircularProgress color="secondary" />
+        </Box>
       ) : (
         mediaFetchData && (
           <ImageList variant="quilted" cols={5} rowHeight={256} gap={16}>
@@ -122,7 +148,7 @@ const MainPage = () => {
 
       <Pagination
         shape="rounded"
-        count={mediaTotalPage}
+        count={mediaFetchData?.totalPages}
         page={mediaPage}
         sx={{ display: "flex", justifyContent: "center" }}
         onChange={(_, p) => {

@@ -2,13 +2,25 @@ import { Box } from "@mui/system";
 import AddMediaDialog, {
   AddMediaDialogProps,
 } from "@/lib/Media/AddMediaDialog";
-import { Button, Divider, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
+  Typography,
+} from "@mui/material";
 import Dropzone from "react-dropzone";
 import useAppModal from "@/hooks/useAppModal";
 import { useState } from "react";
 import { MediaDTO, MediaType } from "@/lib/Media";
 import AppDropzone from "@/components/AppDropzone";
 import { UserState } from "@/redux/slice/userSlice";
+import { PaginatedDTO } from "@/lib/types";
+import { useNavigate } from "react-router";
+import { createSearchParams } from "react-router-dom";
 
 const MediaInfo = ({
   label,
@@ -40,7 +52,10 @@ const MediaSidebar: React.FC<Props> = (props) => {
       <Box
         component="aside"
         sx={{
+          display: "flex",
+          flexDirection: "column",
           mx: 2,
+          pb: 2,
           width: 256,
           flexShrink: 0,
           wordWrap: "break-word",
@@ -96,6 +111,7 @@ const MediaSidebar: React.FC<Props> = (props) => {
             )}
           </Box>
         )}
+        <Box sx={{ flexGrow: 1 }} />
         {children}
       </Box>
       <Divider flexItem orientation={"vertical"} sx={{ my: 5, opacity: 0.5 }} />

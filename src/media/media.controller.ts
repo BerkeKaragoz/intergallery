@@ -40,7 +40,7 @@ export class MediaController {
     return this.mediaService.getUserMedia(user, +page, +perPage);
   }
 
-  @Get('/source/:mediaId')
+  @Get('/:mediaId/source')
   async getMediaSource(
     @Request() req,
     @Response() res: ExpressRes,
@@ -52,6 +52,22 @@ export class MediaController {
       mediaId,
       sourceIndex,
     );
+
+    if (source.isLocal) {
+      const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
+      res.sendFile(fileAbsolutePath);
+    } else {
+      res.redirect(source.url);
+    }
+  }
+
+  @Get('/source/:sourceId')
+  async getSource(
+    @Request() req,
+    @Response() res: ExpressRes,
+    @Param('sourceId') sourceId,
+  ) {
+    const source = await this.mediaService.getUserSource(req.user, sourceId);
 
     if (source.isLocal) {
       const fileAbsolutePath = join(this.mediaService.servingPath, source.url);

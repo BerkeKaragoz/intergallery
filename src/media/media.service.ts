@@ -35,6 +35,8 @@ export class MediaService {
       where: { owner: user.id },
       take: perPage,
       skip: (page - 1) * perPage,
+      order: { creationDate: -1 },
+      cache: true,
     });
 
     const dto = new UserMediaDTO(mediaList, total, page, perPage);
@@ -42,13 +44,13 @@ export class MediaService {
     return dto;
   }
 
-  getMediaById(id: number): Promise<MediaEntity> {
+  getMediaById(id: MediaEntity['id']): Promise<MediaEntity> {
     return this.mediaRepository.findOneOrFail(id);
   }
 
   async getUserMediaSource(
-    user: any,
-    mediaId: number,
+    user: Pick<UserEntity, 'id'>,
+    mediaId: MediaEntity['id'],
     sourceIndex = 0,
   ): Promise<SourceEntity> {
     const media = await this.mediaRepository.findOne(mediaId, {
@@ -69,13 +71,16 @@ export class MediaService {
     return this.mediaRepository.save(newMedia);
   }
 
-  async updateMedia(id: number, name: string): Promise<MediaEntity> {
+  async updateMedia(
+    id: MediaEntity['id'],
+    name: MediaEntity['name'],
+  ): Promise<MediaEntity> {
     const media = await this.getMediaById(id);
     media.name = name;
     return this.mediaRepository.save(media);
   }
 
-  async deleteMedia(id: number): Promise<MediaEntity> {
+  async deleteMedia(id: MediaEntity['id']): Promise<MediaEntity> {
     const media = await this.getMediaById(id);
     return this.mediaRepository.remove(media);
   }

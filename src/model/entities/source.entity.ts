@@ -4,8 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity('source')
 export class SourceEntity {
   @ApiProperty()
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   url: string;
@@ -14,7 +14,7 @@ export class SourceEntity {
   isLocal: boolean;
 
   @ManyToOne(() => MediaEntity, (media) => media.sources, {
-    onDelete: 'CASCADE',
+    //onDelete: 'CASCADE'
   })
   media: MediaEntity;
 }

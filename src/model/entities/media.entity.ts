@@ -21,8 +21,8 @@ export enum MediaType {
 @Entity('media')
 export class MediaEntity {
   @ApiProperty()
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -37,7 +37,7 @@ export class MediaEntity {
   updateDate: Date;
 
   @RelationId((media: MediaEntity) => media.sources)
-  sourceIds: number[];
+  sourceIds: SourceEntity['id'][];
 
   @OneToMany(() => SourceEntity, (source) => source.media, {
     cascade: true,

@@ -61,6 +61,17 @@ export class MediaService {
     return media.sources[sourceIndex];
   }
 
+  async getUserSource(
+    user: Pick<UserEntity, 'id'>,
+    sourceId: SourceEntity['id'],
+  ): Promise<SourceEntity> {
+    const source = await this.sourceRepository.findOne(sourceId, {
+      relations: ['media'],
+    });
+
+    if (source.media.ownerId === user.id) return source;
+  }
+
   createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
     const { name, owner, sources } = dto;
 

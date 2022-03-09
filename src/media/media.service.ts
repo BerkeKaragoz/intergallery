@@ -73,9 +73,9 @@ export class MediaService {
   }
 
   createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
-    const { name, owner, sources } = dto;
+    const { name, owner, sources, type } = dto;
 
-    const newMedia = this.mediaRepository.create({ name });
+    const newMedia = this.mediaRepository.create({ name, type });
     newMedia.owner = owner;
     newMedia.sources = sources;
 

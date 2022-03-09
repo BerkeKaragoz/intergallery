@@ -82,8 +82,6 @@ export class MediaController {
     @User() user,
     @Body() dto: CreateMediaInputDto,
   ): Promise<MediaEntity> {
-    const { name, sources } = dto;
-    console.log(dto);
-    return this.mediaService.createMedia({ name, owner: user, sources });
+    return this.mediaService.createMedia({ ...dto, owner: user });
   }
 }

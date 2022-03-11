@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
 import { Repository } from 'typeorm';
-import { CreateMediaDto } from './dto/create-media.dto';
+import { CreateMediaDto, CreateMediaInputDto } from './dto/create-media.dto';
 import { UserMediaDTO } from './dto/user-media.dto';
 
 @Injectable()
@@ -80,6 +80,27 @@ export class MediaService {
     newMedia.sources = sources;
 
     return this.mediaRepository.save(newMedia);
+  }
+
+  createMultipleMedia(
+    dto: CreateMediaInputDto[],
+    owner: UserEntity,
+  ): Promise<MediaEntity[]> {
+    const newMediaArr: MediaEntity[] = [];
+
+    for (const media of dto) {
+      const newMedia = this.mediaRepository.create({
+        name: media.name,
+        type: media.type,
+      });
+
+      newMedia.owner = owner;
+      newMedia.sources = media.sources;
+
+      newMediaArr.push(newMedia);
+    }
+
+    return this.mediaRepository.save(newMediaArr);
   }
 
   async updateMedia(

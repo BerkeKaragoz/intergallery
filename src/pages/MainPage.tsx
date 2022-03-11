@@ -15,6 +15,7 @@ import {
   ImageListItem,
   ImageListItemBar,
   InputLabel,
+  LinearProgress,
   MenuItem,
   Pagination,
   Paper,
@@ -90,11 +91,14 @@ const MainPage = () => {
           highlightedMedia={highlightedMedia}
         >
           <Box sx={{ textAlign: "end" }}>
-            <FormControl sx={{ minWidth: "72px" }}>
-              <InputLabel id="sidebar-per-page-label">Per Page</InputLabel>
+            <InputLabel id="sidebar-per-page-label" sx={{ fontSize: "small" }}>
+              Per Page
+            </InputLabel>
+            <FormControl>
               <Select
                 labelId="sidebar-per-page-label"
                 id="sidebar-per-page"
+                variant="standard"
                 value={mediaPerPage}
                 label="Per Page"
                 onChange={({ target }) => {
@@ -123,7 +127,9 @@ const MainPage = () => {
               <ImageListItem
                 key={item.id}
                 component={Paper}
-                variant="outlined"
+                variant={
+                  highlightedMedia?.id === item.id ? "outlined" : "elevation"
+                }
                 onFocus={highlightHandler(item)}
                 onPointerEnter={highlightHandler(item)}
                 sx={{ borderRadius: 2, overflow: "hidden" }}
@@ -145,6 +151,16 @@ const MainPage = () => {
           </ImageList>
         )
       )}
+
+      <LinearProgress
+        variant="determinate"
+        sx={{ height: "1px", width: "128px", mx: "auto", my: 2 }}
+        value={
+          mediaFetchData && mediaPage
+            ? (mediaPage / mediaFetchData.totalPages) * 100
+            : 0
+        }
+      />
 
       <Pagination
         shape="rounded"

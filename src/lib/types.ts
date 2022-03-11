@@ -12,3 +12,7 @@ export type PaginatedDTO<T = void> = {
   : {
       data: T[];
     });
+
+export type PickByType<Value, Type> = {
+  [P in keyof Type as Type[P] extends Value | undefined ? P : never]: Type[P];
+};

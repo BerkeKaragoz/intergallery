@@ -29,7 +29,10 @@ export const mediaApiSlice = createApi({
             ]
           : [{ type: "Media", id: "PARTIAL-LIST" }],
     }),
-    postMedia: builder.mutation<MediaEntity, CreateMediaInputDTO>({
+    postMedia: builder.mutation<
+      MediaEntity,
+      CreateMediaInputDTO | CreateMediaInputDTO[]
+    >({
       query: (media) => ({
         url: "/media",
         method: "POST",

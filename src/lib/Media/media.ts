@@ -1,6 +1,6 @@
 import { SourceEntity } from "../Source";
 import { CreateSourceDTO } from "../Source/source";
-import { PaginatedDTO } from "../types";
+import { PaginatedDTO, PickByType } from "../types";
 import { UserEntity } from "../User";
 
 export enum MediaType {
@@ -8,6 +8,8 @@ export enum MediaType {
   PICTURE = 1,
   VIDEO = 2,
 }
+
+export const lengthMediaType = Object.keys(MediaType).length / 2;
 
 export interface MediaEntity {
   id: string;
@@ -22,12 +24,13 @@ export interface MediaEntity {
 }
 
 export interface MediaDTO
-  extends Pick<MediaEntity, "id" | "name" | "type" | "sourceIds" | "ownerId"> {
+  extends Pick<MediaEntity, "id" | "name" | "sourceIds" | "ownerId"> {
+  type: PickByType<MediaType, number>;
   creationDate: string;
   updateDate: string;
 }
 
-export interface CreateMediaInputDTO extends Pick<MediaDTO, "name"> {
+export interface CreateMediaInputDTO extends Pick<MediaDTO, "name" | "type"> {
   sources: CreateSourceDTO[];
 }
 

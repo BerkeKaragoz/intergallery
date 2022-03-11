@@ -1,26 +1,13 @@
-import { Box } from "@mui/system";
+import AppDropzone from "@/components/AppDropzone";
+import useAppModal from "@/hooks/useAppModal";
+import { MediaDTO, MediaType } from "@/lib/Media";
 import AddMediaDialog, {
   AddMediaDialogProps,
 } from "@/lib/Media/AddMediaDialog";
-import {
-  Button,
-  Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Slider,
-  Typography,
-} from "@mui/material";
-import Dropzone from "react-dropzone";
-import useAppModal from "@/hooks/useAppModal";
-import { useState } from "react";
-import { MediaDTO, MediaType } from "@/lib/Media";
-import AppDropzone from "@/components/AppDropzone";
 import { UserState } from "@/redux/slice/userSlice";
-import { PaginatedDTO } from "@/lib/types";
-import { useNavigate } from "react-router";
-import { createSearchParams } from "react-router-dom";
+import { Button, Divider, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import { useState } from "react";
 
 const MediaInfo = ({
   label,
@@ -40,11 +27,17 @@ type Props = {
   userId?: UserState["data"]["id"];
 };
 
+const decideMediaType = (typeString = "") => {
+  if (typeString.startsWith("image")) return MediaType.PICTURE;
+  if (typeString.startsWith("video")) return MediaType.VIDEO;
+  return MediaType.UNKNOWN;
+};
+
 const MediaSidebar: React.FC<Props> = (props) => {
   const { highlightedMedia, userId, children } = props;
   const [addMediaValues, setAddMediaValues] = useState<
-    AddMediaDialogProps["initialValues"]
-  >({});
+    AddMediaDialogProps["initialMedia"]
+  >([]);
   const [AddMediaModal, openAddMedia, closeAddMedia] = useAppModal();
 
   return (
@@ -62,10 +55,10 @@ const MediaSidebar: React.FC<Props> = (props) => {
           overflowX: "hidden",
         }}
       >
-        <AddMediaModal fullWidth>
+        <AddMediaModal fullWidth maxWidth="lg">
           <AddMediaDialog
             cancelHandler={closeAddMedia}
-            initialValues={addMediaValues}
+            initialMedia={addMediaValues}
           />
         </AddMediaModal>
         <Button
@@ -79,7 +72,18 @@ const MediaSidebar: React.FC<Props> = (props) => {
         <AppDropzone
           onDrop={(acceptedFiles) => {
             console.log(acceptedFiles);
-            setAddMediaValues({ URL: acceptedFiles[0].name, "Is Local": true });
+            const mediaArr: typeof addMediaValues = [];
+
+            for (const f of acceptedFiles) {
+              mediaArr.push({
+                URL: f.name,
+                Name: f.name,
+                Type: decideMediaType(f.type),
+                "Is Local": true,
+              });
+            }
+
+            setAddMediaValues(mediaArr);
             openAddMedia();
           }}
         />

@@ -80,16 +80,10 @@ export class MediaController {
   @Post()
   createMedia(
     @User() user,
-    @Body() dto: CreateMediaInputDto,
-  ): Promise<MediaEntity> {
-    return this.mediaService.createMedia({ ...dto, owner: user });
-  }
-
-  @Post('/multiple')
-  createMultipleMedia(
-    @User() user,
-    @Body() dto: CreateMediaInputDto[],
-  ): Promise<MediaEntity[]> {
-    return this.mediaService.createMultipleMedia(dto, user);
+    @Body() dto: CreateMediaInputDto | CreateMediaInputDto[],
+  ): Promise<MediaEntity | MediaEntity[]> {
+    if (Array.isArray(dto))
+      return this.mediaService.createMultipleMedia(dto, user);
+    else return this.mediaService.createMedia({ ...dto, owner: user });
   }
 }

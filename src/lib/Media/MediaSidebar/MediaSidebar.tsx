@@ -70,13 +70,13 @@ const MediaSidebar: React.FC<Props> = (props) => {
           Add Media
         </Button>
         <AppDropzone
-          onDrop={(acceptedFiles) => {
+          onDrop={(acceptedFiles: (File & { path?: string })[]) => {
             console.log(acceptedFiles);
             const mediaArr: typeof addMediaValues = [];
 
             for (const f of acceptedFiles) {
               mediaArr.push({
-                URL: f.name,
+                URL: f.path || f.name,
                 Name: f.name,
                 Type: decideMediaType(f.type),
                 "Is Local": true,

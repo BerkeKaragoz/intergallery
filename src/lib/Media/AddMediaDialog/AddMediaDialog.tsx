@@ -15,7 +15,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
-import { Field, FieldArray, Form, Formik } from "formik";
+import { FastField, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
 import { CreateMediaInputDTO, MediaType } from "..";
@@ -54,6 +54,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
       }}
       validationSchema={addMediaSchema}
       validateOnMount={true}
+      validateOnChange={false}
       onSubmit={(values) => {
         const inputArr: CreateMediaInputDTO[] = [];
 
@@ -112,7 +113,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                         }}
                       >
                         <TableCell>
-                          <Field
+                          <FastField
                             as={TextField}
                             name={`media.${index}.URL`}
                             aria-label="URL"
@@ -127,7 +128,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                           />
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Field
+                          <FastField
                             as={TextField}
                             name={`media.${index}.Name`}
                             aria-label="Name"
@@ -139,7 +140,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                           />
                         </TableCell>
                         <TableCell align="center">
-                          <Field
+                          <FastField
                             as={Checkbox}
                             defaultChecked
                             name={`media.${index}.Is Local`}
@@ -147,7 +148,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                           />
                         </TableCell>
                         <TableCell>
-                          <Field
+                          <FastField
                             as={Select}
                             fullWidth
                             size="small"
@@ -162,7 +163,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                                 </MenuItem>
                               ),
                             )}
-                          </Field>
+                          </FastField>
                         </TableCell>
                         <TableCell align="right" size="small" padding="none">
                           <Button

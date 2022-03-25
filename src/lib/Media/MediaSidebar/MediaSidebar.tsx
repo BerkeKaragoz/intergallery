@@ -1,6 +1,7 @@
 import AppDropzone from "@/components/AppDropzone";
 import useAppModal from "@/hooks/useAppModal";
 import { MediaDTO, MediaType } from "@/lib/Media";
+import { sortAlphaNum } from "@/lib/utils";
 import AddMediaDialog, {
   AddMediaDialogProps,
 } from "@/lib/Media/AddMediaDialog";
@@ -83,6 +84,7 @@ const MediaSidebar: React.FC<Props> = (props) => {
               });
             }
 
+            mediaArr.sort((a, b) => sortAlphaNum(a.Name, b.Name));
             setAddMediaValues(mediaArr);
             openAddMedia();
           }}

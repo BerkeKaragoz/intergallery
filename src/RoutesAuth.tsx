@@ -16,6 +16,7 @@ const RoutesAuth = ({ location }: Props) => (
       element={
         <Navigate
           to={{ pathname: "/", search: location?.search?.toString() }}
+          replace={true}
         />
       }
     />

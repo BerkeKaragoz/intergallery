@@ -14,6 +14,7 @@ const RoutesNonAuth = ({ location }: Props) => (
       element={
         <Navigate
           to={{ pathname: "/auth", search: location?.search?.toString() }}
+          replace={true}
         />
       }
     />

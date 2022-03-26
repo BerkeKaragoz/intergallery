@@ -52,7 +52,7 @@ const initialState: UserState = {
     name: null,
     creationDate: null,
   },
-  isLoading: false,
+  isLoading: true, // to prevent flashing, initially starts to load anyway
   error: null,
 };
 

@@ -1,6 +1,8 @@
+import { SIDEBAR_BREAKPOINT } from "@/lib/Media/MediaSidebar";
 import { Nullable } from "@/lib/types";
 import { UserDTO } from "@/lib/User";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Theme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -23,6 +25,10 @@ type Props = {
 
 const Header: React.FC<Props> = (props) => {
   const { user } = props;
+
+  const matchesSidebar = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.up(SIDEBAR_BREAKPOINT),
+  );
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -48,7 +54,11 @@ const Header: React.FC<Props> = (props) => {
 
   return (
     <>
-      <AppBar position="fixed" enableColorOnDark>
+      <AppBar
+        position="fixed"
+        enableColorOnDark
+        sx={matchesSidebar ? {} : { top: "auto", bottom: 0 }}
+      >
         <Container maxWidth="xl">
           <Toolbar disableGutters variant="dense">
             <Typography
@@ -165,7 +175,7 @@ const Header: React.FC<Props> = (props) => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Toolbar />
+      <Toolbar sx={{ display: matchesSidebar ? "block" : "none" }} />
     </>
   );
 };

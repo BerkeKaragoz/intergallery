@@ -146,6 +146,7 @@ const MainPage = () => {
             }
             rowHeight={256}
             gap={16}
+            sx={{ mt: 0 }}
           >
             {mediaFetchData.data.map((item) => (
               <ImageListItem

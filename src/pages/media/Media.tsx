@@ -3,7 +3,7 @@ import Page from "@/components/Page";
 import { API_BASE_URL } from "@/lib/api";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
 import { Grid, LinearProgress, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, styled } from "@mui/system";
 import React from "react";
 import { useParams } from "react-router";
 import { MediaType } from "@/lib/Media";
@@ -20,6 +20,26 @@ const MediaInfo = ({
     <Typography variant="body2" children={info} mb={2} />
   </>
 );
+
+const Video = styled("video")`
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+  &::before {
+    text-align: center;
+    font-weight: lighter;
+    font-size: large;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 0 0 1.125rem #fff;
+    line-height: initial;
+  }
+`;
 
 type Props = {};
 
@@ -42,20 +62,29 @@ const MediaPage: React.FC<Props> = (props) => {
               overflow: "hidden",
             }}
           >
-            <Image
-              src={`${API_BASE_URL}/media/source/${data.sourceIds[0]}`}
-              alt={data.name}
-              sx={{
-                display: "flex",
-                maxHeight: "80vh",
-                minHeight: "512px",
-                height: "initial",
-                width: "initial",
-                maxWidth: "100%",
-                objectFit: "scale-down",
-                mx: "auto",
-              }}
-            />
+            {data.type !== MediaType.VIDEO ? (
+              <Image
+                src={`${API_BASE_URL}/media/source/${data.sourceIds[0]}`}
+                alt={data.name}
+                sx={{
+                  display: "flex",
+                  maxHeight: "80vh",
+                  minHeight: "512px",
+                  height: "initial",
+                  width: "initial",
+                  maxWidth: "100%",
+                  objectFit: "scale-down",
+                  mx: "auto",
+                }}
+              />
+            ) : (
+              <Video
+                src={`${API_BASE_URL}/media/source/${data.sourceIds[0]}`}
+                controls
+                preload="metadata"
+                //poster='thumbnailurl'
+              />
+            )}
           </Box>
           <Typography
             variant="h4"

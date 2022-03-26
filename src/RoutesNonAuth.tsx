@@ -20,7 +20,16 @@ const RoutesNonAuth = ({ location }: Props) => (
     />
     <Route path="/auth" element={<AuthPage />} />
     <Route path="/test" element={<h1>Testing Page</h1>} />
-    <Route path="*" element={<h1>404 Not Found</h1>} />
+    <Route
+      path="*"
+      element={
+        <h1>
+          404 Not Found
+          <br />
+          <a href="/">Home</a>
+        </h1>
+      }
+    />
   </Routes>
 );
 

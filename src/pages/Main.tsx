@@ -1,3 +1,4 @@
+import AppLink from "@/components/AppLink";
 import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useQuery from "@/hooks/useQuery";
@@ -7,7 +8,7 @@ import { GetMediaInputDTO } from "@/lib/Media/media";
 import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/lib/Media/MediaSidebar";
 import { createQuery } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { mediaApiSlice } from "@/redux/slice/mediaApiSlice";
+import { useGetMediaQuery } from "@/redux/slice/mediaApiSlice";
 import {
   CircularProgress,
   FormControl,
@@ -58,11 +59,10 @@ const MainPage = () => {
   const dispatch = useAppDispatch();
   const isFirstRender = useRef(true);
 
-  const { data: mediaFetchData, isLoading: isMediaLoading } =
-    mediaApiSlice.useGetMediaQuery({
-      page: mediaPage,
-      perPage: mediaPerPage,
-    });
+  const { data: mediaFetchData, isLoading: isMediaLoading } = useGetMediaQuery({
+    page: mediaPage,
+    perPage: mediaPerPage,
+  });
 
   const highlightHandler = (item: MediaDTO) => () => {
     if (!matchesSidebar) return; // if sidebar is shown
@@ -161,18 +161,14 @@ const MainPage = () => {
                     highlightedMedia?.id === item.id ? "1px solid gray" : "",
                 }}
               >
-                <a
-                  href={`${API_BASE_URL}/media/source/${item.sourceIds[0]}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <AppLink href={`/media/${item.id}`}>
                   <Image
                     src={`${API_BASE_URL}/media/source/${item.sourceIds[0]}`}
                     alt={item.name}
                     loading="lazy"
                   />
                   <ImageListItemBar title={item.name} subtitle={item.id} />
-                </a>
+                </AppLink>
               </ImageListItem>
             ))}
           </ImageList>

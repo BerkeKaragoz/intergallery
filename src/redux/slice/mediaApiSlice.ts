@@ -29,6 +29,9 @@ export const mediaApiSlice = createApi({
             ]
           : [{ type: "Media", id: "PARTIAL-LIST" }],
     }),
+    getMediaById: builder.query<MediaDTO, MediaDTO["id"]>({
+      query: (mediaId) => ({ url: `/media/${mediaId}` }),
+    }),
     postMedia: builder.mutation<
       MediaEntity,
       CreateMediaInputDTO | CreateMediaInputDTO[]
@@ -48,4 +51,5 @@ export const mediaApiSlice = createApi({
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetMediaQuery, usePostMediaMutation } = mediaApiSlice;
+export const { useGetMediaQuery, useGetMediaByIdQuery, usePostMediaMutation } =
+  mediaApiSlice;

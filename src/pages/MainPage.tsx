@@ -4,7 +4,7 @@ import useQuery from "@/hooks/useQuery";
 import { API_BASE_URL } from "@/lib/api";
 import { MediaDTO } from "@/lib/Media";
 import { GetMediaInputDTO } from "@/lib/Media/media";
-import MediaSidebar from "@/lib/Media/MediaSidebar";
+import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/lib/Media/MediaSidebar";
 import { createQuery } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { mediaApiSlice } from "@/redux/slice/mediaApiSlice";
@@ -20,8 +20,9 @@ import {
   Pagination,
   Paper,
   Select,
+  useMediaQuery,
 } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, useTheme } from "@mui/system";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -31,6 +32,18 @@ const DEFAULT_PAGE = 1;
 const MainPage = () => {
   const query = useQuery();
   const navigate = useNavigate();
+  const theme = useTheme();
+
+  const matchesSidebar = useMediaQuery(
+    theme.breakpoints.up(SIDEBAR_BREAKPOINT),
+  );
+
+  const matchesXs = useMediaQuery(theme.breakpoints.up("xs"));
+  //const matchesSm = useMediaQuery(theme.breakpoints.up("sm"));
+  const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
+  const matchesLg = useMediaQuery(theme.breakpoints.up("lg"));
+  const matchesXl = useMediaQuery(theme.breakpoints.up("xl"));
+
   const [mediaPage, setMediaPage] = useState<GetMediaInputDTO["page"]>(
     +(query.get("page") ?? DEFAULT_PAGE),
   );
@@ -38,18 +51,21 @@ const MainPage = () => {
     +(query.get("perPage") ?? DEFAULT_PERPAGE),
   );
 
+  const [highlightedMedia, setHighlightedMedia] =
+    React.useState<MediaDTO | null>(null);
+
+  const userState = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const isFirstRender = useRef(true);
+
   const { data: mediaFetchData, isLoading: isMediaLoading } =
     mediaApiSlice.useGetMediaQuery({
       page: mediaPage,
       perPage: mediaPerPage,
     });
-  const userState = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-  const [highlightedMedia, setHighlightedMedia] =
-    React.useState<MediaDTO | null>(null);
 
   const highlightHandler = (item: MediaDTO) => () => {
+    if (!matchesSidebar) return; // if sidebar is shown
     setHighlightedMedia(item);
   };
 
@@ -87,6 +103,7 @@ const MainPage = () => {
     <Page
       sidebar={
         <MediaSidebar
+          open={matchesSidebar}
           userId={userState.data.id}
           highlightedMedia={highlightedMedia}
         >
@@ -122,17 +139,26 @@ const MainPage = () => {
         </Box>
       ) : (
         mediaFetchData && (
-          <ImageList variant="quilted" cols={5} rowHeight={256} gap={16}>
+          <ImageList
+            variant="quilted"
+            cols={
+              matchesXl ? 5 : matchesLg ? 4 : matchesMd ? 3 : matchesXs ? 2 : 1
+            }
+            rowHeight={256}
+            gap={16}
+          >
             {mediaFetchData.data.map((item) => (
               <ImageListItem
                 key={item.id}
                 component={Paper}
-                variant={
-                  highlightedMedia?.id === item.id ? "outlined" : "elevation"
-                }
                 onFocus={highlightHandler(item)}
                 onPointerEnter={highlightHandler(item)}
-                sx={{ borderRadius: 2, overflow: "hidden" }}
+                sx={{
+                  borderRadius: 2,
+                  overflow: "hidden",
+                  outline:
+                    highlightedMedia?.id === item.id ? "1px solid gray" : "",
+                }}
               >
                 <a
                   href={`${API_BASE_URL}/media/source/${item.sourceIds[0]}`}

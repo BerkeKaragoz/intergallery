@@ -6,7 +6,15 @@ import AddMediaDialog, {
   AddMediaDialogProps,
 } from "@/lib/Media/AddMediaDialog";
 import { UserState } from "@/redux/slice/userSlice";
-import { Button, Divider, Typography } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Drawer,
+  DrawerProps,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 
@@ -23,34 +31,86 @@ const MediaInfo = ({
   </>
 );
 
-type Props = {
-  highlightedMedia?: MediaDTO | null;
-  userId?: UserState["data"]["id"];
-};
-
 const decideMediaType = (typeString = "") => {
   if (typeString.startsWith("image")) return MediaType.PICTURE;
   if (typeString.startsWith("video")) return MediaType.VIDEO;
   return MediaType.UNKNOWN;
 };
 
+export const SIDEBAR_BREAKPOINT = "sm";
+export const SIDEBAR_SMALL_BREAKPOINT = "md";
+
+const SIDEBAR_WIDTH = 256;
+const SIDEBAR_SMALL_WIDTH = 196;
+
+type Props = {
+  open?: DrawerProps["open"];
+  highlightedMedia?: MediaDTO | null;
+  userId?: UserState["data"]["id"];
+};
+
 const MediaSidebar: React.FC<Props> = (props) => {
-  const { highlightedMedia, userId, children } = props;
+  const { open, highlightedMedia, userId, children } = props;
+
+  const [AddMediaModal, openAddMedia, closeAddMedia] = useAppModal();
+
+  const matchesSidebar = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.up(SIDEBAR_BREAKPOINT),
+  );
+
+  const matchesSidebarSmall = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.up(SIDEBAR_SMALL_BREAKPOINT),
+  );
+
   const [addMediaValues, setAddMediaValues] = useState<
     AddMediaDialogProps["initialMedia"]
   >([]);
-  const [AddMediaModal, openAddMedia, closeAddMedia] = useAppModal();
+
+  const handleOnDrop = (acceptedFiles: (File & { path?: string })[]) => {
+    console.log(acceptedFiles);
+    const mediaArr: typeof addMediaValues = [];
+
+    for (const f of acceptedFiles) {
+      mediaArr.push({
+        URL: f.path || f.name,
+        Name: f.name,
+        Type: decideMediaType(f.type),
+        "Is Local": true,
+      });
+    }
+
+    mediaArr.sort((a, b) => sortAlphaNum(a.Name, b.Name));
+
+    setAddMediaValues(mediaArr);
+    openAddMedia();
+  };
 
   return (
-    <>
+    <Drawer
+      variant={matchesSidebar ? "permanent" : "temporary"}
+      open={open}
+      sx={
+        matchesSidebar
+          ? {
+              [`& .MuiDrawer-paper`]: {
+                position: "static",
+                background: "inherit",
+                flexDirection: "row",
+                border: "none",
+              },
+            }
+          : {}
+      }
+    >
       <Box
         component="aside"
         sx={{
           display: "flex",
           flexDirection: "column",
+          flexGrow: 1,
           mx: 2,
           pb: 2,
-          width: 256,
+          width: matchesSidebarSmall ? SIDEBAR_WIDTH : SIDEBAR_SMALL_WIDTH,
           flexShrink: 0,
           wordWrap: "break-word",
           overflowX: "hidden",
@@ -70,25 +130,7 @@ const MediaSidebar: React.FC<Props> = (props) => {
         >
           Add Media
         </Button>
-        <AppDropzone
-          onDrop={(acceptedFiles: (File & { path?: string })[]) => {
-            console.log(acceptedFiles);
-            const mediaArr: typeof addMediaValues = [];
-
-            for (const f of acceptedFiles) {
-              mediaArr.push({
-                URL: f.path || f.name,
-                Name: f.name,
-                Type: decideMediaType(f.type),
-                "Is Local": true,
-              });
-            }
-
-            mediaArr.sort((a, b) => sortAlphaNum(a.Name, b.Name));
-            setAddMediaValues(mediaArr);
-            openAddMedia();
-          }}
-        />
+        <AppDropzone onDrop={handleOnDrop} />
 
         {highlightedMedia && (
           <Box>
@@ -121,7 +163,7 @@ const MediaSidebar: React.FC<Props> = (props) => {
         {children}
       </Box>
       <Divider flexItem orientation={"vertical"} sx={{ my: 5, opacity: 0.5 }} />
-    </>
+    </Drawer>
   );
 };
 

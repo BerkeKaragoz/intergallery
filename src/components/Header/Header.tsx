@@ -19,6 +19,15 @@ import * as React from "react";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
+// const StyledFab = styled(Fab)({
+//   position: 'absolute',
+//   zIndex: 1,
+//   top: -30,
+//   left: 0,
+//   right: 0,
+//   margin: '0 auto',
+// });
+
 type Props = {
   user: Partial<Nullable<UserDTO>>;
 };
@@ -175,7 +184,11 @@ const Header: React.FC<Props> = (props) => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Toolbar sx={{ display: matchesSidebar ? "block" : "none" }} />
+      <Toolbar
+        sx={{ display: matchesSidebar ? "block" : "none" }}
+        variant="dense"
+      />
+      <Box height={0} mb={2} />
     </>
   );
 };

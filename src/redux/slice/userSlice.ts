@@ -1,7 +1,7 @@
 import { API_BASE_URL } from "@/lib/api";
 import { BaseReducerState } from "@/redux/store";
 import { getRequest, postRequest } from "@/lib/requests";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UserDTO } from "@/lib/User";
 
 export interface UserState extends BaseReducerState<UserDTO> {}
@@ -59,7 +59,11 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRegisterUser.fulfilled, (state, action) => {
@@ -106,6 +110,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {} = userSlice.actions;
+export const { setIsLoading: setIsUserLoading } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

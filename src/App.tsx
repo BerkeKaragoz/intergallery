@@ -9,7 +9,7 @@ import {
 import React from "react";
 import RoutesNonAuth from "./RoutesNonAuth";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { fetchGetUser } from "./redux/slice/userSlice";
+import { fetchGetUser, setIsUserLoading } from "./redux/slice/userSlice";
 import RoutesAuth from "./RoutesAuth";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -32,8 +32,10 @@ function App() {
       //TODO remove the item when logging out
 
       if (lastLoginData["id"]) dispatch(fetchGetUser());
+      else dispatch(setIsUserLoading(false));
     } catch (ex) {}
   }, []);
+
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method

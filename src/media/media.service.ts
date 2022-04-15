@@ -48,6 +48,17 @@ export class MediaService {
     return this.mediaRepository.findOneOrFail(id);
   }
 
+  async getUserMediaById(
+    user: UserEntity,
+    id: MediaEntity['id'],
+  ): Promise<MediaEntity> {
+    return await this.mediaRepository.findOneOrFail(id, {
+      where: { owner: user.id },
+      //relations: ['sources'],
+      cache: true,
+    });
+  }
+
   async getUserMediaSource(
     user: Pick<UserEntity, 'id'>,
     mediaId: MediaEntity['id'],

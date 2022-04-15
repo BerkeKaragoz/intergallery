@@ -40,6 +40,11 @@ export class MediaController {
     return this.mediaService.getUserMedia(user, +page, +perPage);
   }
 
+  @Get('/:mediaId')
+  getMedia(@Request() req, @Param('mediaId') mediaId: MediaEntity['id']) {
+    return this.mediaService.getUserMediaById(req.user, mediaId);
+  }
+
   @Get('/:mediaId/source')
   async getMediaSource(
     @Request() req,
@@ -71,7 +76,9 @@ export class MediaController {
 
     if (source.isLocal) {
       const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
-      res.sendFile(fileAbsolutePath);
+      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err) => {
+        if (err) console.error(err);
+      });
     } else {
       res.redirect(source.url);
     }

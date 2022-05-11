@@ -7,13 +7,13 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import React from "react";
-import RoutesNonAuth from "./RoutesNonAuth";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { fetchGetUser, setIsUserLoading } from "./redux/slice/userSlice";
-import RoutesAuth from "./RoutesAuth";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import ErrorBoundary from "./components/ErrorBoundary";
+import RoutesNonAuth from "@/RoutesNonAuth";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchGetUser, setIsUserLoading } from "@/redux/slice/userSlice";
+import RoutesAuth from "@/RoutesAuth";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLocation } from "react-router";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });

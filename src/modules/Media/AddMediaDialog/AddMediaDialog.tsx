@@ -115,6 +115,18 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                           "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
+                        <TableCell component="th" scope="row">
+                          <FastField
+                            as={TextField}
+                            name={`media.${index}.Name`}
+                            aria-label="Name"
+                            placeholder="Name"
+                            variant="standard"
+                            fullWidth
+                            autoComplete="off"
+                            spellCheck={false}
+                          />
+                        </TableCell>
                         <TableCell>
                           <FastField
                             as={TextField}
@@ -128,18 +140,6 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                             spellCheck={false}
                             //@ts-ignore undefined is expected anyway
                             error={Boolean(errors?.media?.[index]?.URL)}
-                          />
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          <FastField
-                            as={TextField}
-                            name={`media.${index}.Name`}
-                            aria-label="Name"
-                            placeholder="Name"
-                            variant="standard"
-                            fullWidth
-                            autoComplete="off"
-                            spellCheck={false}
                           />
                         </TableCell>
                         <TableCell align="center">

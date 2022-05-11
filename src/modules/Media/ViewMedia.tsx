@@ -1,12 +1,14 @@
 import Image from "@/components/Image";
 import Page from "@/components/Page";
+import useAppModal from "@/hooks/useAppModal";
 import { API_BASE_URL } from "@/lib/api";
 import { MediaType } from "@/modules/Media/utils";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
-import { Grid, LinearProgress, Typography } from "@mui/material";
+import { Button, Grid, LinearProgress, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import React from "react";
 import { useParams } from "react-router";
+import EditMediaDialog from "./EditMediaDialog/EditMediaDialog";
 
 const MediaInfo = ({
   label,
@@ -43,9 +45,11 @@ const Video = styled("video")`
 
 type Props = {};
 
-const Media: React.FC<Props> = (props) => {
+const ViewMedia: React.FC<Props> = (props) => {
   const {} = props;
   const { mediaId } = useParams();
+
+  const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal();
 
   const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "");
 
@@ -53,8 +57,14 @@ const Media: React.FC<Props> = (props) => {
     <Page>
       {isLoading && <LinearProgress />}
       {isError && <pre>{`Something went wrong.`}</pre>}
+      <hr />
+      <hr />
       {data && (
         <>
+          <EditMediaModal fullWidth maxWidth="lg">
+            <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
+          </EditMediaModal>
+          <Button onClick={openEditMedia}>Open</Button>
           <Box
             sx={{
               backgroundColor: "rgba(0,0,0,0.2)",
@@ -130,4 +140,4 @@ const Media: React.FC<Props> = (props) => {
 };
 
 export type { Props as MediaPageProps };
-export default Media;
+export default ViewMedia;

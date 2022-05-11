@@ -4,7 +4,7 @@ import Page from "@/components/Page";
 import useQuery from "@/hooks/useQuery";
 import { API_BASE_URL } from "@/lib/api";
 import { MediaDTO } from "@/modules/Media";
-import { GetMediaInputDTO } from "@/modules/Media/media";
+import { GetMediaInputDTO } from "@/modules/Media/utils";
 import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
 import { createQuery } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";

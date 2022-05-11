@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { RoutesProps } from "react-router-dom";
-import AuthPage from "./pages/auth";
+import AuthPage from "@/modules/Auth";
 
 type Props = {
   location?: RoutesProps["location"];

@@ -1,12 +1,12 @@
 import Image from "@/components/Image";
 import Page from "@/components/Page";
 import { API_BASE_URL } from "@/lib/api";
+import { MediaType } from "@/modules/Media/utils";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
 import { Grid, LinearProgress, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import React from "react";
 import { useParams } from "react-router";
-import { MediaType } from "@/lib/Media";
 
 const MediaInfo = ({
   label,
@@ -43,7 +43,7 @@ const Video = styled("video")`
 
 type Props = {};
 
-const MediaPage: React.FC<Props> = (props) => {
+const Media: React.FC<Props> = (props) => {
   const {} = props;
   const { mediaId } = useParams();
 
@@ -130,4 +130,4 @@ const MediaPage: React.FC<Props> = (props) => {
 };
 
 export type { Props as MediaPageProps };
-export default MediaPage;
+export default Media;

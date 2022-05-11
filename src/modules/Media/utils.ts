@@ -1,6 +1,6 @@
 import { SourceEntity } from "../Source";
 import { CreateSourceDTO } from "../Source/source";
-import { PaginatedDTO, PickByType } from "../types";
+import { PaginatedDTO, PickByType } from "../../lib/types";
 import { UserEntity } from "../User";
 
 export enum MediaType {
@@ -10,6 +10,8 @@ export enum MediaType {
 }
 
 export const lengthMediaType = Object.keys(MediaType).length / 2;
+
+// Types
 
 export interface MediaEntity {
   id: string;

@@ -1,6 +1,6 @@
-import { SIDEBAR_BREAKPOINT } from "@/lib/Media/MediaSidebar";
+import { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
 import { Nullable } from "@/lib/types";
-import { UserDTO } from "@/lib/User";
+import { UserDTO } from "@/modules/User";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Theme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";

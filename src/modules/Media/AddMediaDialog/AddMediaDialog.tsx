@@ -18,8 +18,11 @@ import TextField from "@mui/material/TextField";
 import { FastField, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { CreateMediaInputDTO, MediaType } from "..";
-import { lengthMediaType } from "../media";
+import {
+  lengthMediaType,
+  CreateMediaInputDTO,
+  MediaType,
+} from "@/modules/Media/utils";
 
 const mediaSchema = Yup.object({
   Name: Yup.string().default("").max(100),

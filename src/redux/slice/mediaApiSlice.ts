@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
-import { CreateMediaInputDTO, MediaDTO, MediaEntity } from "@/lib/Media";
-import { GetMediaInputDTO } from "@/lib/Media/media";
+import { CreateMediaInputDTO, MediaDTO, MediaEntity } from "@/modules/Media";
+import { GetMediaInputDTO } from "@/modules/Media/media";
 import { PaginatedDTO } from "@/lib/types";
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";

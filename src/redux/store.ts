@@ -1,6 +1,6 @@
-import { mediaApiSlice } from "./slice/mediaApiSlice";
-import { Nullable } from "./../lib/types";
-import { userReducer } from "./slice/userSlice";
+import { mediaApiSlice } from "@/redux/slice/mediaApiSlice";
+import { Nullable } from "@/lib/types";
+import { userReducer } from "@/redux/slice/userSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store = configureStore({

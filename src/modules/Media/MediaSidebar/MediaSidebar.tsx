@@ -1,10 +1,10 @@
 import AppDropzone from "@/components/AppDropzone";
 import useAppModal from "@/hooks/useAppModal";
-import { MediaDTO, MediaType } from "@/lib/Media";
+import { MediaDTO, MediaType } from "@/modules/Media";
 import { sortAlphaNum } from "@/lib/utils";
 import AddMediaDialog, {
   AddMediaDialogProps,
-} from "@/lib/Media/AddMediaDialog";
+} from "@/modules/Media/AddMediaDialog";
 import { UserState } from "@/redux/slice/userSlice";
 import {
   Button,

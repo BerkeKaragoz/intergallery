@@ -2,7 +2,7 @@ import { API_BASE_URL } from "@/lib/api";
 import { BaseReducerState } from "@/redux/store";
 import { getRequest, postRequest } from "@/lib/requests";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserDTO } from "@/lib/User";
+import { UserDTO } from "@/modules/User";
 
 export interface UserState extends BaseReducerState<UserDTO> {}
 

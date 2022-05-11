@@ -3,9 +3,9 @@ import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useQuery from "@/hooks/useQuery";
 import { API_BASE_URL } from "@/lib/api";
-import { MediaDTO } from "@/lib/Media";
-import { GetMediaInputDTO } from "@/lib/Media/media";
-import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/lib/Media/MediaSidebar";
+import { MediaDTO } from "@/modules/Media";
+import { GetMediaInputDTO } from "@/modules/Media/media";
+import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
 import { createQuery } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/mediaApiSlice";
@@ -30,7 +30,7 @@ import { useNavigate } from "react-router";
 const DEFAULT_PERPAGE = 20;
 const DEFAULT_PAGE = 1;
 
-const MainPage = () => {
+const Browse = () => {
   const query = useQuery();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -198,4 +198,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default Browse;

@@ -228,7 +228,7 @@ const RegisterBox = () => {
   );
 };
 
-const AuthPage = () => {
+const Auth = () => {
   const { hash } = useLocation();
 
   return (
@@ -324,4 +324,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default Auth;

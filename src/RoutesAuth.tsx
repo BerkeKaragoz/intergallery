@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes, RoutesProps } from "react-router";
 import { Navigate } from "react-router-dom";
-import MainPage from "./pages";
-import MediaPage from "./pages/media/Media";
+import Browse from "@/modules/Browse";
+import Media from "@/modules/Media";
 
 type Props = {
   location?: RoutesProps["location"];
@@ -10,8 +10,8 @@ type Props = {
 
 const RoutesAuth = ({ location }: Props) => (
   <Routes>
-    <Route index element={<MainPage />} />
-    <Route path="/media/:mediaId" element={<MediaPage />} />
+    <Route index element={<Browse />} />
+    <Route path="/media/:mediaId" element={<Media />} />
 
     <Route
       path="/auth"

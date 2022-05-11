@@ -1,4 +1,4 @@
-import { MediaEntity } from "../Media/media";
+import { MediaEntity } from "@/modules/Media/utils";
 
 export interface UserEntity {
   id: string;

@@ -8,7 +8,7 @@ type Props = Omit<RouterLinkProps, "to"> & { href: RouterLinkProps["to"] };
 
 /**
  * You don't need to use this component as it just replaces
- * the components in the them
+ * the components in the theme
  */
 const AppLink = React.forwardRef<HTMLAnchorElement, Props>((props, ref) => {
   const { href, ...other } = props;

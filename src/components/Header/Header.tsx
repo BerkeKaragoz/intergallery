@@ -2,7 +2,7 @@ import { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
 import { Nullable } from "@/lib/types";
 import { UserDTO } from "@/modules/User";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Theme, useMediaQuery } from "@mui/material";
+import { Link, Theme, useMediaQuery } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -76,7 +76,9 @@ const Header: React.FC<Props> = (props) => {
               component="div"
               sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
             >
-              Intergallery
+              <Link href="/" color="inherit" underline="none">
+                Intergallery
+              </Link>
             </Typography>
 
             <Box

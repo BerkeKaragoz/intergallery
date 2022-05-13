@@ -1,0 +1,144 @@
+<div class="login-background screen-centered">
+  <h1 class="bg-title">Intergallery</h1>
+</div>
+
+<div class="login-box screen-centered login-box-color backdrop-filter">
+  <div *ngIf="modalTab === 0" class="box-container">
+    <h1 class="login-title">Login</h1>
+    <p class="login-subtitle">Welcome! Login to access Intergallery.</p>
+    <form [formGroup]="loginForm" (ngSubmit)="loginHandler()">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" required formControlName="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showLoginPassword ? 'text' : 'password'"
+          required
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showLoginPassword = !showLoginPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showLoginPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showLoginPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="split-container">
+        <a class="mat-primary caption" href="/reset-password"
+          >Forgot Password?</a
+        >
+        <button
+          mat-flat-button
+          color="accent"
+          type="submit"
+          [disabled]="loginForm.invalid || loginForm.disabled"
+        >
+          Continue <mat-icon class="button-icon">keyboard_tab</mat-icon>
+        </button>
+      </div>
+    </form>
+
+    <div class="login-divider split-container">
+      <hr />
+      <span>or</span>
+    </div>
+    <div class="end-align">
+      <button mat-flat-button color="primary" (click)="goToRegister()">
+        Sign up
+        <mat-icon class="button-icon">app_registration</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="modalTab === 1" class="box-container">
+    <h1 class="login-title">Sign Up</h1>
+    <p class="login-subtitle">Welcome! It's simple and fast.</p>
+    <form [formGroup]="registerForm" (ngSubmit)="registerHandler()">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" required formControlName="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="showRegisterPassword ? 'text' : 'password'"
+          required
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showRegisterPassword = !showRegisterPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showRegisterPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showRegisterPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          required
+          formControlName="confirmPassword"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="showConfirmPassword = !showConfirmPassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!showConfirmPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            showConfirmPassword ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="split-container">
+        <button
+          mat-stroked-button
+          class="caption"
+          color="accent"
+          (click)="goToLogin()"
+        >
+          I have an account.
+        </button>
+        <button
+          mat-flat-button
+          color="accent"
+          type="submit"
+          [disabled]="registerForm.invalid || registerForm.disabled"
+        >
+          Sign Up <mat-icon class="button-icon">keyboard_tab</mat-icon>
+        </button>
+      </div>
+    </form>
+
+    <div class="login-divider"></div>
+    <div class="end-align">
+      <p class="caption" style="opacity: 0.8">
+        By clicking Sign Up, you agree to our Terms, Data Policy and Cookie
+        Policy.
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<mat-toolbar class="header">
+  <app-container class="container">
+    <h3 class="title">
+      <a routerLink="/">{{ title }}</a>
+    </h3>
+
+    <span class="spacer"></span>
+
+    <nav class="desktop-only">
+      <ul>
+        <li>
+          <a href="http://localhost:3000/auth/logout">
+            <button mat-button>Logout</button>
+          </a>
+        </li>
+        <li *ngIf="currentUser !== null">
+          <button mat-flat-button color="accent">
+            {{ currentUser.username }}
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <button
+      class="mobile-only main-icon-button"
+      mat-flat-button
+      color="accent"
+      (click)="openDialog()"
+      [ngClass]="{ 'minimized-icon-button': isMenuOpen }"
+    >
+      <mat-icon>add_photo_alternate</mat-icon>
+    </button>
+
+    <button
+      class="mobile-only"
+      mat-stroked-button
+      (click)="isMenuOpen = !isMenuOpen"
+    >
+      <mat-icon>{{ isMenuOpen ? "close" : "menu" }}</mat-icon>
+    </button>
+  </app-container>
+</mat-toolbar>
+<nav
+  class="mobile-menu mobile-only"
+  [ngClass]="{ 'mobile-menu-open': isMenuOpen }"
+>
+  <ul>
+    <li>
+      <a href="http://localhost:3000/auth/logout">
+        <button mat-stroked-button>Logout</button>
+      </a>
+    </li>
+    <li *ngIf="currentUser !== null">
+      <hr />
+      <button mat-stroked-button>
+        {{ currentUser.username }}
+      </button>
+    </li>
+  </ul>
+</nav>
+<div class="content-spacer"></div>

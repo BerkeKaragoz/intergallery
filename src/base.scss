@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@use "./app/styles/colors.scss";
+@use "./app/styles/breakpoints.scss";
+@use "./app/styles/shapes.scss";
+@use "./app/styles/global.scss";
+
+@include mat.core();
+
+@include mat.all-component-themes(colors.$app-theme);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

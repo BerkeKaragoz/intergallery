@@ -18,7 +18,7 @@ export class MediaCardComponent implements OnInit {
 
   getMediaSource() {
     if (!this.media) return null;
-    return URL.BASE + '/media/source/' + this.media.id;
+    return URL.BASE + '/media/' + this.media.id + '/source';
   }
 
   get mediaType(): typeof MediaType {

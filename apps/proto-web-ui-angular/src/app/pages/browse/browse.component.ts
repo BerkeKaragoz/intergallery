@@ -60,7 +60,7 @@ export class BrowseComponent implements OnInit {
   }
 
   getMediaSource(media: MediaEntity) {
-    return URL.BASE + '/media/source/' + media.id;
+    return URL.BASE + '/media/' + media.id + '/source';
   }
 
   setHoveredMedia(media: MediaEntity | null) {

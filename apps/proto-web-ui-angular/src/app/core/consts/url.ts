@@ -1,6 +1,6 @@
 import * as URL from './url';
 
-export const BASE = 'http://localhost:3000';
+export const BASE = 'http://localhost:4200/api';
 
 export const REGISTER = BASE + '/auth/register';
 export const LOGIN = BASE + '/auth/login';

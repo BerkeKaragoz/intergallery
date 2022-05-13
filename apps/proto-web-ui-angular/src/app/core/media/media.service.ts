@@ -10,7 +10,7 @@ import MediaEntity from './media.entity';
   providedIn: 'root',
 })
 export class MediaService {
-  private readonly _baseUrl = 'http://localhost:3000';
+  private readonly _baseUrl = 'http://localhost:4200/api';
   private readonly _userMediaUrl = this._baseUrl + '/media/user';
   private readonly _createMediaUrl = this._baseUrl + '/media';
 

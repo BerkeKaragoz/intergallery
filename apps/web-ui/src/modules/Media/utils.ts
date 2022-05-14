@@ -42,4 +42,6 @@ export interface UpdateMediaInputDTO
   deletedSourceIds: Array<SourceEntity["id"]>;
 }
 
+export type DeleteMediaInputDTO = MediaEntity["id"];
+
 export type GetMediaInputDTO = Partial<Pick<PaginatedDTO, "page" | "perPage">>;

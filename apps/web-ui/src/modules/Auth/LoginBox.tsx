@@ -52,7 +52,7 @@ const LoginBox = () => {
                 label="Username"
                 required
                 autoComplete="off"
-                spellCheck={false}
+                spellCheck="false"
                 //helperText={<ErrorMessage name="username" />}
                 //error={Boolean(errors.username)}
               />
@@ -63,7 +63,7 @@ const LoginBox = () => {
                 label="Password"
                 required
                 autoComplete="off"
-                spellCheck={false}
+                spellCheck="false"
                 //helperText={<ErrorMessage name="password" />}
                 //error={Boolean(errors.password)}
               />

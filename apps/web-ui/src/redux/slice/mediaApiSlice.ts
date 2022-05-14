@@ -1,6 +1,10 @@
 import { API_BASE_URL } from "@/lib/api";
 import { CreateMediaInputDTO, MediaDTO, MediaEntity } from "@/modules/Media";
-import { GetMediaInputDTO, UpdateMediaInputDTO } from "@/modules/Media/utils";
+import {
+  DeleteMediaInputDTO,
+  GetMediaInputDTO,
+  UpdateMediaInputDTO,
+} from "@/modules/Media/utils";
 import { PaginatedDTO } from "@/lib/types";
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -60,6 +64,18 @@ export const mediaApiSlice = createApi({
       invalidatesTags: (result, error) =>
         result ? [{ type: "Media", id: result.id }] : [],
     }),
+    deleteMedia: builder.mutation<MediaEntity, DeleteMediaInputDTO>({
+      query: (id) => ({
+        url: "/media/delete",
+        method: "POST",
+        body: { id },
+      }),
+      // Invalidates the tag for `PARTIAL-LIST`,
+      // causing the `listPosts` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: (result, error) => [
+        { type: "Media", id: "PARTIAL-LIST" },
+      ],
+    }),
   }),
 });
 
@@ -69,4 +85,5 @@ export const {
   useGetMediaByIdQuery,
   usePostMediaMutation,
   useEditMediaMutation,
+  useDeleteMediaMutation,
 } = mediaApiSlice;

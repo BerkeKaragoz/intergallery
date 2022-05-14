@@ -2,14 +2,16 @@ import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useAppModal from "@/hooks/useAppModal";
 import { API_BASE_URL } from "@/lib/api";
+import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
+import EditMediaDialog from "@/modules/Media/EditMediaDialog";
 import { MediaType } from "@/modules/Media/utils";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Button, Grid, LinearProgress, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import React from "react";
 import { useParams } from "react-router";
-import EditMediaDialog from "./EditMediaDialog/EditMediaDialog";
-import EditIcon from "@mui/icons-material/Edit";
 
 const MediaInfo = ({
   label,
@@ -51,6 +53,7 @@ const ViewMedia: React.FC<Props> = (props) => {
   const { mediaId } = useParams();
 
   const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal();
+  const [DeleteMediaModal, openDeleteMedia, closeDeleteMedia] = useAppModal();
 
   const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "");
 
@@ -112,7 +115,12 @@ const ViewMedia: React.FC<Props> = (props) => {
             >
               {data.name}
             </Typography>
-            <Button onClick={openEditMedia} endIcon={<EditIcon />}>
+            <Button
+              onClick={openEditMedia}
+              color="secondary"
+              variant="contained"
+              endIcon={<EditIcon />}
+            >
               Edit
             </Button>
           </Box>
@@ -141,9 +149,19 @@ const ViewMedia: React.FC<Props> = (props) => {
               <MediaInfo label="Owner ID" info={data.ownerId} />
             </Grid>
           </Grid>
+          <Button
+            onClick={openDeleteMedia}
+            variant="outlined"
+            endIcon={<DeleteIcon />}
+          >
+            Delete
+          </Button>
           <EditMediaModal fullWidth>
             <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
           </EditMediaModal>
+          <DeleteMediaModal>
+            <DeleteMediaDialog media={data} cancelHandler={closeDeleteMedia} />
+          </DeleteMediaModal>
         </>
       )}
     </Page>

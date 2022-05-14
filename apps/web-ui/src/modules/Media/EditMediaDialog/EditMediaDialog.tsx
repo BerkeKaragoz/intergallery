@@ -19,6 +19,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useEditMediaMutation } from "@/redux/slice/mediaApiSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 const deletedSourceId = Yup.string().default("").required();
 
@@ -92,7 +94,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                   variant="standard"
                   fullWidth
                   autoComplete="off"
-                  spellCheck={false}
+                  spellCheck="false"
                 />
 
                 <FastField
@@ -155,7 +157,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                                 required
                                 fullWidth
                                 autoComplete="off"
-                                spellCheck={false}
+                                spellCheck="false"
                                 //@ts-ignore undefined is expected anyway
                                 error={Boolean(errors.URL)}
                               />
@@ -210,12 +212,14 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                           variant="standard"
                           fullWidth
                           autoComplete="off"
-                          spellCheck={false}
+                          spellCheck="false"
                         />
                       </TableCell>
-                      <TableCell padding="checkbox">
+                      <TableCell padding="checkbox" align="center">
                         <FastField
                           as={Checkbox}
+                          icon={<DeleteOutlinedIcon />}
+                          checkedIcon={<DeleteIcon />}
                           name={`deletedSourceIds`}
                           value={sourceId}
                           label="Remove"

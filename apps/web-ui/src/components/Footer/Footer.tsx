@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     <>
-      <Container component="footer" maxWidth="xl">
+      <Container component="footer" maxWidth="xl" sx={{ mt: 2 }}>
         <Button
           variant="outlined"
           component="a"

@@ -132,7 +132,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                             variant="standard"
                             fullWidth
                             autoComplete="off"
-                            spellCheck={false}
+                            spellCheck="false"
                           />
                         </TableCell>
                         <TableCell>
@@ -145,7 +145,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                             required
                             fullWidth
                             autoComplete="off"
-                            spellCheck={false}
+                            spellCheck="false"
                             //@ts-ignore undefined is expected anyway
                             error={Boolean(errors?.media?.[index]?.URL)}
                           />

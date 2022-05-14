@@ -53,7 +53,7 @@ const RegisterBox = () => {
                 label="Username"
                 required
                 autoComplete="off"
-                spellCheck={false}
+                spellCheck="false"
                 helperText={<ErrorMessage name="Username" />}
                 error={touched.Username && Boolean(errors.Username)}
               />
@@ -64,7 +64,7 @@ const RegisterBox = () => {
                 label="Password"
                 required
                 autoComplete="off"
-                spellCheck={false}
+                spellCheck="false"
                 helperText={<ErrorMessage name="Password" />}
                 error={touched.Password && Boolean(errors.Password)}
               />
@@ -75,7 +75,7 @@ const RegisterBox = () => {
                 label="Confirm Password"
                 required
                 autoComplete="off"
-                spellCheck={false}
+                spellCheck="false"
                 helperText={<ErrorMessage name="Confirm Password" />}
                 error={
                   touched["Confirm Password"] &&

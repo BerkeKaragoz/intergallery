@@ -67,10 +67,12 @@ const ViewMedia: React.FC<Props> = (props) => {
 
   const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "");
 
-  React.useEffect(() => {
-    if (!data) return;
+  const maxSourceId = data ? data.sourceIds.length - 1 : undefined;
 
-    if (sourceIndex >= data.sourceIds.length) {
+  React.useEffect(() => {
+    if (!maxSourceId) return;
+
+    if (sourceIndex >= maxSourceId) {
       const indexToSet = 0;
       navigate(
         {
@@ -80,7 +82,7 @@ const ViewMedia: React.FC<Props> = (props) => {
       );
       setSourceIndex(indexToSet);
     }
-  }, [data]);
+  }, [maxSourceId, navigate, sourceIndex]);
 
   return (
     <Page>

@@ -1,7 +1,9 @@
 import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useAppModal from "@/hooks/useAppModal";
+import useQuery from "@/hooks/useQuery";
 import { API_BASE_URL } from "@/lib/api";
+import { createQuery } from "@/lib/utils";
 import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
 import EditMediaDialog from "@/modules/Media/EditMediaDialog";
 import { MediaType } from "@/modules/Media/utils";
@@ -11,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Button, Grid, LinearProgress, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 const MediaInfo = ({
   label,
@@ -46,16 +48,39 @@ const Video = styled("video")`
   }
 `;
 
+const DEFAULT_SOURCE_INDEX = 0;
+
 type Props = {};
 
 const ViewMedia: React.FC<Props> = (props) => {
   const {} = props;
+  const navigate = useNavigate();
+  const query = useQuery();
   const { mediaId } = useParams();
+
+  const [sourceIndex, setSourceIndex] = React.useState(
+    +(query.get("source") ?? DEFAULT_SOURCE_INDEX),
+  );
 
   const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal();
   const [DeleteMediaModal, openDeleteMedia, closeDeleteMedia] = useAppModal();
 
   const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "");
+
+  React.useEffect(() => {
+    if (!data) return;
+
+    if (sourceIndex >= data.sourceIds.length) {
+      const indexToSet = 0;
+      navigate(
+        {
+          search: createQuery(["source", indexToSet]),
+        },
+        { replace: true },
+      );
+      setSourceIndex(indexToSet);
+    }
+  }, [data]);
 
   return (
     <Page>
@@ -72,7 +97,7 @@ const ViewMedia: React.FC<Props> = (props) => {
           >
             {data.type !== MediaType.VIDEO ? (
               <Image
-                src={`${API_BASE_URL}/media/source/${data.sourceIds[0]}`}
+                src={`${API_BASE_URL}/media/source/${data.sourceIds[sourceIndex]}`}
                 alt={data.name}
                 sx={{
                   display: "flex",
@@ -87,10 +112,10 @@ const ViewMedia: React.FC<Props> = (props) => {
               />
             ) : (
               <Video
-                src={`${API_BASE_URL}/media/source/${data.sourceIds[0]}`}
+                src={`${API_BASE_URL}/media/source/${data.sourceIds[sourceIndex]}`}
                 controls
                 preload="metadata"
-                //poster='thumbnailurl'
+                //poster="thumbnailurl"
               />
             )}
           </Box>
@@ -156,9 +181,11 @@ const ViewMedia: React.FC<Props> = (props) => {
           >
             Delete
           </Button>
+
           <EditMediaModal fullWidth>
             <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
           </EditMediaModal>
+
           <DeleteMediaModal>
             <DeleteMediaDialog media={data} cancelHandler={closeDeleteMedia} />
           </DeleteMediaModal>

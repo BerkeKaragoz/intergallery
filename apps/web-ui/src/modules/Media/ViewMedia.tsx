@@ -9,6 +9,7 @@ import { Box, styled } from "@mui/system";
 import React from "react";
 import { useParams } from "react-router";
 import EditMediaDialog from "./EditMediaDialog/EditMediaDialog";
+import EditIcon from "@mui/icons-material/Edit";
 
 const MediaInfo = ({
   label,
@@ -57,14 +58,8 @@ const ViewMedia: React.FC<Props> = (props) => {
     <Page>
       {isLoading && <LinearProgress />}
       {isError && <pre>{`Something went wrong.`}</pre>}
-      <hr />
-      <hr />
       {data && (
         <>
-          <EditMediaModal fullWidth maxWidth="lg">
-            <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
-          </EditMediaModal>
-          <Button onClick={openEditMedia}>Open</Button>
           <Box
             sx={{
               backgroundColor: "rgba(0,0,0,0.2)",
@@ -96,18 +91,31 @@ const ViewMedia: React.FC<Props> = (props) => {
               />
             )}
           </Box>
-          <Typography
-            variant="h4"
-            component="h1"
+          <Box
             sx={{
-              wordWrap: "break-word",
-              my: 2,
-              fontWeight: "medium",
-              fontSize: { xs: "1.5rem", md: "2rem" },
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            {data.name}
-          </Typography>
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{
+                display: "inline-block",
+                wordWrap: "break-word",
+                my: 2,
+                mr: 2,
+                fontWeight: "medium",
+                fontSize: { xs: "1.5rem", md: "2rem" },
+              }}
+            >
+              {data.name}
+            </Typography>
+            <Button onClick={openEditMedia} endIcon={<EditIcon />}>
+              Edit
+            </Button>
+          </Box>
           <Grid container spacing={2} justifyContent="space-between">
             <Grid item xs={12} md={6}>
               <MediaInfo label="Type" info={MediaType[data.type]} />
@@ -133,6 +141,9 @@ const ViewMedia: React.FC<Props> = (props) => {
               <MediaInfo label="Owner ID" info={data.ownerId} />
             </Grid>
           </Grid>
+          <EditMediaModal fullWidth>
+            <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
+          </EditMediaModal>
         </>
       )}
     </Page>

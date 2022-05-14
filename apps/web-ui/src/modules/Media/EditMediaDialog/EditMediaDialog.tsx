@@ -14,12 +14,13 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
 
 const sourceSchema = Yup.object({
-  url: Yup.string(),
+  url: Yup.string().default(""),
   isLocal: Yup.boolean().default(true).required(),
 });
 
@@ -123,38 +124,42 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                     </Box>
                     <Table size="small" stickyHeader>
                       <TableHead>
-                        <TableCell padding="checkbox">#</TableCell>
-                        <TableCell>URL</TableCell>
-                        <TableCell padding="checkbox">Local</TableCell>
+                        <TableRow>
+                          <TableCell padding="checkbox">#</TableCell>
+                          <TableCell>URL</TableCell>
+                          <TableCell padding="checkbox">Local</TableCell>
+                        </TableRow>
                       </TableHead>
-                      {values.sources.map((s, i) => (
-                        <TableBody key={`${media.id}-source-${i}`}>
-                          <TableCell padding="checkbox">{i + 1}</TableCell>
-                          <TableCell>
-                            <FastField
-                              as={TextField}
-                              name={`values.sources.${i}.url`}
-                              aria-label="URL"
-                              placeholder="URL *"
-                              variant="standard"
-                              required
-                              fullWidth
-                              autoComplete="off"
-                              spellCheck={false}
-                              //@ts-ignore undefined is expected anyway
-                              error={Boolean(errors.URL)}
-                            />
-                          </TableCell>
-                          <TableCell padding="checkbox">
-                            <FastField
-                              as={Checkbox}
-                              defaultChecked
-                              name={`values.sources.${i}.isLocal`}
-                              label="Is Local"
-                            />
-                          </TableCell>
-                        </TableBody>
-                      ))}
+                      <TableBody>
+                        {values.sources.map((s, i) => (
+                          <TableRow key={`${media.id}-source-${i}`}>
+                            <TableCell padding="checkbox">{i + 1}</TableCell>
+                            <TableCell>
+                              <FastField
+                                as={TextField}
+                                name={`sources.${i}.url`}
+                                aria-label="URL"
+                                placeholder="URL *"
+                                variant="standard"
+                                required
+                                fullWidth
+                                autoComplete="off"
+                                spellCheck={false}
+                                //@ts-ignore undefined is expected anyway
+                                error={Boolean(errors.URL)}
+                              />
+                            </TableCell>
+                            <TableCell padding="checkbox">
+                              <FastField
+                                as={Checkbox}
+                                defaultChecked
+                                name={`sources.${i}.isLocal`}
+                                label="Is Local"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
                     </Table>
                   </>
                 )}

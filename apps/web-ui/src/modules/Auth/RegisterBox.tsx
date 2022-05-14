@@ -1,4 +1,5 @@
 import AppLink from "@/components/AppLink";
+import LoadingButton from "@/components/LoadingButton";
 import { useAppDispatch } from "@/redux/hooks";
 import { fetchRegisterUser } from "@/redux/slice/userSlice";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
@@ -44,7 +45,7 @@ const RegisterBox = () => {
         }}
         validateOnMount={true}
       >
-        {({ errors, isValid, touched }) => (
+        {({ errors, isValid, isSubmitting, touched }) => (
           <Form>
             <Stack spacing={3}>
               <Field
@@ -95,14 +96,15 @@ const RegisterBox = () => {
                 >
                   I have an account
                 </Button>
-                <Button
+                <LoadingButton
                   variant="contained"
                   type="submit"
                   disabled={!isValid}
                   endIcon={<KeyboardTabIcon />}
+                  isLoading={isSubmitting}
                 >
                   Sign Up
-                </Button>
+                </LoadingButton>
               </Stack>
             </Stack>
           </Form>

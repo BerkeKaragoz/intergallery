@@ -16,6 +16,7 @@ import { Field, Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import { REGISTER_HASH } from "@/modules/Auth/utils";
+import LoadingButton from "@/components/LoadingButton";
 
 const loginFormSchema = Yup.object({
   username: Yup.string().default("").required(),
@@ -39,11 +40,11 @@ const LoginBox = () => {
         initialValues={loginFormSchema.getDefault()}
         validationSchema={loginFormSchema}
         onSubmit={(values) => {
-          dispatch(fetchLoginUser(values));
+          dispatch(fetchLoginUser(values)).finally(() => {});
         }}
         validateOnMount={true}
       >
-        {({ errors, isValid }) => (
+        {({ errors, isValid, isSubmitting }) => (
           <Form>
             <Stack spacing={4}>
               <Field
@@ -75,15 +76,16 @@ const LoginBox = () => {
                 <Link href="/forgot-password" variant="caption">
                   Forgot Password?
                 </Link>
-                <Button
+                <LoadingButton
                   variant="contained"
                   type="submit"
                   color="secondary"
                   disabled={!isValid}
                   endIcon={<KeyboardTabIcon />}
+                  isLoading={isSubmitting}
                 >
                   Continue
-                </Button>
+                </LoadingButton>
               </Stack>
             </Stack>
           </Form>

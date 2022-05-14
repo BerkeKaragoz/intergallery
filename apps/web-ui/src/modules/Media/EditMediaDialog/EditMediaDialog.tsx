@@ -21,6 +21,7 @@ import {
 import { useEditMediaMutation } from "@/redux/slice/mediaApiSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import LoadingButton from "@/components/LoadingButton";
 
 const deletedSourceId = Yup.string().default("").required();
 
@@ -234,9 +235,13 @@ const EditMediaDialog: React.FC<Props> = (props) => {
               <Button variant="text" onClick={cancelHandler}>
                 Cancel
               </Button>
-              <Button variant="contained" type="submit">
+              <LoadingButton
+                variant="contained"
+                type="submit"
+                isLoading={isLoading}
+              >
                 Edit
-              </Button>
+              </LoadingButton>
             </DialogActions>
           </Form>
         )}

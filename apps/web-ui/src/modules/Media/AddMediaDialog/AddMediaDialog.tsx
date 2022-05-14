@@ -23,6 +23,7 @@ import {
   CreateMediaInputDTO,
   MediaType,
 } from "@/modules/Media/utils";
+import LoadingButton from "@/components/LoadingButton";
 
 const mediaSchema = Yup.object({
   Name: Yup.string().default("").max(100),
@@ -194,13 +195,14 @@ const AddMediaDialog: React.FC<Props> = (props) => {
               </DialogContent>
               <DialogActions>
                 <Button onClick={cancelHandler}>Cancel</Button>
-                <Button
+                <LoadingButton
                   type="submit"
                   variant="contained"
                   disabled={!isValid || isLoading}
+                  isLoading={isLoading}
                 >
-                  {isLoading ? <CircularProgress size={24} /> : "Add"}
-                </Button>
+                  Add
+                </LoadingButton>
               </DialogActions>
             </Form>
           )}

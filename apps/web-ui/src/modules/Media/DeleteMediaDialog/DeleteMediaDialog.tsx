@@ -1,3 +1,4 @@
+import LoadingButton from "@/components/LoadingButton";
 import { MediaDTO } from "@/modules/Media/utils";
 import { useDeleteMediaMutation } from "@/redux/slice/mediaApiSlice";
 import {
@@ -85,9 +86,14 @@ const DeleteMediaDialog: React.FC<Props> = (props) => {
               <Button variant="text" onClick={cancelHandler}>
                 Cancel
               </Button>
-              <Button variant="contained" type="submit" disabled={!isValid}>
+              <LoadingButton
+                variant="contained"
+                type="submit"
+                disabled={!isValid}
+                isLoading={isLoading}
+              >
                 Delete
-              </Button>
+              </LoadingButton>
             </DialogActions>
           </Form>
         )}

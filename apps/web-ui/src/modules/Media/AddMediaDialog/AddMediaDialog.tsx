@@ -36,7 +36,9 @@ const mediaSchema = Yup.object({
 });
 
 const addMediaSchema = Yup.object({
-  media: Yup.array(mediaSchema).default([]),
+  media: Yup.array(mediaSchema)
+    .default([mediaSchema.getDefaultFromShape()])
+    .min(1, "Minimum 1 source is required!"),
 });
 
 type Props = {
@@ -53,7 +55,11 @@ const AddMediaDialog: React.FC<Props> = (props) => {
     <Formik
       initialValues={{
         ...addMediaSchema.getDefaultFromShape(),
-        media: [...addMediaSchema.getDefaultFromShape().media, ...initialMedia],
+        media: [
+          ...(initialMedia.length === 0
+            ? addMediaSchema.getDefaultFromShape().media
+            : initialMedia),
+        ],
       }}
       validationSchema={addMediaSchema}
       validateOnMount={true}
@@ -84,12 +90,14 @@ const AddMediaDialog: React.FC<Props> = (props) => {
             <Form>
               <DialogTitle>Add Media</DialogTitle>
               <DialogContent>
-                <Table>
+                <Table size="small" stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell>URL</TableCell>
                       <TableCell>Name</TableCell>
-                      <TableCell align="center">Local?</TableCell>
+                      <TableCell align="center" padding="checkbox">
+                        Local
+                      </TableCell>
                       <TableCell>Type</TableCell>
                       <TableCell align="right" size="small" padding="none">
                         <Button
@@ -142,7 +150,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                             error={Boolean(errors?.media?.[index]?.URL)}
                           />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell align="center" padding="checkbox">
                           <FastField
                             as={Checkbox}
                             defaultChecked

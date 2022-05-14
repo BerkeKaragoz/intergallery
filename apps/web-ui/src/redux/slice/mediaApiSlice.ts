@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { CreateMediaInputDTO, MediaDTO, MediaEntity } from "@/modules/Media";
-import { GetMediaInputDTO } from "@/modules/Media/utils";
+import { GetMediaInputDTO, UpdateMediaInputDTO } from "@/modules/Media/utils";
 import { PaginatedDTO } from "@/lib/types";
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -31,6 +31,8 @@ export const mediaApiSlice = createApi({
     }),
     getMediaById: builder.query<MediaDTO, MediaDTO["id"]>({
       query: (mediaId) => ({ url: `/media/${mediaId}` }),
+      providesTags: (result) =>
+        result ? [{ type: "Media", id: result.id }] : [],
     }),
     postMedia: builder.mutation<
       MediaEntity,
@@ -47,9 +49,24 @@ export const mediaApiSlice = createApi({
         { type: "Media", id: "PARTIAL-LIST" },
       ],
     }),
+    editMedia: builder.mutation<MediaEntity, UpdateMediaInputDTO>({
+      query: (media) => ({
+        url: "/media/update",
+        method: "POST",
+        body: media,
+      }),
+      // Invalidates the tag for `PARTIAL-LIST`,
+      // causing the `listPosts` query to re-fetch if a component is subscribed to the query.
+      invalidatesTags: (result, error) =>
+        result ? [{ type: "Media", id: result.id }] : [],
+    }),
   }),
 });
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetMediaQuery, useGetMediaByIdQuery, usePostMediaMutation } =
-  mediaApiSlice;
+export const {
+  useGetMediaQuery,
+  useGetMediaByIdQuery,
+  usePostMediaMutation,
+  useEditMediaMutation,
+} = mediaApiSlice;

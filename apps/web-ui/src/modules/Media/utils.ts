@@ -36,4 +36,10 @@ export interface CreateMediaInputDTO extends Pick<MediaDTO, "name" | "type"> {
   sources: CreateSourceDTO[];
 }
 
+export interface UpdateMediaInputDTO
+  extends Pick<MediaDTO, "id" | "name" | "type"> {
+  addedSources: CreateSourceDTO[];
+  deletedSourceIds: Array<SourceEntity["id"]>;
+}
+
 export type GetMediaInputDTO = Partial<Pick<PaginatedDTO, "page" | "perPage">>;

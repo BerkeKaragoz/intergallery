@@ -18,6 +18,7 @@ import { join } from 'path';
 import { ApiTags, ApiBasicAuth } from '@nestjs/swagger';
 import { User } from 'src/core/decorator/user.decorator';
 import { UserMediaDTO } from './dto/user-media.dto';
+import { UpdateMediaInputDto } from './dto/update-media.dto';
 
 @ApiTags('media')
 @ApiBasicAuth()
@@ -72,6 +73,11 @@ export class MediaController {
     @Response() res: ExpressRes,
     @Param('sourceId') sourceId,
   ) {
+    if (sourceId === typeof undefined) {
+      res.sendStatus(404);
+      return;
+    }
+
     const source = await this.mediaService.getUserSource(req.user, sourceId);
 
     if (source.isLocal) {
@@ -92,5 +98,13 @@ export class MediaController {
     if (Array.isArray(dto))
       return this.mediaService.createMultipleMedia(dto, user);
     else return this.mediaService.createMedia({ ...dto, owner: user });
+  }
+
+  @Post('/update')
+  updateMedia(
+    @User() user,
+    @Body() dto: UpdateMediaInputDto,
+  ): Promise<MediaEntity> {
+    return this.mediaService.updateMedia({ ...dto, owner: user });
   }
 }

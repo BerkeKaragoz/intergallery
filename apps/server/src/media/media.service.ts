@@ -7,6 +7,7 @@ import { SourceEntity } from 'src/model/entities/source.entity';
 import { Repository } from 'typeorm';
 import { CreateMediaDto, CreateMediaInputDto } from './dto/create-media.dto';
 import { UserMediaDTO } from './dto/user-media.dto';
+import { UpdateMediaDto } from './dto/update-media.dto';
 
 @Injectable()
 export class MediaService {
@@ -114,17 +115,32 @@ export class MediaService {
     return this.mediaRepository.save(newMediaArr);
   }
 
-  async updateMedia(
+  async deleteMedia(
     id: MediaEntity['id'],
-    name: MediaEntity['name'],
+    user: UserEntity,
   ): Promise<MediaEntity> {
-    const media = await this.getMediaById(id);
-    media.name = name;
-    return this.mediaRepository.save(media);
+    const media = await this.getUserMediaById(user, id);
+    return this.mediaRepository.remove(media);
   }
 
-  async deleteMedia(id: MediaEntity['id']): Promise<MediaEntity> {
-    const media = await this.getMediaById(id);
-    return this.mediaRepository.remove(media);
+  async updateMedia(dto: UpdateMediaDto): Promise<MediaEntity> {
+    const { id, name, owner, addedSources, deletedSourceIds, type } = dto;
+    console.log('?=====================');
+    console.log(dto);
+
+    const media = await this.getUserMediaById(owner, id);
+    console.log(media);
+    media.name = name;
+    media.type = type;
+
+    for (const id of deletedSourceIds)
+      media.sourceIds = media.sourceIds.filter((sid) => sid !== id);
+
+    if (deletedSourceIds.length > 0)
+      await this.sourceRepository.delete(deletedSourceIds);
+
+    if (addedSources.length > 0) media.sources.concat(addedSources);
+
+    return this.mediaRepository.save(media);
   }
 }

@@ -125,21 +125,25 @@ export class MediaService {
 
   async updateMedia(dto: UpdateMediaDto): Promise<MediaEntity> {
     const { id, name, owner, addedSources, deletedSourceIds, type } = dto;
-    console.log('?=====================');
-    console.log(dto);
 
-    const media = await this.getUserMediaById(owner, id);
-    console.log(media);
+    const media = await this.mediaRepository.findOneOrFail(id, {
+      where: { owner: owner.id },
+      relations: ['sources'],
+      cache: true,
+    });
+
     media.name = name;
     media.type = type;
 
-    for (const id of deletedSourceIds)
-      media.sourceIds = media.sourceIds.filter((sid) => sid !== id);
+    media.sources = media.sources.filter(
+      (m) => !deletedSourceIds.includes(m.id),
+    );
 
     if (deletedSourceIds.length > 0)
       await this.sourceRepository.delete(deletedSourceIds);
 
-    if (addedSources.length > 0) media.sources.concat(addedSources);
+    if (addedSources.length > 0)
+      media.sources = media.sources.concat(addedSources);
 
     return this.mediaRepository.save(media);
   }

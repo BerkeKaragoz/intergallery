@@ -115,14 +115,6 @@ export class MediaService {
     return this.mediaRepository.save(newMediaArr);
   }
 
-  async deleteMedia(
-    id: MediaEntity['id'],
-    user: UserEntity,
-  ): Promise<MediaEntity> {
-    const media = await this.getUserMediaById(user, id);
-    return this.mediaRepository.remove(media);
-  }
-
   async updateMedia(dto: UpdateMediaDto): Promise<MediaEntity> {
     const { id, name, owner, addedSources, deletedSourceIds, type } = dto;
 
@@ -146,5 +138,13 @@ export class MediaService {
       media.sources = media.sources.concat(addedSources);
 
     return this.mediaRepository.save(media);
+  }
+
+  async deleteMedia(
+    id: MediaEntity['id'],
+    user: UserEntity,
+  ): Promise<MediaEntity> {
+    const media = await this.getUserMediaById(user, id);
+    return this.mediaRepository.remove(media);
   }
 }

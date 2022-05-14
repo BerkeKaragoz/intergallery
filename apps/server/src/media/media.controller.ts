@@ -1,4 +1,3 @@
-import { CreateMediaDto, CreateMediaInputDto } from './dto/create-media.dto';
 import {
   Body,
   Controller,
@@ -10,15 +9,16 @@ import {
   Response,
   UseGuards,
 } from '@nestjs/common';
-import { MediaService } from './media.service';
-import { MediaEntity } from 'src/model/entities/media.entity';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { Response as ExpressRes } from 'express';
 import { join } from 'path';
-import { ApiTags, ApiBasicAuth } from '@nestjs/swagger';
+import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/core/decorator/user.decorator';
-import { UserMediaDTO } from './dto/user-media.dto';
+import { MediaEntity } from 'src/model/entities/media.entity';
+import { CreateMediaInputDto } from './dto/create-media.dto';
 import { UpdateMediaInputDto } from './dto/update-media.dto';
+import { UserMediaDTO } from './dto/user-media.dto';
+import { MediaService } from './media.service';
 
 @ApiTags('media')
 @ApiBasicAuth()
@@ -106,5 +106,13 @@ export class MediaController {
     @Body() dto: UpdateMediaInputDto,
   ): Promise<MediaEntity> {
     return this.mediaService.updateMedia({ ...dto, owner: user });
+  }
+
+  @Post('/delete')
+  deleteMedia(
+    @User() user,
+    @Body() id: MediaEntity['id'],
+  ): Promise<MediaEntity> {
+    return this.mediaService.deleteMedia(id, user);
   }
 }

@@ -14,7 +14,7 @@ export class SourceEntity {
   isLocal: boolean;
 
   @ManyToOne(() => MediaEntity, (media) => media.sources, {
-    //onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
   media: MediaEntity;
 }

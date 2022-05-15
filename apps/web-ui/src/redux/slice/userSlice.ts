@@ -13,7 +13,10 @@ export const fetchRegisterUser = createAsyncThunk(
       withCredentials: true,
     })
       .then((res) => res.data as UserDTO)
-      .catch((err) => rejectWithValue(err.message));
+      .catch((err) => {
+        const { statusCode, message, error } = err.response.data;
+        return rejectWithValue(message);
+      });
   },
 );
 
@@ -24,7 +27,10 @@ export const fetchLoginUser = createAsyncThunk(
       withCredentials: true,
     })
       .then((res) => res.data as UserDTO)
-      .catch((err) => rejectWithValue(err.message));
+      .catch((err) => {
+        const { statusCode, message, error } = err.response.data;
+        return rejectWithValue(message);
+      });
   },
 );
 
@@ -36,11 +42,13 @@ export const fetchGetUser = createAsyncThunk(
     })
       .then((res) => res.data as UserDTO)
       .catch((err) => {
+        const { statusCode, message, error } = err.response.data;
+
         try {
           window.localStorage.removeItem("lastLogin");
         } catch (ex) {}
 
-        return rejectWithValue(err.message);
+        return rejectWithValue(message);
       });
   },
 );

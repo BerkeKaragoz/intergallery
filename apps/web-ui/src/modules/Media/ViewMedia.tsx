@@ -72,7 +72,7 @@ const ViewMedia: React.FC<Props> = (props) => {
   React.useEffect(() => {
     if (!maxSourceId) return;
 
-    if (sourceIndex >= maxSourceId) {
+    if (sourceIndex > maxSourceId) {
       const indexToSet = 0;
       navigate(
         {

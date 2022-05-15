@@ -9,6 +9,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel --filter=!intergallery-proto-*",
+    "dev:proto": "turbo run dev --parallel --filter=intergallery-proto-*",
+    "dev:all": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

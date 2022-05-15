@@ -1,6 +1,6 @@
 import AppLink from "@/components/AppLink";
 import LoadingButton from "@/components/LoadingButton";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchRegisterUser } from "@/redux/slice/userSlice";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { Button, Stack, TextField, Typography } from "@mui/material";
@@ -21,6 +21,7 @@ const registerFormSchema = Yup.object({
 
 const RegisterBox = () => {
   const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.user);
 
   return (
     <Stack spacing={4} sx={{ textAlign: "center" }}>
@@ -31,6 +32,11 @@ const RegisterBox = () => {
         <Typography variant="subtitle1" component="p">
           Welcome! It's simple and fast.
         </Typography>
+        {userState.error && (
+          <Typography variant="subtitle2" color="error" component="p">
+            {userState.error}
+          </Typography>
+        )}
       </Box>
       <Formik
         initialValues={registerFormSchema.getDefault()}

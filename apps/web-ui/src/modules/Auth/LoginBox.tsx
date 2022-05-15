@@ -1,5 +1,5 @@
 import AppLink from "@/components/AppLink";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchLoginUser } from "@/redux/slice/userSlice";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
@@ -25,6 +25,7 @@ const loginFormSchema = Yup.object({
 
 const LoginBox = () => {
   const dispatch = useAppDispatch();
+  const userState = useAppSelector((state) => state.user);
 
   return (
     <Stack spacing={4} sx={{ textAlign: "center" }}>
@@ -35,6 +36,11 @@ const LoginBox = () => {
         <Typography variant="subtitle1" component="p">
           Welcome! Login to access Intergallery.
         </Typography>
+        {userState.error && (
+          <Typography variant="subtitle2" color="error" component="p">
+            {userState.error}
+          </Typography>
+        )}
       </Box>
       <Formik
         initialValues={loginFormSchema.getDefault()}

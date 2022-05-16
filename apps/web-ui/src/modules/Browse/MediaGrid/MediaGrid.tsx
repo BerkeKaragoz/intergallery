@@ -1,5 +1,5 @@
 import MediaCard from "@/modules/Media/MediaCard";
-import { SIDEBAR_WIDTH } from "@/modules/Media/MediaSidebar/MediaSidebar";
+import { SIDEBAR_WIDTH } from "@/modules/Browse/MediaSidebar/MediaSidebar";
 import { MediaDTO } from "@/modules/Media/utils";
 import { styled, Typography } from "@mui/material";
 import React from "react";

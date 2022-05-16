@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/lib/api";
-import { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
+import { SIDEBAR_BREAKPOINT } from "@/modules/Browse/MediaSidebar";
 import {
   Button,
   Container,

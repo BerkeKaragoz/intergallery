@@ -2,7 +2,7 @@ import Page from "@/components/Page";
 import useQuery from "@/hooks/useQuery";
 import { createQuery } from "@/lib/utils";
 import { MediaDTO } from "@/modules/Media";
-import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
+import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Browse/MediaSidebar";
 import { GetMediaInputDTO } from "@/modules/Media/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/mediaApiSlice";

@@ -25,7 +25,8 @@ const MediaCard = React.forwardRef<HTMLDivElement, Props>(
       switch (media.type) {
         case MediaType.VIDEO: {
           return (
-            <MCVideo controls>
+            // TODO thumbnail/poster
+            <MCVideo preload="metadata">
               <source src={src} />
             </MCVideo>
           );

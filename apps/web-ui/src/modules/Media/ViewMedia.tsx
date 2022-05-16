@@ -181,6 +181,7 @@ const ViewMedia: React.FC<Props> = (props) => {
             onClick={openDeleteMedia}
             variant="outlined"
             endIcon={<DeleteIcon />}
+            sx={{ mt: 4 }}
           >
             Delete
           </Button>

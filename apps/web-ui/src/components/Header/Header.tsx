@@ -1,4 +1,4 @@
-import { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
+import { SIDEBAR_BREAKPOINT } from "@/modules/Browse/MediaSidebar";
 import { Nullable } from "@/lib/types";
 import { UserDTO } from "@/modules/User";
 import MenuIcon from "@mui/icons-material/Menu";

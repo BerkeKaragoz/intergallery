@@ -1,11 +1,11 @@
-import { Box } from "@mui/system";
+import { Box, BoxProps } from "@mui/material";
 import Dropzone, { DropzoneOptions } from "react-dropzone";
 
-type Props = {
+type Props = Omit<BoxProps, "onDrop"> & {
   onDrop?: DropzoneOptions["onDrop"];
 };
 
-const AppDropzone = ({ onDrop }: Props) => (
+const AppDropzone = ({ onDrop, sx, ...rest }: Props) => (
   <Dropzone onDrop={onDrop}>
     {({ getRootProps, getInputProps }) => (
       <Box
@@ -14,7 +14,7 @@ const AppDropzone = ({ onDrop }: Props) => (
           borderStyle: "dashed",
           borderColor: "gray",
           borderRadius: 2,
-          p: 2,
+          p: 4,
           my: 2,
           textAlign: "center",
           cursor: "pointer",
@@ -22,11 +22,13 @@ const AppDropzone = ({ onDrop }: Props) => (
           "&:hover": {
             backgroundColor: "#0003",
           },
+          ...sx,
         }}
+        {...rest}
         {...getRootProps()}
       >
         <input {...getInputProps()} />
-        <p>Drop files here.</p>
+        <span>Drop files here.</span>
       </Box>
     )}
   </Dropzone>

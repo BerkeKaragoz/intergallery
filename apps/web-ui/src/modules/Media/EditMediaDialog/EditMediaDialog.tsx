@@ -22,6 +22,7 @@ import { useEditMediaMutation } from "@/redux/slice/mediaApiSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import LoadingButton from "@/components/LoadingButton";
+import AppDropzone from "@/components/AppDropzone";
 
 const deletedSourceId = Yup.string().default("").required();
 
@@ -50,6 +51,19 @@ const EditMediaDialog: React.FC<Props> = (props) => {
   const { cancelHandler = () => {}, media } = props;
 
   const [editMedia, { isLoading }] = useEditMediaMutation();
+
+  const onDropHandler =
+    (push: (obj: any) => void) =>
+    (acceptedFiles: Array<File & { path?: string }>) => {
+      console.log(acceptedFiles);
+
+      for (const f of acceptedFiles) {
+        push({
+          ...addedSourceSchema.getDefaultFromShape(),
+          url: f.path || f.name,
+        });
+      }
+    };
 
   return (
     <div>
@@ -116,25 +130,41 @@ const EditMediaDialog: React.FC<Props> = (props) => {
               <FieldArray name="addedSources">
                 {({ remove, push }) => (
                   <>
-                    <Typography
-                      variant="h6"
-                      mt={1}
-                      sx={{ display: "inline-block", marginRight: 2 }}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "stretch",
+                        justifyContent: "space-between",
+                        gap: 2,
+                      }}
                     >
-                      Add Sources
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        aria-label="Add Source"
-                        size="small"
-                        sx={{ marginLeft: 2 }}
-                        onClick={() => {
-                          push(addedSourceSchema.getDefaultFromShape());
+                      <Typography variant="h6" component="span" mt={1}>
+                        Add Sources
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          aria-label="Add Source"
+                          size="small"
+                          onClick={() => {
+                            push(addedSourceSchema.getDefaultFromShape());
+                          }}
+                          sx={{ ml: 2 }}
+                        >
+                          +
+                        </Button>
+                      </Typography>
+                      <AppDropzone
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          p: 0,
+                          px: 2,
+                          m: 0,
+                          fontSize: "small",
                         }}
-                      >
-                        +
-                      </Button>
-                    </Typography>
+                        onDrop={onDropHandler(push)}
+                      />
+                    </Box>
                     <Table size="small" stickyHeader>
                       <TableHead>
                         <TableRow>
@@ -190,7 +220,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                   </>
                 )}
               </FieldArray>
-              <Typography variant="h6" mt={1}>
+              <Typography variant="h6" component="span" mt={1}>
                 Remove Sources
               </Typography>
               <Table size="small" stickyHeader>

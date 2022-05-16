@@ -1,62 +1,55 @@
-import AppLink from "@/components/AppLink";
-import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useQuery from "@/hooks/useQuery";
-import { API_BASE_URL } from "@/lib/api";
-import { MediaDTO } from "@/modules/Media";
-import { GetMediaInputDTO } from "@/modules/Media/utils";
-import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
 import { createQuery } from "@/lib/utils";
+import { MediaDTO } from "@/modules/Media";
+import MediaSidebar, { SIDEBAR_BREAKPOINT } from "@/modules/Media/MediaSidebar";
+import { GetMediaInputDTO } from "@/modules/Media/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/mediaApiSlice";
 import {
   CircularProgress,
   FormControl,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   InputLabel,
   LinearProgress,
   MenuItem,
   Pagination,
-  Paper,
   Select,
   useMediaQuery,
 } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import MediaGrid from "./MediaGrid";
 
 const DEFAULT_PERPAGE = 20;
 const DEFAULT_PAGE = 1;
 
 const Browse = () => {
+  const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
   const theme = useTheme();
-
+  const userState = useAppSelector((state) => state.user);
   const matchesSidebar = useMediaQuery(
     theme.breakpoints.up(SIDEBAR_BREAKPOINT),
   );
 
-  const matchesXs = useMediaQuery(theme.breakpoints.up("xs"));
-  //const matchesSm = useMediaQuery(theme.breakpoints.up("sm"));
-  const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
-  const matchesLg = useMediaQuery(theme.breakpoints.up("lg"));
-  const matchesXl = useMediaQuery(theme.breakpoints.up("xl"));
+  // const matchesXs = useMediaQuery(theme.breakpoints.up("xs"));
+  // const matchesSm = useMediaQuery(theme.breakpoints.up("sm"));
+  // const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
+  // const matchesLg = useMediaQuery(theme.breakpoints.up("lg"));
+  // const matchesXl = useMediaQuery(theme.breakpoints.up("xl"));
 
   const [mediaPage, setMediaPage] = useState<GetMediaInputDTO["page"]>(
-    +(query.get("page") ?? DEFAULT_PAGE),
+    Number(query.get("page") ?? DEFAULT_PAGE),
   );
   const [mediaPerPage, setMediaPerPage] = useState<GetMediaInputDTO["perPage"]>(
-    +(query.get("perPage") ?? DEFAULT_PERPAGE),
+    Number(query.get("perPage") ?? DEFAULT_PERPAGE),
   );
 
   const [highlightedMedia, setHighlightedMedia] =
     React.useState<MediaDTO | null>(null);
 
-  const userState = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
   const isFirstRender = useRef(true);
 
   const { data: mediaFetchData, isLoading: isMediaLoading } = useGetMediaQuery({
@@ -64,7 +57,7 @@ const Browse = () => {
     perPage: mediaPerPage,
   });
 
-  const highlightHandler = (item: MediaDTO) => () => {
+  const highlightHandler = (item: MediaDTO) => {
     if (!matchesSidebar) return; // if sidebar is shown
     setHighlightedMedia(item);
   };
@@ -74,16 +67,16 @@ const Browse = () => {
       isFirstRender.current = false;
       return;
     }
+
     setMediaPage(+(query.get("page") ?? DEFAULT_PAGE));
     setMediaPerPage(+(query.get("perPage") ?? DEFAULT_PERPAGE));
   }, [query]);
 
   React.useEffect(() => {
-    //console.log({ media });
-    if (mediaFetchData) {
-      setMediaPage(mediaFetchData.page);
-      setMediaPerPage(mediaFetchData.perPage);
-    }
+    if (!mediaFetchData) return;
+
+    setMediaPage(mediaFetchData.page);
+    setMediaPerPage(mediaFetchData.perPage);
   }, [mediaFetchData]);
 
   // TODO validate page
@@ -139,39 +132,10 @@ const Browse = () => {
         </Box>
       ) : (
         mediaFetchData && (
-          <ImageList
-            variant="quilted"
-            cols={
-              matchesXl ? 5 : matchesLg ? 4 : matchesMd ? 3 : matchesXs ? 2 : 1
-            }
-            rowHeight={256}
-            gap={16}
-            sx={{ mt: 0 }}
-          >
-            {mediaFetchData.data.map((item) => (
-              <ImageListItem
-                key={item.id}
-                component={Paper}
-                onFocus={highlightHandler(item)}
-                onPointerEnter={highlightHandler(item)}
-                sx={{
-                  borderRadius: 2,
-                  overflow: "hidden",
-                  outline:
-                    highlightedMedia?.id === item.id ? "1px solid gray" : "",
-                }}
-              >
-                <AppLink href={`/media/${item.id}`}>
-                  <Image
-                    src={`${API_BASE_URL}/media/source/${item.sourceIds[0]}`}
-                    alt={item.name}
-                    loading="lazy"
-                  />
-                  <ImageListItemBar title={item.name} subtitle={item.id} />
-                </AppLink>
-              </ImageListItem>
-            ))}
-          </ImageList>
+          <MediaGrid
+            mediaList={mediaFetchData.data}
+            highlightHandler={highlightHandler}
+          />
         )
       )}
 

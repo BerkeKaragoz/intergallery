@@ -109,6 +109,7 @@ const ViewMedia: React.FC<Props> = (props) => {
                   width: "initial",
                   maxWidth: "100%",
                   objectFit: "scale-down",
+                  objectPosition: "center",
                   mx: "auto",
                 }}
               />

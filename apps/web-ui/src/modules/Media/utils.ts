@@ -1,7 +1,6 @@
-import { SourceEntity } from "../Source";
-import { CreateSourceDTO } from "../Source/source";
-import { PaginatedDTO, PickByType } from "../../lib/types";
-import { UserEntity } from "../User";
+import { PaginatedDTO, PickByType } from "@/lib/types";
+import { SourceEntity, CreateSourceDTO } from "@/modules/Source";
+import { UserEntity } from "@/modules/User";
 
 export enum MediaType {
   UNKNOWN = 0,
@@ -19,7 +18,7 @@ export interface MediaEntity {
   type: MediaType;
   creationDate: string | Date;
   updateDate: string | Date;
-  sourceIds: number[];
+  sourceIds: SourceEntity["id"][];
   sources: SourceEntity[];
   ownerId: string;
   owner: UserEntity;

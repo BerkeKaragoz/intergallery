@@ -2,11 +2,11 @@ import Image from "@/components/Image";
 import Page from "@/components/Page";
 import useAppModal from "@/hooks/useAppModal";
 import useQuery from "@/hooks/useQuery";
-import { API_BASE_URL } from "@/lib/api";
 import { createQuery } from "@/lib/utils";
 import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
 import EditMediaDialog from "@/modules/Media/EditMediaDialog";
 import { MediaType } from "@/modules/Media/utils";
+import { getMediaSource } from "@/modules/Source";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -59,7 +59,7 @@ const ViewMedia: React.FC<Props> = (props) => {
   const { mediaId } = useParams();
 
   const [sourceIndex, setSourceIndex] = React.useState(
-    +(query.get("source") ?? DEFAULT_SOURCE_INDEX),
+    Number(query.get("source") ?? DEFAULT_SOURCE_INDEX),
   );
 
   const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal();
@@ -99,7 +99,7 @@ const ViewMedia: React.FC<Props> = (props) => {
           >
             {data.type !== MediaType.VIDEO ? (
               <Image
-                src={`${API_BASE_URL}/media/source/${data.sourceIds[sourceIndex]}`}
+                src={getMediaSource(data.sourceIds[sourceIndex])}
                 alt={data.name}
                 sx={{
                   display: "flex",
@@ -115,7 +115,7 @@ const ViewMedia: React.FC<Props> = (props) => {
               />
             ) : (
               <Video
-                src={`${API_BASE_URL}/media/source/${data.sourceIds[sourceIndex]}`}
+                src={getMediaSource(data.sourceIds[sourceIndex])}
                 controls
                 preload="metadata"
                 //poster="thumbnailurl"
@@ -177,6 +177,7 @@ const ViewMedia: React.FC<Props> = (props) => {
               <MediaInfo label="Owner ID" info={data.ownerId} />
             </Grid>
           </Grid>
+
           <Button
             onClick={openDeleteMedia}
             variant="outlined"

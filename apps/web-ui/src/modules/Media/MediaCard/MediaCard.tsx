@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { MediaDTO, MediaType } from "@/modules/Media/utils";
+import { getMediaSource } from "@/modules/Source";
 import React from "react";
 import {
   MCContainer,
@@ -19,7 +20,7 @@ const MediaCard = React.forwardRef<HTMLDivElement, Props>(
   (props, forwardRef) => {
     const { media, ...rest } = props;
     const { type: mediaType } = media;
-    const src = `${API_BASE_URL}/media/source/${media.sourceIds[0]}`;
+    const src = getMediaSource(media.sourceIds[0]);
 
     const MediaSrcComponent = React.useMemo(() => {
       switch (media.type) {
@@ -42,7 +43,7 @@ const MediaCard = React.forwardRef<HTMLDivElement, Props>(
           );
         }
         default:
-          return <MCSource>{media.sourceIds}</MCSource>;
+          return <MCSource>{media.name}</MCSource>;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mediaType]);

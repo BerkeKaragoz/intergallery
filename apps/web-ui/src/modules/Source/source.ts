@@ -1,4 +1,10 @@
+import { API_BASE_URL } from "@/lib/api";
 import { MediaEntity } from "@/modules/Media/utils";
+
+export const getMediaSource = (id: SourceEntity["id"]) =>
+  `${API_BASE_URL}/media/source/${id}`;
+
+// Types
 
 export interface SourceEntity {
   id: string;

@@ -15,6 +15,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLocation } from "react-router";
+import "./app.css";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 

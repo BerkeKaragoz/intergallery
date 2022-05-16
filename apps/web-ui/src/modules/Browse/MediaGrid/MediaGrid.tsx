@@ -8,7 +8,6 @@ const minMediaWidth = 150; //TODO
 
 const MediaContainer = styled("div")`
   width: 100%;
-  min-height: ${(m) => m.theme.breakpoints.values.sm}px;
 `;
 
 const MediaUl = styled("ul")`

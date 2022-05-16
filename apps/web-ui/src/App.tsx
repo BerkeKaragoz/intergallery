@@ -15,9 +15,42 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { useLocation } from "react-router";
-import "./app.css";
+import GlobalStyles from "@mui/material/GlobalStyles";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+const inputGlobalStyles = (
+  <GlobalStyles
+    styles={{
+      img: {
+        backgroundColor: "#fff1",
+      },
+      "img[alt]": {
+        textAlign: "center",
+        fontWeight: "lighter",
+        fontSize: 0,
+        overflow: "hidden",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      "img[alt]::before": {
+        fontSize: "medium",
+        display: "block",
+        position: "relative",
+        top: "50%",
+        transform: "translateY(-50%)",
+        wordWrap: "break-word",
+        maxHeight: "100%",
+        maxWidth: "100%",
+        padding: "1rem",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "aliceblue",
+        textShadow: "0 0 1.125rem #fff",
+      },
+    }}
+  />
+);
 
 function App() {
   const [mode, setMode] = React.useState<PaletteMode>("dark");
@@ -57,7 +90,8 @@ function App() {
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        <CssBaseline enableColorScheme />
+        {inputGlobalStyles}
         <ErrorBoundary>
           {userState.isLoading ? (
             <LinearProgress />

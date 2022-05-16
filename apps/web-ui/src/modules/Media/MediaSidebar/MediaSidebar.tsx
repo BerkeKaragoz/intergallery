@@ -40,8 +40,8 @@ const decideMediaType = (typeString = "") => {
 export const SIDEBAR_BREAKPOINT = "sm";
 export const SIDEBAR_SMALL_BREAKPOINT = "md";
 
-const SIDEBAR_WIDTH = 256;
-const SIDEBAR_SMALL_WIDTH = 196;
+export const SIDEBAR_WIDTH = 256;
+export const SIDEBAR_SMALL_WIDTH = 196;
 
 type Props = {
   open?: DrawerProps["open"];

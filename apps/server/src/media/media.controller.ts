@@ -82,8 +82,10 @@ export class MediaController {
 
     if (source.isLocal) {
       const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
-      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err) => {
-        if (err) console.error(err);
+      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err: any) => {
+        if (err) {
+          res.sendStatus(err.statusCode);
+        }
       });
     } else {
       res.redirect(source.url);

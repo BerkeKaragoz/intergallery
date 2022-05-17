@@ -6,7 +6,7 @@ const PORT = process.env.port ?? 5005;
 
 const app: Application = express();
 
-const SERVING_PATH = process.env.SERVING_PATH ?? "public";
+export const SERVING_PATH = process.env.SERVING_PATH ?? "public";
 
 app.use(
   "/f",

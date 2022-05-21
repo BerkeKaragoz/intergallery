@@ -1,13 +1,16 @@
-import { UserEntity } from 'src/model/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { existsSync, mkdirSync } from 'fs';
+import { resolve } from 'path';
+import * as sharp from 'sharp';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
+import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateMediaDto, CreateMediaInputDto } from './dto/create-media.dto';
-import { UserMediaDTO } from './dto/user-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
+import { UserMediaDTO } from './dto/user-media.dto';
 
 @Injectable()
 export class MediaService {
@@ -94,11 +97,11 @@ export class MediaService {
     return this.mediaRepository.save(newMedia);
   }
 
-  createMultipleMedia(
+  async createMultipleMedia(
     dto: CreateMediaInputDto[],
     owner: UserEntity,
   ): Promise<MediaEntity[]> {
-    const newMediaArr: MediaEntity[] = [];
+    let newMediaArr: MediaEntity[] = [];
 
     for (const media of dto) {
       const newMedia = this.mediaRepository.create({
@@ -110,6 +113,21 @@ export class MediaService {
       newMedia.sources = media.sources;
 
       newMediaArr.push(newMedia);
+    }
+
+    const createdMedia = await this.mediaRepository.save(newMediaArr);
+
+    newMediaArr = [];
+
+    for (const media of createdMedia) {
+      for (let i = 0; i < media.sources.length; i++) {
+        media.sources[i].thumbUrl = this.createThumb(
+          media.sources[i].id,
+          media.sources[i].url,
+        );
+      }
+
+      newMediaArr.push(media);
     }
 
     return this.mediaRepository.save(newMediaArr);
@@ -146,5 +164,28 @@ export class MediaService {
   ): Promise<MediaEntity> {
     const media = await this.getUserMediaById(user, id);
     return this.mediaRepository.remove(media);
+  }
+
+  createThumb(sourceId, sourceUrl) {
+    const dirname = 'thumbnails';
+    const thumbName = `${sourceId}.webp`;
+    const sourcePath = resolve(this.servingPath, sourceUrl);
+    const thumbDir = resolve(this.servingPath, dirname);
+    const thumbPath = resolve(thumbDir, thumbName);
+
+    if (!existsSync(thumbDir)) {
+      mkdirSync(thumbDir, {
+        recursive: true,
+      });
+    }
+
+    if (!existsSync(thumbPath))
+      sharp(sourcePath)
+        .resize(200)
+        .toFormat('webp')
+        .toFile(thumbPath)
+        .catch((err) => console.error(err));
+
+    return `${dirname}/${thumbName}`;
   }
 }

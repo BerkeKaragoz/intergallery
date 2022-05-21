@@ -10,6 +10,9 @@ export class SourceEntity {
   @Column()
   url: string;
 
+  @Column({ default: '' })
+  thumbUrl: string;
+
   @Column()
   isLocal: boolean;
 

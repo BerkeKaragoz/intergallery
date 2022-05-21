@@ -67,6 +67,30 @@ export class MediaController {
     }
   }
 
+  @Get('/source/:sourceId/thumb')
+  async getSourceThumb(
+    @Request() req,
+    @Response() res: ExpressRes,
+    @Param('sourceId') sourceId,
+  ) {
+    const source = await this.mediaService.getUserSource(req.user, sourceId);
+
+    if (source.isLocal) {
+      const fileAbsolutePath = join(
+        this.mediaService.servingPath,
+        source.thumbUrl,
+      );
+
+      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err: any) => {
+        if (err) {
+          res.sendStatus(err.statusCode ?? 404);
+        }
+      });
+    } else {
+      res.redirect(301, source.thumbUrl);
+    }
+  }
+
   @Get('/source/:sourceId')
   async getSource(
     @Request() req,
@@ -82,13 +106,14 @@ export class MediaController {
 
     if (source.isLocal) {
       const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
+
       res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err: any) => {
         if (err) {
           res.sendStatus(err.statusCode);
         }
       });
     } else {
-      res.redirect(source.url);
+      res.redirect(301, source.url);
     }
   }
 

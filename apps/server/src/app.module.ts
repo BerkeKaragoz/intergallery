@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import config from 'src/config';
-import ormconfig from 'ormconfig';
+import { ORMConfig } from 'ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FileController } from './file/file.controller';
@@ -20,8 +20,8 @@ import { UserModule } from './user/user.module';
       load: [config],
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(ormconfig.mainDBConfig),
-    TypeOrmModule.forRoot(ormconfig.sessionDBConfig),
+    TypeOrmModule.forRoot(ORMConfig.mainDBConfig),
+    TypeOrmModule.forRoot(ORMConfig.sessionDBConfig),
     TypeOrmModule.forFeature([MediaEntity, SourceEntity]),
     AuthModule,
     UserModule,

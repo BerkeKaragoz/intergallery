@@ -19,6 +19,6 @@ export const sessionDBConfig: SqliteConnectionOptions = {
   entities: ['dist/src/**/session.entity.js'],
 };
 
-const config = { mainDBConfig, sessionDBConfig };
+export const ORMConfig = { mainDBConfig, sessionDBConfig };
 
-export default config;
+export default ORMConfig;

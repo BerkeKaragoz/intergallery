@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { existsSync, mkdirSync, renameSync, symlinkSync } from 'fs';
+import { existsSync, mkdirSync, renameSync, rm, symlinkSync } from 'fs';
 import { dirname, extname, join } from 'path';
 import * as sharp from 'sharp';
 import { MediaEntity } from 'src/model/entities/media.entity';
@@ -124,40 +124,7 @@ export class MediaService {
     newMediaArr = [];
 
     for (const media of createdMedia) {
-      for (let i = 0; i < media.sources.length; i++) {
-        if (!existsSync(this.symlinksDir)) {
-          mkdirSync(this.symlinksDir, {
-            recursive: true,
-          });
-        }
-
-        const internalSrcPath = join(this.sourcesDir, media.sources[i].id);
-        const originalSrcPath = join(this.servingPath, media.sources[i].url);
-        if (!existsSync(internalSrcPath)) {
-          const symlinkName = `${media.sources[i].id}${extname(
-            originalSrcPath,
-          )}`;
-
-          //Move the original source to the internal folder
-          renameSync(originalSrcPath, internalSrcPath);
-          //Create a symlink to the moved source at the internal folder with extension
-          symlinkSync(internalSrcPath, join(this.symlinksDir, symlinkName));
-          //Create a symlink to the symlink in the place of the original file
-          symlinkSync(join(this.symlinksDir, symlinkName), originalSrcPath);
-
-          /* This way lookups are easier, file locations can be
-            reverted, doesn't interfere with UX (you can still 
-            use things like images in your OS) and files can be
-            moved without breaking since you can move symlinks 
-            but not their targets 
-          */
-        }
-
-        media.sources[i].thumbUrl = this.createThumb(
-          media.sources[i].id,
-          media.sources[i].url,
-        );
-      }
+      media.sources = this.addFsSource(media.sources);
 
       newMediaArr.push(media);
     }
@@ -184,9 +151,9 @@ export class MediaService {
 
       await this.sourceRepository.delete(deletedSourceIds);
 
-    media.sources = media.sources.filter(
-      (m) => !deletedSourceIds.includes(m.id),
-    );
+      media.sources = media.sources.filter(
+        (m) => !deletedSourceIds.includes(m.id),
+      );
     }
 
     if (addedSources.length > 0) {
@@ -201,10 +168,10 @@ export class MediaService {
     user: UserEntity,
   ): Promise<MediaEntity> {
     const media = await this.getUserMediaById(user, id);
-    return this.mediaRepository.remove(media);
+    return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 
-  createThumb(sourceId, sourceUrl) {
+  createThumb(sourceId: SourceEntity['id'], sourceUrl: SourceEntity['url']) {
     const thumbName = `${sourceId}.webp`;
     const thumbPath = join(this.thumbsDir, thumbName);
 
@@ -214,12 +181,11 @@ export class MediaService {
       });
     }
 
-    if (!existsSync(thumbPath))
-      sharp(join(this.servingPath, sourceUrl))
-        .resize(200)
-        .toFormat('webp')
-        .toFile(thumbPath)
-        .catch((err) => console.error(err));
+    sharp(join(this.servingPath, sourceUrl))
+      .resize(200)
+      .toFormat('webp')
+      .toFile(thumbPath)
+      .catch((err) => console.error(err));
 
     return `${dirname(this.thumbsDir)}/${thumbName}`;
   }
@@ -230,4 +196,40 @@ export class MediaService {
     return sourceList;
   }
 
+  addFsSource(sourceList: SourceEntity[]) {
+    for (let i = 0; i < sourceList.length; i++) {
+      if (!existsSync(this.symlinksDir)) {
+        mkdirSync(this.symlinksDir, {
+          recursive: true,
+        });
+      }
+
+      const internalSrcPath = join(this.sourcesDir, sourceList[i].id);
+      const originalSrcPath = join(this.servingPath, sourceList[i].url);
+      if (!existsSync(internalSrcPath)) {
+        const symlinkName = `${sourceList[i].id}${extname(originalSrcPath)}`;
+
+        //Move the original source to the internal folder
+        renameSync(originalSrcPath, internalSrcPath);
+        //Create a symlink to the moved source at the internal folder with extension
+        symlinkSync(internalSrcPath, join(this.symlinksDir, symlinkName));
+        //Create a symlink to the symlink in the place of the original file
+        symlinkSync(join(this.symlinksDir, symlinkName), originalSrcPath);
+
+        /* This way lookups are easier, file locations can be
+            reverted, doesn't interfere with UX (you can still 
+            use things like images in your OS) and files can be
+            moved without breaking since you can move symlinks 
+            but not their targets 
+          */
+      }
+
+      sourceList[i].thumbUrl = this.createThumb(
+        sourceList[i].id,
+        sourceList[i].url,
+      );
+    }
+
+    return sourceList;
+  }
 }

@@ -28,11 +28,11 @@ export class MediaService {
     private sourceRepository: Repository<SourceEntity>,
   ) {}
 
-  getAllMedia(): Promise<MediaEntity[]> {
-    return this.mediaRepository.find({
-      relations: ['sources', 'owner'],
-    });
-  }
+  // getAllMedia(): Promise<MediaEntity[]> {
+  //   return this.mediaRepository.find({
+  //     relations: ['sources', 'owner'],
+  //   });
+  // }
 
   async getUserMedia(
     user: UserEntity,
@@ -52,10 +52,6 @@ export class MediaService {
     return dto;
   }
 
-  getMediaById(id: MediaEntity['id']): Promise<MediaEntity> {
-    return this.mediaRepository.findOneOrFail(id);
-  }
-
   async getUserMediaById(
     user: UserEntity,
     id: MediaEntity['id'],
@@ -67,19 +63,6 @@ export class MediaService {
     });
   }
 
-  async getUserMediaSource(
-    user: Pick<UserEntity, 'id'>,
-    mediaId: MediaEntity['id'],
-    sourceIndex = 0,
-  ): Promise<SourceEntity> {
-    const media = await this.mediaRepository.findOne(mediaId, {
-      where: { owner: user.id },
-      relations: ['sources'],
-    });
-
-    return media.sources[sourceIndex];
-  }
-
   async getUserSource(
     user: Pick<UserEntity, 'id'>,
     sourceId: SourceEntity['id'],
@@ -89,16 +72,6 @@ export class MediaService {
     });
 
     if (source.media.ownerId === user.id) return source;
-  }
-
-  createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
-    const { name, owner, sources, type } = dto;
-
-    const newMedia = this.mediaRepository.create({ name, type });
-    newMedia.owner = owner;
-    newMedia.sources = sources;
-
-    return this.mediaRepository.save(newMedia);
   }
 
   async createMultipleMedia(
@@ -171,7 +144,7 @@ export class MediaService {
     return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 
-  createThumb(sourceId: SourceEntity['id'], sourceUrl: SourceEntity['url']) {
+  createFsThumb(sourceId: SourceEntity['id'], sourceUrl: SourceEntity['url']) {
     const thumbName = `${sourceId}.webp`;
     const thumbPath = join(this.thumbsDir, thumbName);
 
@@ -224,12 +197,37 @@ export class MediaService {
           */
       }
 
-      sourceList[i].thumbUrl = this.createThumb(
+      sourceList[i].thumbUrl = this.createFsThumb(
         sourceList[i].id,
         sourceList[i].url,
       );
     }
 
     return sourceList;
+  }
+
+  /** @deprecated */
+  createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
+    const { name, owner, sources, type } = dto;
+
+    const newMedia = this.mediaRepository.create({ name, type });
+    newMedia.owner = owner;
+    newMedia.sources = sources;
+
+    return this.mediaRepository.save(newMedia);
+  }
+
+  /** @deprecated */
+  async getUserMediaSource(
+    user: Pick<UserEntity, 'id'>,
+    mediaId: MediaEntity['id'],
+    sourceIndex = 0,
+  ): Promise<SourceEntity> {
+    const media = await this.mediaRepository.findOne(mediaId, {
+      where: { owner: user.id },
+      relations: ['sources'],
+    });
+
+    return media.sources[sourceIndex];
   }
 }

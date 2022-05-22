@@ -27,10 +27,10 @@ import { MediaService } from './media.service';
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
-  @Get('all')
-  getAllMedia(): Promise<MediaEntity[]> {
-    return this.mediaService.getAllMedia();
-  }
+  // @Get('all')
+  // getAllMedia(): Promise<MediaEntity[]> {
+  //   return this.mediaService.getAllMedia();
+  // }
 
   @Get('user')
   getUserMedia(
@@ -44,34 +44,6 @@ export class MediaController {
   @Get('/:mediaId')
   getMedia(@Request() req, @Param('mediaId') mediaId: MediaEntity['id']) {
     return this.mediaService.getUserMediaById(req.user, mediaId);
-  }
-
-  @Get('/:mediaId/source')
-  async getMediaSource(
-    @Request() req,
-    @Response() res: ExpressRes,
-    @Param('mediaId') mediaId,
-    @Query('src') sourceIndex,
-  ) {
-    const source = await this.mediaService.getUserMediaSource(
-      req.user,
-      mediaId,
-      sourceIndex,
-    );
-
-    if (source.isLocal)
-      res.sendFile(
-        join(this.mediaService.sourcesDir, source.id),
-        (symlinkFileErr) =>
-          symlinkFileErr &&
-          res.sendFile(
-            join(this.mediaService.servingPath, source.url),
-            (err: Error & { statusCode?: number }) => {
-              res.sendStatus(err.statusCode ?? 404);
-            },
-          ),
-      );
-    else res.redirect(source.url);
   }
 
   @Get('/source/:sourceId/thumb')
@@ -111,17 +83,19 @@ export class MediaController {
 
     const source = await this.mediaService.getUserSource(req.user, sourceId);
 
-    if (source.isLocal) {
-      const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
-
-      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err: any) => {
-        if (err) {
-          res.sendStatus(err.statusCode);
-        }
-      });
-    } else {
-      res.redirect(301, source.url);
-    }
+    if (source.isLocal)
+      res.sendFile(
+        join(this.mediaService.sourcesDir, source.id),
+        (symlinkFileErr) =>
+          symlinkFileErr &&
+          res.sendFile(
+            join(this.mediaService.servingPath, source.url),
+            (err: Error & { statusCode?: number }) => {
+              res.sendStatus(err.statusCode ?? 404);
+            },
+          ),
+      );
+    else res.redirect(source.url);
   }
 
   @Post()
@@ -148,5 +122,34 @@ export class MediaController {
     @Body() id: MediaEntity['id'],
   ): Promise<MediaEntity> {
     return this.mediaService.deleteMedia(id, user);
+  }
+
+  /** @deprecated */
+  @Get('/:mediaId/source')
+  async getMediaSource(
+    @Request() req,
+    @Response() res: ExpressRes,
+    @Param('mediaId') mediaId,
+    @Query('src') sourceIndex,
+  ) {
+    const source = await this.mediaService.getUserMediaSource(
+      req.user,
+      mediaId,
+      sourceIndex,
+    );
+
+    if (source.isLocal)
+      res.sendFile(
+        join(this.mediaService.sourcesDir, source.id),
+        (symlinkFileErr) =>
+          symlinkFileErr &&
+          res.sendFile(
+            join(this.mediaService.servingPath, source.url),
+            (err: Error & { statusCode?: number }) => {
+              res.sendStatus(err.statusCode ?? 404);
+            },
+          ),
+      );
+    else res.redirect(source.url);
   }
 }

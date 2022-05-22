@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { existsSync, mkdirSync } from 'fs';
-import { resolve } from 'path';
+import { existsSync, mkdirSync, renameSync, symlinkSync } from 'fs';
+import { dirname, extname, join } from 'path';
 import * as sharp from 'sharp';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
@@ -15,6 +15,10 @@ import { UserMediaDTO } from './dto/user-media.dto';
 @Injectable()
 export class MediaService {
   servingPath = this.configService.get<string>('SERVING_PATH');
+  internalDir = join(this.servingPath, '.intergallery');
+  sourcesDir = join(this.internalDir, 'sources');
+  thumbsDir = join(this.internalDir, 'thumbnails');
+  symlinksDir = join(this.sourcesDir, 'symlinks');
 
   constructor(
     private configService: ConfigService,
@@ -121,6 +125,34 @@ export class MediaService {
 
     for (const media of createdMedia) {
       for (let i = 0; i < media.sources.length; i++) {
+        if (!existsSync(this.symlinksDir)) {
+          mkdirSync(this.symlinksDir, {
+            recursive: true,
+          });
+        }
+
+        const internalSrcPath = join(this.sourcesDir, media.sources[i].id);
+        const originalSrcPath = join(this.servingPath, media.sources[i].url);
+        if (!existsSync(internalSrcPath)) {
+          const symlinkName = `${media.sources[i].id}${extname(
+            originalSrcPath,
+          )}`;
+
+          //Move the original source to the internal folder
+          renameSync(originalSrcPath, internalSrcPath);
+          //Create a symlink to the moved source at the internal folder with extension
+          symlinkSync(internalSrcPath, join(this.symlinksDir, symlinkName));
+          //Create a symlink to the symlink in the place of the original file
+          symlinkSync(join(this.symlinksDir, symlinkName), originalSrcPath);
+
+          /* This way lookups are easier, file locations can be
+            reverted, doesn't interfere with UX (you can still 
+            use things like images in your OS) and files can be
+            moved without breaking since you can move symlinks 
+            but not their targets 
+          */
+        }
+
         media.sources[i].thumbUrl = this.createThumb(
           media.sources[i].id,
           media.sources[i].url,
@@ -167,25 +199,22 @@ export class MediaService {
   }
 
   createThumb(sourceId, sourceUrl) {
-    const dirname = 'thumbnails';
     const thumbName = `${sourceId}.webp`;
-    const sourcePath = resolve(this.servingPath, sourceUrl);
-    const thumbDir = resolve(this.servingPath, dirname);
-    const thumbPath = resolve(thumbDir, thumbName);
+    const thumbPath = join(this.thumbsDir, thumbName);
 
-    if (!existsSync(thumbDir)) {
-      mkdirSync(thumbDir, {
+    if (!existsSync(this.thumbsDir)) {
+      mkdirSync(this.thumbsDir, {
         recursive: true,
       });
     }
 
     if (!existsSync(thumbPath))
-      sharp(sourcePath)
+      sharp(join(this.servingPath, sourceUrl))
         .resize(200)
         .toFormat('webp')
         .toFile(thumbPath)
         .catch((err) => console.error(err));
 
-    return `${dirname}/${thumbName}`;
+    return `${dirname(this.thumbsDir)}/${thumbName}`;
   }
 }

@@ -59,12 +59,19 @@ export class MediaController {
       sourceIndex,
     );
 
-    if (source.isLocal) {
-      const fileAbsolutePath = join(this.mediaService.servingPath, source.url);
-      res.sendFile(fileAbsolutePath);
-    } else {
-      res.redirect(source.url);
-    }
+    if (source.isLocal)
+      res.sendFile(
+        join(this.mediaService.sourcesDir, source.id),
+        (symlinkFileErr) =>
+          symlinkFileErr &&
+          res.sendFile(
+            join(this.mediaService.servingPath, source.url),
+            (err: Error & { statusCode?: number }) => {
+              res.sendStatus(err.statusCode ?? 404);
+            },
+          ),
+      );
+    else res.redirect(source.url);
   }
 
   @Get('/source/:sourceId/thumb')
@@ -75,20 +82,20 @@ export class MediaController {
   ) {
     const source = await this.mediaService.getUserSource(req.user, sourceId);
 
-    if (source.isLocal) {
-      const fileAbsolutePath = join(
-        this.mediaService.servingPath,
-        source.thumbUrl,
+    if (source.isLocal)
+      res.sendFile(
+        // check thumbsDir first since these are locals
+        join(this.mediaService.thumbsDir, `${sourceId}.webp`),
+        { maxAge: '2 days' },
+        (thumbUrlErr) =>
+          thumbUrlErr &&
+          res.sendFile(
+            join(this.mediaService.servingPath, source.thumbUrl),
+            (err: Error & { statusCode?: number }) =>
+              err && res.sendStatus(err.statusCode ?? 404),
+          ),
       );
-
-      res.sendFile(fileAbsolutePath, { maxAge: '2 days' }, (err: any) => {
-        if (err) {
-          res.sendStatus(err.statusCode ?? 404);
-        }
-      });
-    } else {
-      res.redirect(301, source.thumbUrl);
-    }
+    else res.redirect(301, source.thumbUrl);
   }
 
   @Get('/source/:sourceId')

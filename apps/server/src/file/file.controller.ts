@@ -13,6 +13,10 @@ export class FileController {
 
   constructor(private configService: ConfigService) {}
 
+  //
+  // Below is for testing purposes unlike the service
+  //
+
   @Get()
   file(): string {
     return 'File entry point: ' + this.servingPath;

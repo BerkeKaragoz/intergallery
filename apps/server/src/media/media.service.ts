@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { existsSync, mkdirSync, renameSync, rm, symlinkSync } from 'fs';
 import { extname, join } from 'path';
 import * as sharp from 'sharp';
+import { FileService } from 'src/file/file.service';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
 import { UserEntity } from 'src/model/entities/user.entity';
@@ -16,7 +17,7 @@ import { UserMediaDTO } from './dto/user-media.dto';
 export class MediaService {
   servingPath = this.configService.get<string>('SERVING_PATH');
 
-  internalDirName = '.intergallery';
+  internalDirName = this.fileService.internalDirName;
   sourcesDirName = 'sources';
   thumbsDirName = 'thumbnails';
 
@@ -25,7 +26,10 @@ export class MediaService {
   thumbsDir = join(this.internalDir, this.thumbsDirName);
 
   constructor(
+    @Inject(forwardRef(() => ConfigService))
     private configService: ConfigService,
+    @Inject(forwardRef(() => FileService))
+    private fileService: FileService,
     @InjectRepository(MediaEntity)
     private mediaRepository: Repository<MediaEntity>,
     @InjectRepository(SourceEntity)

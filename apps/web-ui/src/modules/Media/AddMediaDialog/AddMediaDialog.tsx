@@ -1,7 +1,12 @@
+import LoadingButton from "@/components/LoadingButton";
+import {
+  CreateMediaInputDTO,
+  lengthMediaType,
+  MediaType,
+} from "@/modules/Media/utils";
 import { usePostMediaMutation } from "@/redux/slice/mediaApiSlice";
 import {
   Checkbox,
-  CircularProgress,
   MenuItem,
   Select,
   Table,
@@ -18,12 +23,6 @@ import TextField from "@mui/material/TextField";
 import { FastField, FieldArray, Form, Formik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import {
-  lengthMediaType,
-  CreateMediaInputDTO,
-  MediaType,
-} from "@/modules/Media/utils";
-import LoadingButton from "@/components/LoadingButton";
 
 const mediaSchema = Yup.object({
   Name: Yup.string().default("").max(100),
@@ -37,6 +36,7 @@ const mediaSchema = Yup.object({
 });
 
 const addMediaSchema = Yup.object({
+  "Root URL": Yup.string().default(""),
   media: Yup.array(mediaSchema)
     .default([mediaSchema.getDefaultFromShape()])
     .min(1, "Minimum 1 source is required!"),
@@ -68,10 +68,19 @@ const AddMediaDialog: React.FC<Props> = (props) => {
       onSubmit={(values) => {
         const inputArr: CreateMediaInputDTO[] = [];
 
+        // trim whitespace and /
+        const rootUrl =
+          values["Root URL"].trim().replace(/^\/+|\/+$/g, "") + "/";
+
         for (const el of values.media) {
           inputArr.push({
             name: el.URL,
-            sources: [{ url: el.URL, isLocal: el["Is Local"] }],
+            sources: [
+              {
+                url: rootUrl + el.URL,
+                isLocal: el["Is Local"],
+              },
+            ],
             type: el.Type,
           });
         }
@@ -86,127 +95,149 @@ const AddMediaDialog: React.FC<Props> = (props) => {
       }}
     >
       {({ errors, isValid, values }) => (
-        <FieldArray name="media">
-          {({ remove, push }) => (
-            <Form>
-              <DialogTitle>Add Media</DialogTitle>
-              <DialogContent>
-                <Table size="small" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>URL</TableCell>
-                      <TableCell>Name</TableCell>
-                      <TableCell align="center" padding="checkbox">
-                        Local
-                      </TableCell>
-                      <TableCell>Type</TableCell>
-                      <TableCell align="right" size="small" padding="none">
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          color="secondary"
-                          aria-label="Add Media"
-                          size="small"
-                          onClick={() => {
-                            push(mediaSchema.getDefaultFromShape());
-                          }}
-                        >
-                          +
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {values.media.map((m, index) => (
-                      <TableRow
-                        key={`media-entry-${index}`}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row">
-                          <FastField
-                            as={TextField}
-                            name={`media.${index}.Name`}
-                            aria-label="Name"
-                            placeholder="Name"
-                            variant="standard"
-                            fullWidth
-                            autoComplete="off"
-                            spellCheck="false"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <FastField
-                            as={TextField}
-                            name={`media.${index}.URL`}
-                            aria-label="URL"
-                            placeholder="URL *"
-                            variant="standard"
-                            required
-                            fullWidth
-                            autoComplete="off"
-                            spellCheck="false"
-                            //@ts-ignore undefined is expected anyway
-                            error={Boolean(errors?.media?.[index]?.URL)}
-                          />
-                        </TableCell>
+        <>
+          <DialogTitle>Add Media</DialogTitle>
+          <DialogContent>
+            <Form id="_AddMediaDialog-form">
+              <FastField
+                as={TextField}
+                name="Root URL"
+                label="Root URL"
+                placeholder="/"
+                variant="standard"
+                fullWidth
+                autoComplete="off"
+                spellCheck="false"
+                //@ts-ignore undefined is expected anyway
+                error={Boolean(errors["Root URL"])}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mb: 2 }}
+              />
+              <FieldArray name="media">
+                {({ remove, push }) => (
+                  <Table size="small" stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>URL</TableCell>
                         <TableCell align="center" padding="checkbox">
-                          <FastField
-                            as={Checkbox}
-                            defaultChecked
-                            name={`media.${index}.Is Local`}
-                            label="Is Local"
-                          />
+                          Local
                         </TableCell>
-                        <TableCell>
-                          <FastField
-                            as={Select}
-                            fullWidth
-                            size="small"
-                            label="Type"
-                            name={`media.${index}.Type`}
-                            variant="standard"
-                          >
-                            {Array.from({ length: lengthMediaType }).map(
-                              (_, i) => (
-                                <MenuItem key={`media-menuItem-${i}`} value={i}>
-                                  {MediaType[i]}
-                                </MenuItem>
-                              ),
-                            )}
-                          </FastField>
-                        </TableCell>
+                        <TableCell>Type</TableCell>
                         <TableCell align="right" size="small" padding="none">
                           <Button
                             fullWidth
-                            aria-label="Remove Media"
+                            variant="contained"
+                            color="secondary"
+                            aria-label="Add Media"
                             size="small"
-                            variant="outlined"
-                            onClick={() => remove(index)}
+                            onClick={() => {
+                              push(mediaSchema.getDefaultFromShape());
+                            }}
                           >
-                            X
+                            +
                           </Button>
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={cancelHandler}>Cancel</Button>
-                <LoadingButton
-                  type="submit"
-                  variant="contained"
-                  disabled={!isValid || isLoading}
-                  isLoading={isLoading}
-                >
-                  Add
-                </LoadingButton>
-              </DialogActions>
+                    </TableHead>
+                    <TableBody>
+                      {values.media.map((m, index) => (
+                        <TableRow
+                          key={`media-entry-${index}`}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            <FastField
+                              as={TextField}
+                              name={`media.${index}.Name`}
+                              aria-label="Name"
+                              placeholder="Name"
+                              variant="standard"
+                              fullWidth
+                              autoComplete="off"
+                              spellCheck="false"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <FastField
+                              as={TextField}
+                              name={`media.${index}.URL`}
+                              aria-label="URL"
+                              placeholder="URL *"
+                              variant="standard"
+                              required
+                              fullWidth
+                              autoComplete="off"
+                              spellCheck="false"
+                              //@ts-ignore undefined is expected anyway
+                              error={Boolean(errors?.media?.[index]?.URL)}
+                            />
+                          </TableCell>
+                          <TableCell align="center" padding="checkbox">
+                            <FastField
+                              as={Checkbox}
+                              defaultChecked
+                              name={`media.${index}.Is Local`}
+                              label="Is Local"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <FastField
+                              as={Select}
+                              fullWidth
+                              size="small"
+                              label="Type"
+                              name={`media.${index}.Type`}
+                              variant="standard"
+                            >
+                              {Array.from({ length: lengthMediaType }).map(
+                                (_, i) => (
+                                  <MenuItem
+                                    key={`media-menuItem-${i}`}
+                                    value={i}
+                                  >
+                                    {MediaType[i]}
+                                  </MenuItem>
+                                ),
+                              )}
+                            </FastField>
+                          </TableCell>
+                          <TableCell align="right" size="small" padding="none">
+                            <Button
+                              fullWidth
+                              aria-label="Remove Media"
+                              size="small"
+                              variant="outlined"
+                              onClick={() => remove(index)}
+                            >
+                              X
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </FieldArray>
             </Form>
-          )}
-        </FieldArray>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={cancelHandler}>Cancel</Button>
+            <LoadingButton
+              type="submit"
+              form="_AddMediaDialog-form"
+              variant="contained"
+              disabled={!isValid || isLoading}
+              isLoading={isLoading}
+            >
+              Add
+            </LoadingButton>
+          </DialogActions>
+        </>
       )}
     </Formik>
   );

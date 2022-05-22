@@ -1,9 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { existsSync, mkdirSync, renameSync, rm, symlinkSync } from 'fs';
-import { extname, join } from 'path';
-import * as sharp from 'sharp';
+import { join } from 'path';
 import { FileService } from 'src/file/file.service';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
@@ -105,7 +103,7 @@ export class MediaService {
     newMediaArr = [];
 
     for (const media of createdMedia) {
-      media.sources = this.addFsSource(media.sources);
+      media.sources = this.fileService.addSource(media.sources);
 
       newMediaArr.push(media);
     }
@@ -128,7 +126,7 @@ export class MediaService {
     const existingSrcIds = media.sourceIds;
 
     if (deletedSourceIds.length > 0) {
-      this.deleteFsSourceThumbs(
+      this.fileService.deleteSourceThumbs(
         media.sources.filter((m) => deletedSourceIds.includes(m.id)),
       );
 
@@ -143,7 +141,7 @@ export class MediaService {
       const savedSources = await this.sourceRepository.save(addedSources);
 
       media.sources = media.sources.concat(
-        this.addFsSource(
+        this.fileService.addSource(
           savedSources.filter(({ id }) => !existingSrcIds.includes(id)),
         ),
       );
@@ -160,61 +158,6 @@ export class MediaService {
   ): Promise<MediaEntity> {
     const media = await this.getUserMediaById(user, id);
     return this.mediaRepository.remove(media); // TODO revert symlinks
-  }
-
-  createFsThumb(sourceId: SourceEntity['id'], sourceUrl: SourceEntity['url']) {
-    const thumbName = `${sourceId}.webp`;
-    const thumbPath = join(this.thumbsDir, thumbName);
-
-    if (!existsSync(this.thumbsDir)) {
-      mkdirSync(this.thumbsDir, {
-        recursive: true,
-      });
-    }
-
-    sharp(join(this.servingPath, sourceUrl))
-      .resize(200)
-      .toFormat('webp')
-      .toFile(thumbPath)
-      .catch((err) => console.error(err));
-
-    return `${this.internalDirName}/${this.thumbsDirName}/${thumbName}`;
-  }
-
-  deleteFsSourceThumbs(sourceList: SourceEntity[]) {
-    for (let i = 0; i < sourceList.length; i++)
-      rm(join(this.thumbsDir, `${sourceList[i].id}.webp`), null);
-    return sourceList;
-  }
-
-  addFsSource(sourceList: SourceEntity[]) {
-    for (let i = 0; i < sourceList.length; i++) {
-      const originalSrcPath = join(this.servingPath, sourceList[i].url);
-      const internalSrcPath = join(
-        this.sourcesDir,
-        `${sourceList[i].id}${extname(sourceList[i].url)}`,
-      );
-
-      if (!existsSync(internalSrcPath)) {
-        //Move the original source to the internal folder
-        renameSync(originalSrcPath, internalSrcPath);
-        //Create a symlink to the symlink in the place of the original file
-        symlinkSync(internalSrcPath, originalSrcPath);
-
-        // This way lookups are easier, file locations can be
-        // reverted, doesn't interfere with UX (you can still
-        // use things like images in your OS) and files can be
-        // moved without breaking since you can move symlinks
-        // but not their targets
-      }
-
-      sourceList[i].thumbUrl = this.createFsThumb(
-        sourceList[i].id,
-        sourceList[i].url,
-      );
-    }
-
-    return sourceList;
   }
 
   /** @deprecated */

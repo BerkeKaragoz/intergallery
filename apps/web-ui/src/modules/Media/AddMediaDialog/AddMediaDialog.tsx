@@ -65,7 +65,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
       validationSchema={addMediaSchema}
       validateOnMount={true}
       validateOnChange={false}
-      onSubmit={(values) => {
+      onSubmit={(values, { resetForm }) => {
         const inputArr: CreateMediaInputDTO[] = [];
 
         // trim whitespace and /
@@ -91,6 +91,9 @@ const AddMediaDialog: React.FC<Props> = (props) => {
           })
           .catch((err) => {
             console.error("Failed to add the media.", err);
+          })
+          .finally(() => {
+            resetForm();
           });
       }}
     >

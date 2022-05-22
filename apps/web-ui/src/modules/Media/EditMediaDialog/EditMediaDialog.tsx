@@ -8,6 +8,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Link,
   MenuItem,
   Select,
   Table,
@@ -23,11 +24,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import LoadingButton from "@/components/LoadingButton";
 import AppDropzone from "@/components/AppDropzone";
+import { getMediaSource, getMediaSourceThumb } from "@/modules/Source";
+import Image from "@/components/Image";
 
 const deletedSourceId = Yup.string().default("").required();
 
 const addedSourceSchema = Yup.object({
-  url: Yup.string().default(""),
+  url: Yup.string().required().default("").max(300),
   isLocal: Yup.boolean().default(true).required(),
 });
 
@@ -66,29 +69,31 @@ const EditMediaDialog: React.FC<Props> = (props) => {
     };
 
   return (
-    <div>
-      <Formik
-        initialValues={{
-          ...mediaSchema.getDefaultFromShape(),
-          ...media,
-        }}
-        validationSchema={mediaSchema}
-        validateOnMount={true}
-        validateOnChange={false}
-        onSubmit={(value) => {
-          editMedia(value)
-            .then((res) => {
-              cancelHandler();
-            })
-            .catch((err) => {
-              console.error("Failed to edit the media.", err);
-            });
-        }}
-      >
-        {({ errors, values }) => (
-          <Form>
-            <DialogTitle>Edit Media</DialogTitle>
-            <DialogContent
+    <Formik
+      initialValues={{
+        ...mediaSchema.getDefaultFromShape(),
+        ...media,
+      }}
+      validationSchema={mediaSchema}
+      validateOnMount={true}
+      validateOnChange={false}
+      onSubmit={(value) => {
+        editMedia(value)
+          .then((res) => {
+            cancelHandler();
+          })
+          .catch((err) => {
+            console.error("Failed to edit the media.", err);
+          });
+      }}
+    >
+      {({ errors, values, isValid }) => (
+        <>
+          <DialogTitle>Edit Media</DialogTitle>
+          <DialogContent>
+            <Box
+              component={Form}
+              id="_EditMediaDialog-form"
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -190,7 +195,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                                 autoComplete="off"
                                 spellCheck="false"
                                 //@ts-ignore undefined is expected anyway
-                                error={Boolean(errors.URL)}
+                                error={Boolean(errors?.addedSources?.[i]?.url)}
                               />
                             </TableCell>
                             <TableCell padding="checkbox">
@@ -227,6 +232,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                 <TableHead>
                   <TableRow>
                     <TableCell padding="checkbox">#</TableCell>
+                    <TableCell />
                     <TableCell>ID</TableCell>
                     <TableCell padding="checkbox">Remove</TableCell>
                   </TableRow>
@@ -236,22 +242,30 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                     <TableRow key={`${media.id}-deleted_source-${i}`}>
                       <TableCell padding="checkbox">{i + 1}</TableCell>
                       <TableCell>
-                        <TextField
-                          disabled
-                          aria-label="ID"
-                          value={sourceId}
-                          variant="standard"
-                          fullWidth
-                          autoComplete="off"
-                          spellCheck="false"
+                        <Image
+                          sx={{
+                            maxHeight: "100px",
+                            maxWidth: "160px",
+                          }}
+                          src={getMediaSourceThumb(sourceId)}
+                          alt=""
                         />
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={getMediaSource(sourceId)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {sourceId}
+                        </Link>
                       </TableCell>
                       <TableCell padding="checkbox" align="center">
                         <FastField
                           as={Checkbox}
                           icon={<DeleteOutlinedIcon />}
                           checkedIcon={<DeleteIcon />}
-                          name={`deletedSourceIds`}
+                          name="deletedSourceIds"
                           value={sourceId}
                           label="Remove"
                         />
@@ -260,23 +274,25 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                   ))}
                 </TableBody>
               </Table>
-            </DialogContent>
-            <DialogActions>
-              <Button variant="text" onClick={cancelHandler}>
-                Cancel
-              </Button>
-              <LoadingButton
-                variant="contained"
-                type="submit"
-                isLoading={isLoading}
-              >
-                Edit
-              </LoadingButton>
-            </DialogActions>
-          </Form>
-        )}
-      </Formik>
-    </div>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="text" onClick={cancelHandler}>
+              Cancel
+            </Button>
+            <LoadingButton
+              variant="contained"
+              type="submit"
+              form="_EditMediaDialog-form"
+              disabled={!isValid || isLoading}
+              isLoading={isLoading}
+            >
+              Edit
+            </LoadingButton>
+          </DialogActions>
+        </>
+      )}
+    </Formik>
   );
 };
 

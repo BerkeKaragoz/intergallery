@@ -177,15 +177,21 @@ export class MediaService {
     media.name = name;
     media.type = type;
 
+    if (deletedSourceIds.length > 0) {
+      this.deleteFsSourceThumbs(
+        media.sources.filter((m) => deletedSourceIds.includes(m.id)),
+      );
+
+      await this.sourceRepository.delete(deletedSourceIds);
+
     media.sources = media.sources.filter(
       (m) => !deletedSourceIds.includes(m.id),
     );
+    }
 
-    if (deletedSourceIds.length > 0)
-      await this.sourceRepository.delete(deletedSourceIds);
-
-    if (addedSources.length > 0)
-      media.sources = media.sources.concat(addedSources);
+    if (addedSources.length > 0) {
+      media.sources = media.sources.concat(this.addFsSource(addedSources));
+    }
 
     return this.mediaRepository.save(media);
   }
@@ -217,4 +223,11 @@ export class MediaService {
 
     return `${dirname(this.thumbsDir)}/${thumbName}`;
   }
+
+  deleteFsSourceThumbs(sourceList: SourceEntity[]) {
+    for (let i = 0; i < sourceList.length; i++)
+      rm(join(this.thumbsDir, `${sourceList[i].id}.webp`), null);
+    return sourceList;
+  }
+
 }

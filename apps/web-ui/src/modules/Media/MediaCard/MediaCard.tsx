@@ -1,13 +1,11 @@
-import { API_BASE_URL } from "@/lib/api";
 import { MediaDTO, MediaType } from "@/modules/Media/utils";
-import { getMediaSource } from "@/modules/Source";
+import { getMediaSourceThumb } from "@/modules/Source";
 import React from "react";
 import {
   MCContainer,
   MCImg,
   MCLink,
   MCSource,
-  MCVideo,
   MCSubtitle,
   MCSubtitleContainer,
 } from "./MediaCardStyles";
@@ -20,22 +18,14 @@ const MediaCard = React.forwardRef<HTMLDivElement, Props>(
   (props, forwardRef) => {
     const { media, ...rest } = props;
     const { type: mediaType } = media;
-    const src = getMediaSource(media.sourceIds[0]);
 
     const MediaSrcComponent = React.useMemo(() => {
       switch (media.type) {
-        case MediaType.VIDEO: {
-          return (
-            // TODO thumbnail/poster
-            <MCVideo preload="metadata">
-              <source src={src} />
-            </MCVideo>
-          );
-        }
+        case MediaType.VIDEO:
         case MediaType.PICTURE: {
           return (
             <MCImg
-              src={src}
+              src={getMediaSourceThumb(media.sourceIds[0])}
               alt={media.name}
               loading="lazy"
               referrerPolicy="same-origin"

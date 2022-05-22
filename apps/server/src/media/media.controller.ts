@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { Response as ExpressRes } from 'express';
-import { join } from 'path';
+import { extname, join } from 'path';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/core/decorator/user.decorator';
 import { MediaEntity } from 'src/model/entities/media.entity';
@@ -85,14 +85,13 @@ export class MediaController {
 
     if (source.isLocal)
       res.sendFile(
-        join(this.mediaService.sourcesDir, source.id),
-        (symlinkFileErr) =>
-          symlinkFileErr &&
+        join(this.mediaService.sourcesDir, source.id + extname(source.url)),
+        (internalFileErr) =>
+          internalFileErr &&
           res.sendFile(
             join(this.mediaService.servingPath, source.url),
-            (err: Error & { statusCode?: number }) => {
-              res.sendStatus(err.statusCode ?? 404);
-            },
+            (err: Error & { statusCode?: number }) =>
+              err && res.sendStatus(err.statusCode ?? 404),
           ),
       );
     else res.redirect(source.url);

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { existsSync, mkdirSync, renameSync, rm, symlinkSync } from 'fs';
-import { dirname, extname, join } from 'path';
+import { extname, join } from 'path';
 import * as sharp from 'sharp';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
@@ -15,10 +15,14 @@ import { UserMediaDTO } from './dto/user-media.dto';
 @Injectable()
 export class MediaService {
   servingPath = this.configService.get<string>('SERVING_PATH');
-  internalDir = join(this.servingPath, '.intergallery');
-  sourcesDir = join(this.internalDir, 'sources');
-  thumbsDir = join(this.internalDir, 'thumbnails');
-  symlinksDir = join(this.sourcesDir, 'symlinks');
+
+  internalDirName = '.intergallery';
+  sourcesDirName = 'sources';
+  thumbsDirName = 'thumbnails';
+
+  internalDir = join(this.servingPath, this.internalDirName);
+  sourcesDir = join(this.internalDir, this.sourcesDirName);
+  thumbsDir = join(this.internalDir, this.thumbsDirName);
 
   constructor(
     private configService: ConfigService,
@@ -117,6 +121,8 @@ export class MediaService {
     media.name = name;
     media.type = type;
 
+    const existingSrcIds = media.sourceIds;
+
     if (deletedSourceIds.length > 0) {
       this.deleteFsSourceThumbs(
         media.sources.filter((m) => deletedSourceIds.includes(m.id)),
@@ -130,7 +136,15 @@ export class MediaService {
     }
 
     if (addedSources.length > 0) {
-      media.sources = media.sources.concat(this.addFsSource(addedSources));
+      const savedSources = await this.sourceRepository.save(addedSources);
+
+      media.sources = media.sources.concat(
+        this.addFsSource(
+          savedSources.filter(({ id }) => !existingSrcIds.includes(id)),
+        ),
+      );
+
+      this.sourceRepository.save(addedSources);
     }
 
     return this.mediaRepository.save(media);
@@ -160,7 +174,7 @@ export class MediaService {
       .toFile(thumbPath)
       .catch((err) => console.error(err));
 
-    return `${dirname(this.thumbsDir)}/${thumbName}`;
+    return `${this.internalDirName}/${this.thumbsDirName}/${thumbName}`;
   }
 
   deleteFsSourceThumbs(sourceList: SourceEntity[]) {
@@ -171,30 +185,23 @@ export class MediaService {
 
   addFsSource(sourceList: SourceEntity[]) {
     for (let i = 0; i < sourceList.length; i++) {
-      if (!existsSync(this.symlinksDir)) {
-        mkdirSync(this.symlinksDir, {
-          recursive: true,
-        });
-      }
-
-      const internalSrcPath = join(this.sourcesDir, sourceList[i].id);
       const originalSrcPath = join(this.servingPath, sourceList[i].url);
-      if (!existsSync(internalSrcPath)) {
-        const symlinkName = `${sourceList[i].id}${extname(originalSrcPath)}`;
+      const internalSrcPath = join(
+        this.sourcesDir,
+        `${sourceList[i].id}${extname(sourceList[i].url)}`,
+      );
 
+      if (!existsSync(internalSrcPath)) {
         //Move the original source to the internal folder
         renameSync(originalSrcPath, internalSrcPath);
-        //Create a symlink to the moved source at the internal folder with extension
-        symlinkSync(internalSrcPath, join(this.symlinksDir, symlinkName));
         //Create a symlink to the symlink in the place of the original file
-        symlinkSync(join(this.symlinksDir, symlinkName), originalSrcPath);
+        symlinkSync(internalSrcPath, originalSrcPath);
 
-        /* This way lookups are easier, file locations can be
-            reverted, doesn't interfere with UX (you can still 
-            use things like images in your OS) and files can be
-            moved without breaking since you can move symlinks 
-            but not their targets 
-          */
+        // This way lookups are easier, file locations can be
+        // reverted, doesn't interfere with UX (you can still
+        // use things like images in your OS) and files can be
+        // moved without breaking since you can move symlinks
+        // but not their targets
       }
 
       sourceList[i].thumbUrl = this.createFsThumb(

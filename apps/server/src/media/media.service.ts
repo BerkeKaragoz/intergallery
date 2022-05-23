@@ -171,6 +171,12 @@ export class MediaService {
     return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 
+  createThumb(source: SourceEntity) {
+    source.thumbUrl = this.fileService.generateThumb(source);
+
+    return this.sourceRepository.save(source);
+  }
+
   /** @deprecated */
   createMedia(dto: CreateMediaDto): Promise<MediaEntity> {
     const { name, owner, sources, type } = dto;

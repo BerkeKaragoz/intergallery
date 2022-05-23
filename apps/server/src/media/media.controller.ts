@@ -14,6 +14,7 @@ import { Response as ExpressRes } from 'express';
 import { extname, join } from 'path';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/core/decorator/user.decorator';
+import { FileService } from 'src/file/file.service';
 import { MediaEntity } from 'src/model/entities/media.entity';
 import { CreateMediaInputDto } from './dto/create-media.dto';
 import { UpdateMediaInputDto } from './dto/update-media.dto';
@@ -25,7 +26,10 @@ import { MediaService } from './media.service';
 @UseGuards(AuthenticatedGuard)
 @Controller('media')
 export class MediaController {
-  constructor(private readonly mediaService: MediaService) {}
+  constructor(
+    private readonly mediaService: MediaService,
+    private readonly fileService: FileService,
+  ) {}
 
   // @Get('all')
   // getAllMedia(): Promise<MediaEntity[]> {
@@ -53,18 +57,33 @@ export class MediaController {
     @Param('sourceId') sourceId,
   ) {
     const source = await this.mediaService.getUserSource(req.user, sourceId);
+    const pathAtThumbsDir = join(
+      this.mediaService.thumbsDir,
+      `${sourceId}.webp`,
+    );
 
     res.sendFile(
-      // check thumbsDir first since these are locals
-      join(this.mediaService.thumbsDir, `${sourceId}.webp`),
+      // Send thumbsDir first since these are locals
+      pathAtThumbsDir,
       { maxAge: '2 days' },
-      (thumbUrlErr) =>
-        thumbUrlErr &&
-        res.sendFile(
-          join(this.mediaService.servingPath, source.thumbUrl),
-          (err: Error & { statusCode?: number }) =>
-            err && res.sendStatus(err.statusCode ?? 404),
-        ),
+      (thumbsDirErr) => {
+        if (thumbsDirErr)
+          res.sendFile(
+            // Otherwise, check if thumb exist at thumbUrl
+            join(this.mediaService.servingPath, source.thumbUrl),
+            (thumbUrlErr) => {
+              if (thumbUrlErr)
+                this.mediaService.createThumb(source).then(() => {
+                  res.sendFile(
+                    // Otherwise, generate the thumb and send it
+                    pathAtThumbsDir,
+                    (err: Error & { statusCode?: number }) =>
+                      err && res.sendStatus(err.statusCode ?? 404), // Otherwise, give up :(
+                  );
+                });
+            },
+          );
+      },
     );
   }
 

@@ -2,8 +2,16 @@ import AppLink from "@/components/AppLink";
 import LoadingButton from "@/components/LoadingButton";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchRegisterUser } from "@/redux/slice/userSlice";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
@@ -22,6 +30,8 @@ const registerFormSchema = Yup.object({
 const RegisterBox = () => {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
+
+  const [isShowingPassword, setIsShowingPassword] = React.useState(false);
 
   return (
     <Stack spacing={4} sx={{ textAlign: "center" }}>
@@ -66,7 +76,7 @@ const RegisterBox = () => {
               />
               <Field
                 as={TextField}
-                type="password"
+                type={isShowingPassword ? "text" : "password"}
                 name="Password"
                 label="Password"
                 required
@@ -74,10 +84,23 @@ const RegisterBox = () => {
                 spellCheck="false"
                 helperText={<ErrorMessage name="Password" />}
                 error={touched.Password && Boolean(errors.Password)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setIsShowingPassword((s) => !s)}
+                        edge="end"
+                      >
+                        {isShowingPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Field
                 as={TextField}
-                type="password"
+                type={isShowingPassword ? "text" : "password"}
                 name="Confirm Password"
                 label="Confirm Password"
                 required
@@ -88,6 +111,19 @@ const RegisterBox = () => {
                   touched["Confirm Password"] &&
                   Boolean(errors["Confirm Password"])
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setIsShowingPassword((s) => !s)}
+                        edge="end"
+                      >
+                        {isShowingPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Stack
                 direction="row"

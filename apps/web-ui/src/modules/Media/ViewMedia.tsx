@@ -133,8 +133,9 @@ const ViewMedia: React.FC<Props> = (props) => {
               variant="h4"
               component="h1"
               sx={{
-                display: "inline-block",
                 wordWrap: "break-word",
+                overflow: "auto",
+                flexBasis: "90%",
                 my: 2,
                 mr: 2,
                 fontWeight: "medium",

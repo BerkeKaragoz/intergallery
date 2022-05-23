@@ -103,7 +103,9 @@ export class MediaService {
     newMediaArr = [];
 
     for (const media of createdMedia) {
-      media.sources = this.fileService.addSource(media.sources);
+      media.sources = media.sources.concat(
+        this.fileService.addSource(media.sources),
+      );
 
       newMediaArr.push(media);
     }
@@ -140,9 +142,18 @@ export class MediaService {
     if (addedSources.length > 0) {
       const savedSources = await this.sourceRepository.save(addedSources);
 
+      media.sources.concat(
+        savedSources.filter(
+          ({ id, isLocal }) => !isLocal && !existingSrcIds.includes(id),
+        ),
+      );
+
+      // Process local sources seperately so that thumbUrl can be updated
       media.sources = media.sources.concat(
         this.fileService.addSource(
-          savedSources.filter(({ id }) => !existingSrcIds.includes(id)),
+          savedSources.filter(
+            ({ id, isLocal }) => isLocal && !existingSrcIds.includes(id),
+          ),
         ),
       );
 

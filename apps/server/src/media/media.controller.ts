@@ -54,20 +54,18 @@ export class MediaController {
   ) {
     const source = await this.mediaService.getUserSource(req.user, sourceId);
 
-    if (source.isLocal)
-      res.sendFile(
-        // check thumbsDir first since these are locals
-        join(this.mediaService.thumbsDir, `${sourceId}.webp`),
-        { maxAge: '2 days' },
-        (thumbUrlErr) =>
-          thumbUrlErr &&
-          res.sendFile(
-            join(this.mediaService.servingPath, source.thumbUrl),
-            (err: Error & { statusCode?: number }) =>
-              err && res.sendStatus(err.statusCode ?? 404),
-          ),
-      );
-    else res.redirect(301, source.thumbUrl);
+    res.sendFile(
+      // check thumbsDir first since these are locals
+      join(this.mediaService.thumbsDir, `${sourceId}.webp`),
+      { maxAge: '2 days' },
+      (thumbUrlErr) =>
+        thumbUrlErr &&
+        res.sendFile(
+          join(this.mediaService.servingPath, source.thumbUrl),
+          (err: Error & { statusCode?: number }) =>
+            err && res.sendStatus(err.statusCode ?? 404),
+        ),
+    );
   }
 
   @Get('/source/:sourceId')
@@ -94,17 +92,17 @@ export class MediaController {
               err && res.sendStatus(err.statusCode ?? 404),
           ),
       );
-    else res.redirect(source.url);
+    else res.redirect(301, source.url);
   }
 
   @Post()
   createMedia(
     @User() user,
-    @Body() dto: CreateMediaInputDto | CreateMediaInputDto[],
-  ): Promise<MediaEntity | MediaEntity[]> {
-    if (Array.isArray(dto))
-      return this.mediaService.createMultipleMedia(dto, user);
-    else return this.mediaService.createMedia({ ...dto, owner: user });
+    @Body() dto: CreateMediaInputDto[],
+  ): Promise<MediaEntity[]> {
+    //if (Array.isArray(dto))
+    return this.mediaService.createMultipleMedia(dto, user);
+    //else return this.mediaService.createMedia({ ...dto, owner: user });
   }
 
   @Post('/update')

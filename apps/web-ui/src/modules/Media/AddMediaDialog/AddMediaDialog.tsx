@@ -69,10 +69,14 @@ const AddMediaDialog: React.FC<Props> = (props) => {
         const inputArr: CreateMediaInputDTO[] = [];
 
         // trim whitespace and /
-        const rootUrl =
-          values["Root URL"].trim().replace(/^\/+|\/+$/g, "") + "/";
+        const trimmedRootUrl = values["Root URL"]
+          .trim()
+          .replace(/^\/+|\/+$/g, "");
+
+        const rootUrl = trimmedRootUrl + (trimmedRootUrl.length > 0 ? "/" : "");
 
         for (const el of values.media) {
+          console.log(el);
           inputArr.push({
             name: el.URL,
             sources: [
@@ -91,17 +95,14 @@ const AddMediaDialog: React.FC<Props> = (props) => {
           })
           .catch((err) => {
             console.error("Failed to add the media.", err);
-          })
-          .finally(() => {
-            resetForm();
           });
       }}
     >
-      {({ errors, isValid, values }) => (
+      {({ errors, isValid, values, submitForm, resetForm }) => (
         <>
           <DialogTitle>Add Media</DialogTitle>
           <DialogContent>
-            <Form id="_AddMediaDialog-form">
+            <Form>
               <FastField
                 as={TextField}
                 name="Root URL"
@@ -232,8 +233,10 @@ const AddMediaDialog: React.FC<Props> = (props) => {
             <Button onClick={cancelHandler}>Cancel</Button>
             <LoadingButton
               type="submit"
-              form="_AddMediaDialog-form"
               variant="contained"
+              onClick={(e) => {
+                submitForm();
+              }}
               disabled={!isValid || isLoading}
               isLoading={isLoading}
             >

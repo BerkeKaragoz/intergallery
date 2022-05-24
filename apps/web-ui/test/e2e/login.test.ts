@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import authTest from "../fixtures/auth-test";
-import { TEST_USER } from "../test-consts";
+import { STORAGE_STATE, TEST_USER } from "../test-consts";
+
+test.use({ storageState: STORAGE_STATE.NOAUTH });
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/auth");

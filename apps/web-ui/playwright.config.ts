@@ -1,5 +1,5 @@
 import { PlaywrightTestConfig, devices } from "@playwright/test";
-import { BASE_URL } from "./test/test-consts";
+import { BASE_URL, STORAGE_STATE } from "./test/test-consts";
 
 const config: PlaywrightTestConfig = {
   testDir: "./test/",
@@ -10,7 +10,7 @@ const config: PlaywrightTestConfig = {
     baseURL: BASE_URL,
     trace: "on-first-retry",
     // Tell all tests to load signed-in state from 'storageState.json'.
-    //storageState: resolve"storageState.json",
+    storageState: STORAGE_STATE.AUTH,
   },
   projects: [
     {

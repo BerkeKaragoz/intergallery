@@ -6,6 +6,8 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
   Button,
   Divider,
+  IconButton,
+  InputAdornment,
   Link,
   Stack,
   TextField,
@@ -17,6 +19,7 @@ import React from "react";
 import * as Yup from "yup";
 import { REGISTER_HASH } from "@/modules/Auth/utils";
 import LoadingButton from "@/components/LoadingButton";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 const loginFormSchema = Yup.object({
   username: Yup.string().default("").required(),
@@ -26,6 +29,8 @@ const loginFormSchema = Yup.object({
 const LoginBox = () => {
   const dispatch = useAppDispatch();
   const userState = useAppSelector((state) => state.user);
+
+  const [isShowingPassword, setIsShowingPassword] = React.useState(false);
 
   return (
     <Stack spacing={4} sx={{ textAlign: "center" }}>
@@ -65,7 +70,7 @@ const LoginBox = () => {
               />
               <Field
                 as={TextField}
-                type="password"
+                type={isShowingPassword ? "text" : "password"}
                 name="password"
                 label="Password"
                 required
@@ -73,6 +78,19 @@ const LoginBox = () => {
                 spellCheck="false"
                 //helperText={<ErrorMessage name="password" />}
                 //error={Boolean(errors.password)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setIsShowingPassword((s) => !s)}
+                        edge="end"
+                      >
+                        {isShowingPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Stack
                 direction="row"

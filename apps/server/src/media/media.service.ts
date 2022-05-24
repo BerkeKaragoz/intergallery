@@ -171,8 +171,8 @@ export class MediaService {
     return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 
-  createThumb(source: SourceEntity) {
-    source.thumbUrl = this.fileService.generateThumb(source);
+  async createThumb(source: SourceEntity) {
+    source.thumbUrl = await this.fileService.generateThumb(source);
 
     return this.sourceRepository.save(source);
   }

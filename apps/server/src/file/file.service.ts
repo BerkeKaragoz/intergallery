@@ -20,7 +20,7 @@ export class FileService {
     private mediaService: MediaService,
   ) {}
 
-  generateThumb(source: SourceEntity) {
+  async generateThumb(source: SourceEntity) {
     const thumbName = `${source.id}.webp`;
     const thumbPath = join(this.mediaService.thumbsDir, thumbName);
 
@@ -31,7 +31,7 @@ export class FileService {
     }
 
     if (!source.isLocal)
-      fetch(source.url).then((res) =>
+      await fetch(source.url).then((res) =>
         res.arrayBuffer().then((buffer) => {
           sharp(Buffer.from(buffer))
             .resize(200)
@@ -41,11 +41,12 @@ export class FileService {
         }),
       );
     else
-      sharp(
+      await sharp(
         join(
           this.mediaService.sourcesDir,
           `${source.id}${extname(source.url)}`,
         ),
+        //{ animated: true },
       )
         .resize(200)
         .toFormat('webp')
@@ -93,7 +94,9 @@ export class FileService {
         }
       }
 
-      sourceList[i].thumbUrl = this.generateThumb(sourceList[i]);
+      this.generateThumb(sourceList[i]).then((res) => {
+        sourceList[i].thumbUrl = res;
+      });
     }
 
     return sourceList;

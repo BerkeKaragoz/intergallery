@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/auth");
 });
 
-test.describe("Login", () => {
+test.describe("Login Functionality", () => {
   authTest("unauthorized login", async ({ page, user }) => {
     const loginTitle = await page.locator("text=Login", {
       hasText: /^Login$/i,
@@ -40,9 +40,9 @@ test.describe("Login", () => {
   });
 });
 
-test.describe("Login Form", async () => {
+test.describe("Login Page", async () => {
   authTest(
-    "should react according to the constraints",
+    "continue button should react according to the constraints",
     async ({ page, user }) => {
       const button = await page.locator('button:has-text("Continue")');
       const usernameInput = await page.locator('input[name="username"]');
@@ -69,4 +69,40 @@ test.describe("Login Form", async () => {
       await expect(button).toBeDisabled();
     },
   );
+
+  authTest("password visibility", async ({ page, user }) => {
+    const passwordInput = await page.locator('input[name="password"]');
+    const passVisButton = await page.locator(
+      '[aria-label="toggle password visibility"]',
+    );
+    const passVisIcon = await page.locator("svg[data-testid=VisibilityIcon]");
+
+    await expect(passVisIcon).toBeVisible();
+    expect(passwordInput).toHaveAttribute("type", "password");
+    await expect(passwordInput).toBeEditable();
+
+    await passVisButton.click();
+
+    const passVisOffIcon = await page.locator(
+      "svg[data-testid=VisibilityOffIcon]",
+    );
+
+    await expect(passVisOffIcon).toBeVisible();
+    await expect(passwordInput).toHaveAttribute("type", "text");
+    await expect(passwordInput).toBeEditable();
+
+    await passVisButton.click();
+
+    await expect(passVisIcon).toBeVisible();
+    expect(passwordInput).toHaveAttribute("type", "password");
+    await expect(passwordInput).toBeEditable();
+  });
+
+  authTest("should be able to go to sign up", async ({ page }) => {
+    await page.click('a:has-text("Sign up")');
+
+    const signUpTitle = await page.locator('h1:has-text("Sign Up")');
+
+    await expect(signUpTitle).toBeVisible();
+  });
 });

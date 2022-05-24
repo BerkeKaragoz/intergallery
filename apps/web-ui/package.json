@@ -22,15 +22,17 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.0",
-    "@types/node": "^16.11.18",
+    "@types/node": "^17.0.35",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
     "@types/react-redux": "^7.1.24",
     "@vitejs/plugin-react": "^1.0.7",
+    "playwright": "^1.22.2",
     "typescript": "^4.5.4",
     "vite": "^2.8.0"
   },
@@ -39,7 +41,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "server": "start powershell.exe -ExecutionPolicy Bypass \"cd ../Intergallery-Server;ls;npm start\"",
-    "dev:all": "yarn server && yarn dev"
+    "dev:all": "yarn server && yarn dev",
+    "test": "pnpx playwright test",
+    "test:dev": "pnpx playwright test --headed --project=chromium",
+    "test:dev:curr": "pnpx playwright test --headed --project=chromium --grep @curr"
   },
   "eslintConfig": {
     "extends": [

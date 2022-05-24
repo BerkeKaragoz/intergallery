@@ -1,5 +1,5 @@
 import MediaCard from "@/modules/Media/MediaCard";
-import { SIDEBAR_WIDTH } from "@/modules/Browse/MediaSidebar/MediaSidebar";
+import { SIDEBAR_WIDTH } from "@/modules/Browse/BrowseSidebar/BrowseSidebar";
 import { MediaDTO } from "@/modules/Media/utils";
 import { styled, Typography } from "@mui/material";
 import React from "react";
@@ -35,7 +35,7 @@ type Props = React.HTMLAttributes<HTMLDivElement> & {
   highlightHandler?: (media: MediaDTO) => void;
 };
 
-const MediaGrid: React.FC<Props> = (props) => {
+const BrowseGrid: React.FC<Props> = (props) => {
   const { mediaList, highlightHandler = () => {}, ...rest } = props;
   const [highlightedId, setHighlightedId] = React.useState("");
 
@@ -74,5 +74,5 @@ const MediaGrid: React.FC<Props> = (props) => {
   );
 };
 
-export default MediaGrid;
-export type { Props as MediaGridProps };
+export default BrowseGrid;
+export type { Props as BrowseGridProps };

@@ -49,7 +49,7 @@ type Props = {
   userId?: UserState["data"]["id"];
 };
 
-const MediaSidebar: React.FC<Props> = (props) => {
+const BrowseSidebar: React.FC<Props> = (props) => {
   const { open, highlightedMedia, userId, children } = props;
 
   const [AddMediaModal, openAddMedia, closeAddMedia] = useAppModal();
@@ -167,5 +167,5 @@ const MediaSidebar: React.FC<Props> = (props) => {
   );
 };
 
-export type { Props as MediaSidebarProps };
-export default MediaSidebar;
+export type { Props as BrowseSidebarProps };
+export default BrowseSidebar;

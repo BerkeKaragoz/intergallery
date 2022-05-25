@@ -1,6 +1,6 @@
 import { Link, styled } from "@mui/material";
 
-const subtitleHeight = 2.2; // rem
+const subtitleHeight = 2.4; // rem
 
 export const MCContainer = styled("div")`
   display: inline-block;
@@ -74,10 +74,12 @@ export const MCSubtitle = styled("span")`
   width: inherit;
   line-height: ${subtitleHeight * 0.5}rem;
   font-size: small;
+  overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  margin: ${(m) => m.theme.spacing(1)};
+  word-wrap: break-word;
+  padding: ${(m) => m.theme.spacing(1)};
   text-shadow: 0px 1px 3px #202;
 `;

@@ -120,11 +120,11 @@ export class MediaController {
   @Post()
   createMedia(
     @User() user,
-    @Body() dto: CreateMediaInputDto[],
+    @Body() dto: CreateMediaInputDto | CreateMediaInputDto[],
   ): Promise<MediaEntity[]> {
-    //if (Array.isArray(dto))
-    return this.mediaService.createMultipleMedia(dto, user);
-    //else return this.mediaService.createMedia({ ...dto, owner: user });
+    if (Array.isArray(dto))
+      return this.mediaService.createMultipleMedia(dto, user);
+    else return this.mediaService.createMultipleMedia([dto], user);
   }
 
   @Post('/update')
@@ -138,9 +138,11 @@ export class MediaController {
   @Post('/delete')
   deleteMedia(
     @User() user,
-    @Body() id: MediaEntity['id'],
-  ): Promise<MediaEntity> {
-    return this.mediaService.deleteMedia(id, user);
+    @Body() id: MediaEntity['id'] | MediaEntity['id'][],
+  ): Promise<MediaEntity[]> {
+    if (Array.isArray(id))
+      return this.mediaService.deleteMultipleMedia(id, user);
+    else return this.mediaService.deleteMultipleMedia([id], user);
   }
 
   /** @deprecated */

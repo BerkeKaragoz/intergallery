@@ -165,15 +165,20 @@ export class MediaService {
     return this.mediaRepository.save(media);
   }
 
-  async deleteMedia(
-    id: MediaEntity['id'],
+  async deleteMultipleMedia(
+    ids: MediaEntity['id'][],
     user: UserEntity,
-  ): Promise<MediaEntity> {
-    const media = await this.getUserMediaById(user, id, true);
+  ): Promise<MediaEntity[]> {
+    const mediaList = await this.mediaRepository.findByIds(ids, {
+      where: { owner: user.id },
+      relations: ['sources'],
+      cache: true,
+    });
 
-    this.fileService.deleteSources(media.sources);
+    for (const media of mediaList)
+      this.fileService.deleteSources(media.sources);
 
-    return this.mediaRepository.remove(media); // TODO revert symlinks
+    return this.mediaRepository.remove(mediaList);
   }
 
   async createThumb(

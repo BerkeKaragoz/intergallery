@@ -1,5 +1,5 @@
 import LoadingButton from "@/components/LoadingButton";
-import { MediaDTO } from "@/modules/Media/utils";
+import { DeleteMediaInputDTO } from "@/modules/Media/utils";
 import { useDeleteMediaMutation } from "@/redux/slice/mediaApiSlice";
 import {
   Button,
@@ -22,12 +22,12 @@ const confirmationSchema = Yup.object({
 
 type Props = {
   cancelHandler?: () => void;
-  media: MediaDTO;
+  ids: DeleteMediaInputDTO;
 };
 
 const DeleteMediaDialog: React.FC<Props> = (props) => {
   const navigate = useNavigate();
-  const { cancelHandler = () => {}, media } = props;
+  const { cancelHandler = () => {}, ids } = props;
 
   const [deleteMedia, { isLoading }] = useDeleteMediaMutation();
 
@@ -39,7 +39,7 @@ const DeleteMediaDialog: React.FC<Props> = (props) => {
         validateOnMount={true}
         validateOnChange={true}
         onSubmit={(value) => {
-          deleteMedia(media.id)
+          deleteMedia(ids)
             .then((res) => {
               cancelHandler();
               navigate("/");

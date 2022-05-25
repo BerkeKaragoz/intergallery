@@ -193,7 +193,10 @@ const ViewMedia: React.FC<Props> = (props) => {
           </EditMediaModal>
 
           <DeleteMediaModal>
-            <DeleteMediaDialog media={data} cancelHandler={closeDeleteMedia} />
+            <DeleteMediaDialog
+              ids={[data.id]}
+              cancelHandler={closeDeleteMedia}
+            />
           </DeleteMediaModal>
         </>
       )}

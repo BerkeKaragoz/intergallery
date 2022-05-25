@@ -138,11 +138,11 @@ export class MediaController {
   @Post('/delete')
   deleteMedia(
     @User() user,
-    @Body() id: MediaEntity['id'] | MediaEntity['id'][],
+    @Body('ids') ids: MediaEntity['id'] | MediaEntity['id'][],
   ): Promise<MediaEntity[]> {
-    if (Array.isArray(id))
-      return this.mediaService.deleteMultipleMedia(id, user);
-    else return this.mediaService.deleteMultipleMedia([id], user);
+    if (Array.isArray(ids))
+      return this.mediaService.deleteMultipleMedia(ids, user);
+    else return this.mediaService.deleteMultipleMedia([ids], user);
   }
 
   /** @deprecated */

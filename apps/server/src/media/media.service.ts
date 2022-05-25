@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { readlinkSync } from 'fs';
 import { join } from 'path';
 import { FileService } from 'src/file/file.service';
 import { MediaEntity } from 'src/model/entities/media.entity';
@@ -61,10 +62,11 @@ export class MediaService {
   async getUserMediaById(
     user: UserEntity,
     id: MediaEntity['id'],
+    hasSources = false,
   ): Promise<MediaEntity> {
     return await this.mediaRepository.findOneOrFail(id, {
       where: { owner: user.id },
-      //relations: ['sources'],
+      ...(hasSources ? { relations: ['sources'] } : {}),
       cache: true,
     });
   }
@@ -104,7 +106,7 @@ export class MediaService {
 
     for (const media of createdMedia) {
       media.sources = media.sources.concat(
-        this.fileService.addSource(media.sources),
+        this.fileService.addSources(media.sources),
       );
 
       newMediaArr.push(media);
@@ -128,7 +130,7 @@ export class MediaService {
     const existingSrcIds = media.sourceIds;
 
     if (deletedSourceIds.length > 0) {
-      this.fileService.deleteSourceThumbs(
+      this.fileService.deleteSources(
         media.sources.filter((m) => deletedSourceIds.includes(m.id)),
       );
 
@@ -150,7 +152,7 @@ export class MediaService {
 
       // Process local sources seperately so that thumbUrl can be updated
       media.sources = media.sources.concat(
-        this.fileService.addSource(
+        this.fileService.addSources(
           savedSources.filter(
             ({ id, isLocal }) => isLocal && !existingSrcIds.includes(id),
           ),
@@ -167,7 +169,10 @@ export class MediaService {
     id: MediaEntity['id'],
     user: UserEntity,
   ): Promise<MediaEntity> {
-    const media = await this.getUserMediaById(user, id);
+    const media = await this.getUserMediaById(user, id, true);
+
+    this.fileService.deleteSources(media.sources);
+
     return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 

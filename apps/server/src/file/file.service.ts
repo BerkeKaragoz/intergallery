@@ -1,5 +1,13 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { existsSync, mkdirSync, rm, renameSync, symlinkSync } from 'fs';
+import {
+  existsSync,
+  mkdirSync,
+  rm,
+  renameSync,
+  symlinkSync,
+  readlinkSync,
+  readlink,
+} from 'fs';
 import { join, extname } from 'path';
 import { MediaService } from 'src/media/media.service';
 import { SourceEntity } from 'src/model/entities/source.entity';
@@ -65,7 +73,28 @@ export class FileService {
     return sourceList;
   }
 
-  addSource(sourceList: SourceEntity[]) {
+  deleteSources(sourceList: SourceEntity[]) {
+    this.deleteSourceThumbs(sourceList);
+
+    for (const s of sourceList)
+      if (s.isLocal) {
+        const symlinkPath = join(this.servingPath, s.url);
+
+        if (existsSync(symlinkPath))
+          readlink(symlinkPath, (err, targetPath) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+
+            renameSync(targetPath, symlinkPath);
+          });
+      }
+
+    //
+  }
+
+  addSources(sourceList: SourceEntity[]) {
     if (!existsSync(this.mediaService.sourcesDir)) {
       mkdirSync(this.mediaService.sourcesDir, {
         recursive: true,

@@ -15,9 +15,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { API_BASE_URL } from "@/lib/api";
 
 const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 // const StyledFab = styled(Fab)({
 //   position: 'absolute',
@@ -176,11 +176,12 @@ const Header: React.FC<Props> = (props) => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Profile</Typography>
+                </MenuItem>
+                <MenuItem component="a" href={API_BASE_URL + "/auth/logout"}>
+                  Logout
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>

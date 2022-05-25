@@ -1,10 +1,12 @@
-import { API_BASE_URL } from "@/lib/api";
 import { SIDEBAR_BREAKPOINT } from "@/modules/Browse/BrowseSidebar";
 import {
-  Button,
+  Box,
   Container,
+  Divider,
+  Link,
   Theme,
   Toolbar,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
@@ -16,14 +18,19 @@ const Footer = () => {
 
   return (
     <>
+      <Divider light sx={{ mt: 4 }} />
       <Container component="footer" maxWidth="xl" sx={{ mt: 2 }}>
-        <Button
-          variant="outlined"
-          component="a"
-          href={API_BASE_URL + "/auth/logout"}
-        >
-          Logout
-        </Button>
+        <Box sx={{ textAlign: "center", m: 1 }}>
+          <Typography
+            component={Link}
+            variant="h5"
+            align="center"
+            sx={{ opacity: 0.2 }}
+            href="berkekaragoz.com"
+          >
+            berkekaragoz.com
+          </Typography>
+        </Box>
       </Container>
       <Toolbar sx={{ display: matchesSidebar ? "none" : "block", mt: 1 }} />
     </>

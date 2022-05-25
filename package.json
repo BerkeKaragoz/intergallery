@@ -11,6 +11,7 @@
     "dev": "turbo run dev --parallel --filter=!intergallery-proto-*",
     "dev:proto": "turbo run dev --parallel --filter=intergallery-proto-*",
     "dev:all": "turbo run dev --parallel",
+    "test": "turbo run test --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

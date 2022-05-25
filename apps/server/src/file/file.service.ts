@@ -5,7 +5,6 @@ import {
   rm,
   renameSync,
   symlinkSync,
-  readlinkSync,
   readlink,
 } from 'fs';
 import { join, extname } from 'path';
@@ -14,6 +13,8 @@ import { SourceEntity } from 'src/model/entities/source.entity';
 import * as sharp from 'sharp';
 import { ConfigService } from '@nestjs/config';
 import fetch from 'cross-fetch';
+import * as ffmpeg from 'fluent-ffmpeg';
+import { MediaEntity, MediaType } from 'src/model/entities/media.entity';
 
 @Injectable()
 export class FileService {
@@ -28,9 +29,16 @@ export class FileService {
     private mediaService: MediaService,
   ) {}
 
-  async generateThumb(source: SourceEntity) {
+  async generateThumb(
+    source: SourceEntity,
+    type: MediaEntity['type'] = MediaType.UNKNOWN,
+  ) {
     const thumbName = `${source.id}.webp`;
     const thumbPath = join(this.mediaService.thumbsDir, thumbName);
+    const sourcePath = join(
+      this.mediaService.sourcesDir,
+      `${source.id}${extname(source.url)}`,
+    );
 
     if (!existsSync(this.mediaService.thumbsDir)) {
       mkdirSync(this.mediaService.thumbsDir, {
@@ -48,18 +56,32 @@ export class FileService {
             .catch((err) => console.error(err));
         }),
       );
-    else
-      await sharp(
-        join(
-          this.mediaService.sourcesDir,
-          `${source.id}${extname(source.url)}`,
-        ),
-        //{ animated: true },
-      )
-        .resize(200)
-        .toFormat('webp')
-        .toFile(thumbPath)
-        .catch((err) => console.error(err));
+    else {
+      switch (type) {
+        case MediaType.PICTURE: {
+          await sharp(
+            sourcePath,
+            //{ animated: true },
+          )
+            .resize(200)
+            .toFormat('webp')
+            .toFile(thumbPath)
+            .catch((err) => console.error(err));
+
+          break;
+        }
+        case MediaType.VIDEO: {
+          ffmpeg(sourcePath).screenshots({
+            timestamps: ['25%'],
+            filename: thumbName,
+            folder: this.mediaService.thumbsDir,
+            size: '200x?',
+          });
+        }
+        default:
+          break; //
+      }
+    }
 
     return `${this.mediaService.internalDirName}/${this.mediaService.thumbsDirName}/${thumbName}`;
   }
@@ -94,7 +116,10 @@ export class FileService {
     //
   }
 
-  addSources(sourceList: SourceEntity[]) {
+  addSources(
+    sourceList: SourceEntity[],
+    type: MediaEntity['type'] = MediaType.UNKNOWN,
+  ) {
     if (!existsSync(this.mediaService.sourcesDir)) {
       mkdirSync(this.mediaService.sourcesDir, {
         recursive: true,
@@ -123,7 +148,7 @@ export class FileService {
         }
       }
 
-      this.generateThumb(sourceList[i]).then((res) => {
+      this.generateThumb(sourceList[i], type).then((res) => {
         sourceList[i].thumbUrl = res;
       });
     }

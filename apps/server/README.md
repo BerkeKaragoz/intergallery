@@ -1,4 +1,10 @@
+## Other dependencies
+
+[FFMPEG](https://www.ffmpeg.org/download.html) must be installed.
+Download the binaries, add them to your PATH.
+
 ## Intergallery's Server
+
 Client: https://github.com/BerkeKaragoz/intergallery-client
 
 Angular Prototype Client: https://github.com/BerkeKaragoz/Intergallery-Angular-Prototype
@@ -38,7 +44,6 @@ Angular Prototype Client: https://github.com/BerkeKaragoz/Intergallery-Angular-P
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 

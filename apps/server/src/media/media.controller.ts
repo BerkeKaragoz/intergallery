@@ -15,7 +15,7 @@ import { extname, join } from 'path';
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { User } from 'src/core/decorator/user.decorator';
 import { FileService } from 'src/file/file.service';
-import { MediaEntity } from 'src/model/entities/media.entity';
+import { MediaEntity, MediaType } from 'src/model/entities/media.entity';
 import { CreateMediaInputDto } from './dto/create-media.dto';
 import { UpdateMediaInputDto } from './dto/update-media.dto';
 import { UserMediaDTO } from './dto/user-media.dto';
@@ -72,15 +72,18 @@ export class MediaController {
             // Otherwise, check if thumb exist at thumbUrl
             join(this.mediaService.servingPath, source.thumbUrl),
             (thumbUrlErr) => {
-              if (thumbUrlErr)
-                this.mediaService.createThumb(source).then(() => {
-                  res.sendFile(
-                    // Otherwise, generate the thumb and send it
-                    pathAtThumbsDir,
-                    (err: Error & { statusCode?: number }) =>
-                      err && res.sendStatus(err.statusCode ?? 404), // Otherwise, give up :(
-                  );
-                });
+              if (thumbUrlErr && source.media.type !== MediaType.VIDEO)
+                this.mediaService
+                  .createThumb(source, source.media.type)
+                  .then(() => {
+                    res.sendFile(
+                      // Otherwise, generate the thumb and send it
+                      // not video because it can be data intensive
+                      pathAtThumbsDir,
+                      (err: Error & { statusCode?: number }) =>
+                        err && res.sendStatus(err.statusCode ?? 404), // Otherwise, give up :(
+                    );
+                  });
             },
           );
       },

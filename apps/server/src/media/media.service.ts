@@ -1,10 +1,9 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { readlinkSync } from 'fs';
 import { join } from 'path';
 import { FileService } from 'src/file/file.service';
-import { MediaEntity } from 'src/model/entities/media.entity';
+import { MediaEntity, MediaType } from 'src/model/entities/media.entity';
 import { SourceEntity } from 'src/model/entities/source.entity';
 import { UserEntity } from 'src/model/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -106,7 +105,7 @@ export class MediaService {
 
     for (const media of createdMedia) {
       media.sources = media.sources.concat(
-        this.fileService.addSources(media.sources),
+        this.fileService.addSources(media.sources, media.type),
       );
 
       newMediaArr.push(media);
@@ -156,6 +155,7 @@ export class MediaService {
           savedSources.filter(
             ({ id, isLocal }) => isLocal && !existingSrcIds.includes(id),
           ),
+          media.type,
         ),
       );
 
@@ -176,8 +176,11 @@ export class MediaService {
     return this.mediaRepository.remove(media); // TODO revert symlinks
   }
 
-  async createThumb(source: SourceEntity) {
-    source.thumbUrl = await this.fileService.generateThumb(source);
+  async createThumb(
+    source: SourceEntity,
+    type: MediaEntity['type'] = MediaType.UNKNOWN,
+  ) {
+    source.thumbUrl = await this.fileService.generateThumb(source, type);
 
     return this.sourceRepository.save(source);
   }

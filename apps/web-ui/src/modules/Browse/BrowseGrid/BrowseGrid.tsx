@@ -1,7 +1,10 @@
-import MediaCard from "@/modules/Media/MediaCard";
 import { SIDEBAR_WIDTH } from "@/modules/Browse/BrowseSidebar/BrowseSidebar";
+import MediaCard from "@/modules/Media/MediaCard";
 import { MediaDTO } from "@/modules/Media/utils";
-import { Box, styled, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { Box, Checkbox, styled, Theme, Typography } from "@mui/material";
+import { Field } from "formik";
 import React from "react";
 
 const minMediaWidth = 150; //TODO
@@ -33,10 +36,16 @@ const MediaUl = styled("ul")`
 type Props = React.HTMLAttributes<HTMLDivElement> & {
   mediaList: MediaDTO[];
   highlightHandler?: (media: MediaDTO) => void;
+  showDeleteCheckboxes?: boolean;
 };
 
 const BrowseGrid: React.FC<Props> = (props) => {
-  const { mediaList, highlightHandler = () => {}, ...rest } = props;
+  const {
+    mediaList,
+    highlightHandler = () => {},
+    showDeleteCheckboxes = false,
+    ...rest
+  } = props;
   const [highlightedId, setHighlightedId] = React.useState("");
 
   const onHighlight = (item: MediaDTO) => () => {
@@ -50,7 +59,33 @@ const BrowseGrid: React.FC<Props> = (props) => {
         {mediaList.length > 0 ? (
           <>
             {mediaList.map((item, i) => (
-              <li key={item.id}>
+              <Box component="li" key={item.id} sx={{ position: "relative" }}>
+                {showDeleteCheckboxes && (
+                  <Field
+                    as={Checkbox}
+                    value={item.id}
+                    name="ids"
+                    label="Select as to be deleted"
+                    icon={<DeleteOutlinedIcon />}
+                    checkedIcon={<DeleteIcon />}
+                    centerRipple={false}
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      height: "100%",
+                      width: "100%",
+                      backgroundColor: "#0009",
+                      borderRadius: ({ shape }: Theme) =>
+                        shape.borderRadius + "px",
+                      "& .MuiSvgIcon-root": {
+                        fontSize: 36,
+                        backgroundColor: "#0003",
+                        borderRadius: "25%",
+                      },
+                    }}
+                  />
+                )}
                 <MediaCard
                   media={item}
                   data-testid={`browse-card-${i}`}
@@ -58,7 +93,7 @@ const BrowseGrid: React.FC<Props> = (props) => {
                   onPointerEnter={onHighlight(item)}
                   className={highlightedId === item.id ? "_isHighlighted" : ""}
                 />
-              </li>
+              </Box>
             ))}
           </>
         ) : (

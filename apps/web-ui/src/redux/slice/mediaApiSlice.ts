@@ -52,10 +52,10 @@ export const mediaApiSlice = createApi({
         result ? [{ type: "Media", id: result.id }] : [],
     }),
     deleteMedia: builder.mutation<MediaEntity, DeleteMediaInputDTO>({
-      query: (id) => ({
+      query: (ids) => ({
         url: "/media/delete",
         method: "POST",
-        body: { id },
+        body: { ids },
       }),
       invalidatesTags: (result, error) => [
         { type: "Media", id: "PARTIAL-LIST" },

@@ -1,16 +1,22 @@
 import Page from "@/components/Page";
+import useAppModal from "@/hooks/useAppModal";
 import useQuery from "@/hooks/useQuery";
 import { createQuery } from "@/lib/utils";
-import { MediaDTO } from "@/modules/Media";
 import MediaSidebar, {
   SIDEBAR_BREAKPOINT,
 } from "@/modules/Browse/BrowseSidebar";
+import { MediaDTO } from "@/modules/Media";
+import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
 import { GetMediaInputDTO } from "@/modules/Media/utils";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { useGetMediaQuery } from "@/redux/slice/mediaApiSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {
+  Button,
   CircularProgress,
   FormControl,
+  IconButton,
   InputLabel,
   LinearProgress,
   MenuItem,
@@ -19,15 +25,23 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Box, useTheme } from "@mui/system";
+import { Form, FormikProvider, useFormik } from "formik";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import * as Yup from "yup";
 import MediaGrid from "./BrowseGrid";
 
 const DEFAULT_PERPAGE = 20;
 const DEFAULT_PAGE = 1;
 
+const mediaIdSchema = Yup.string().default("");
+
+const deleteMediaSchema = Yup.object({
+  ids: Yup.array(mediaIdSchema).default([]).min(1).required(),
+});
+
 const Browse = () => {
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
   const query = useQuery();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -36,27 +50,38 @@ const Browse = () => {
     theme.breakpoints.up(SIDEBAR_BREAKPOINT),
   );
 
-  // const matchesXs = useMediaQuery(theme.breakpoints.up("xs"));
-  // const matchesSm = useMediaQuery(theme.breakpoints.up("sm"));
-  // const matchesMd = useMediaQuery(theme.breakpoints.up("md"));
-  // const matchesLg = useMediaQuery(theme.breakpoints.up("lg"));
-  // const matchesXl = useMediaQuery(theme.breakpoints.up("xl"));
-
   const [mediaPage, setMediaPage] = useState<GetMediaInputDTO["page"]>(
     Number(query.get("page") ?? DEFAULT_PAGE),
   );
   const [mediaPerPage, setMediaPerPage] = useState<GetMediaInputDTO["perPage"]>(
     Number(query.get("perPage") ?? DEFAULT_PERPAGE),
   );
+  const [isDeletionActive, setIsDeletionActive] = useState(false);
 
   const [highlightedMedia, setHighlightedMedia] =
     React.useState<MediaDTO | null>(null);
 
   const isFirstRender = useRef(true);
 
+  const [DeleteMediaModal, openDeleteModal, closeDeleteMedia] = useAppModal(
+    undefined,
+    () => {
+      setIsDeletionActive(false);
+    },
+  );
+
   const { data: mediaFetchData, isLoading: isMediaLoading } = useGetMediaQuery({
     page: mediaPage,
     perPage: mediaPerPage,
+  });
+
+  const delFormik = useFormik({
+    initialValues: deleteMediaSchema.getDefault(),
+    validationSchema: deleteMediaSchema,
+    validateOnMount: true,
+    onSubmit: (values) => {
+      openDeleteModal();
+    },
   });
 
   const highlightHandler = (item: MediaDTO) => {
@@ -102,28 +127,73 @@ const Browse = () => {
           userId={userState.data.id}
           highlightedMedia={highlightedMedia}
         >
-          <Box sx={{ textAlign: "end" }}>
-            <InputLabel id="sidebar-per-page-label" sx={{ fontSize: "small" }}>
-              Per Page
-            </InputLabel>
-            <FormControl>
-              <Select
-                labelId="sidebar-per-page-label"
-                id="sidebar-per-page"
-                variant="standard"
-                value={mediaPerPage}
-                label="Per Page"
-                onChange={({ target }) => {
-                  if (target.value && target.value !== mediaPerPage)
-                    setMediaPerPage(target.value as number); // value is controlled
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <IconButton
+                aria-label="delete media active"
+                color={isDeletionActive ? "primary" : "inherit"}
+                onClick={() => {
+                  setIsDeletionActive((s) => !s);
+                  delFormik.resetForm();
+                }}
+                sx={{
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: ({ palette }) =>
+                    isDeletionActive
+                      ? palette.primary.dark
+                      : palette.action.disabled,
                 }}
               >
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={50}>50</MenuItem>
-              </Select>
-            </FormControl>
+                {isDeletionActive ? <DeleteIcon /> : <DeleteOutlineIcon />}
+              </IconButton>
+              {isDeletionActive && (
+                <Button
+                  variant="contained"
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    delFormik.submitForm();
+                  }}
+                  disabled={!delFormik.isValid}
+                  sx={{ ml: 2 }}
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
+            <div>
+              <InputLabel
+                id="sidebar-per-page-label"
+                sx={{ fontSize: "small" }}
+              >
+                Per Page
+              </InputLabel>
+              <FormControl>
+                <Select
+                  labelId="sidebar-per-page-label"
+                  id="sidebar-per-page"
+                  variant="standard"
+                  value={mediaPerPage}
+                  label="Per Page"
+                  onChange={({ target }) => {
+                    if (target.value && target.value !== mediaPerPage)
+                      setMediaPerPage(target.value as number); // value is controlled
+                  }}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
           </Box>
         </MediaSidebar>
       }
@@ -134,10 +204,18 @@ const Browse = () => {
         </Box>
       ) : (
         mediaFetchData && (
-          <MediaGrid
-            mediaList={mediaFetchData.data}
-            highlightHandler={highlightHandler}
-          />
+          <FormikProvider value={delFormik}>
+            <Form
+              onSubmit={delFormik.handleSubmit}
+              onReset={delFormik.handleReset}
+            >
+              <MediaGrid
+                mediaList={mediaFetchData.data}
+                highlightHandler={highlightHandler}
+                showDeleteCheckboxes={isDeletionActive}
+              />
+            </Form>
+          </FormikProvider>
         )
       )}
 
@@ -160,6 +238,13 @@ const Browse = () => {
           setMediaPage(p);
         }}
       />
+
+      <DeleteMediaModal>
+        <DeleteMediaDialog
+          ids={delFormik.values.ids}
+          cancelHandler={closeDeleteMedia}
+        />
+      </DeleteMediaModal>
     </Page>
   );
 };

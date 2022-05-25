@@ -7,15 +7,19 @@ type ModalHookReturns<T> = [T, () => void, () => void];
  *
  * @returns [Component, openHandler, closeHandler]
  */
-const useAppModal = () => {
+const useAppModal = (openCallback?: () => void, closeCallback?: () => void) => {
   const [open, setOpen] = useState(false);
 
   const openHandler = () => {
     setOpen(true);
+
+    if (openCallback) openCallback();
   };
 
   const closeHandler = () => {
     setOpen(false);
+
+    if (closeCallback) closeCallback();
   };
 
   const Component: React.FC<Omit<DialogProps, "open" | "onClose">> = (

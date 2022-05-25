@@ -40,7 +40,11 @@ const MediaCard = React.forwardRef<HTMLDivElement, Props>(
 
     return (
       <MCContainer ref={forwardRef} {...rest}>
-        <MCLink href={`/media/${media.id}`} underline="hover">
+        <MCLink
+          href={`/media/${media.id}`}
+          underline="hover"
+          data-testid={`media-card-${media.id}`}
+        >
           {MediaSrcComponent}
           <MCSubtitleContainer>
             <MCSubtitle>{media.name}</MCSubtitle>

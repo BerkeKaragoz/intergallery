@@ -1,7 +1,7 @@
 import MediaCard from "@/modules/Media/MediaCard";
 import { SIDEBAR_WIDTH } from "@/modules/Browse/BrowseSidebar/BrowseSidebar";
 import { MediaDTO } from "@/modules/Media/utils";
-import { styled, Typography } from "@mui/material";
+import { Box, styled, Typography } from "@mui/material";
 import React from "react";
 
 const minMediaWidth = 150; //TODO
@@ -46,30 +46,34 @@ const BrowseGrid: React.FC<Props> = (props) => {
 
   return (
     <MediaContainer {...rest}>
-      {mediaList.length > 0 ? (
-        <MediaUl>
-          {mediaList.map((item) => (
-            <li key={item.id}>
-              <MediaCard
-                media={item}
-                onFocus={onHighlight(item)}
-                onPointerEnter={onHighlight(item)}
-                className={highlightedId === item.id ? "_isHighlighted" : ""}
-              />
-            </li>
-          ))}
-        </MediaUl>
-      ) : (
-        <Typography
-          m={4}
-          variant="h4"
-          component="p"
-          align="center"
-          sx={{ opacity: 0.2 }}
-        >
-          There isn't any media.
-        </Typography>
-      )}
+      <MediaUl data-testid="browse-grid">
+        {mediaList.length > 0 ? (
+          <>
+            {mediaList.map((item) => (
+              <li key={item.id}>
+                <MediaCard
+                  media={item}
+                  onFocus={onHighlight(item)}
+                  onPointerEnter={onHighlight(item)}
+                  className={highlightedId === item.id ? "_isHighlighted" : ""}
+                />
+              </li>
+            ))}
+          </>
+        ) : (
+          <Box component="li" sx={{ gridColumn: "1/-1" }}>
+            <Typography
+              m={4}
+              variant="h4"
+              component="p"
+              align="center"
+              sx={{ opacity: 0.2 }}
+            >
+              There isn't any media.
+            </Typography>
+          </Box>
+        )}
+      </MediaUl>
     </MediaContainer>
   );
 };

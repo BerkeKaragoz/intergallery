@@ -49,10 +49,11 @@ const BrowseGrid: React.FC<Props> = (props) => {
       <MediaUl data-testid="browse-grid">
         {mediaList.length > 0 ? (
           <>
-            {mediaList.map((item) => (
+            {mediaList.map((item, i) => (
               <li key={item.id}>
                 <MediaCard
                   media={item}
+                  data-testid={`browse-card-${i}`}
                   onFocus={onHighlight(item)}
                   onPointerEnter={onHighlight(item)}
                   className={highlightedId === item.id ? "_isHighlighted" : ""}

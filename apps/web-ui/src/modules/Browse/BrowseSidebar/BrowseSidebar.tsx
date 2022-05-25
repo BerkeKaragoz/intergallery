@@ -89,6 +89,7 @@ const BrowseSidebar: React.FC<Props> = (props) => {
     <Drawer
       variant={matchesSidebar ? "permanent" : "temporary"}
       open={open}
+      data-testid="browse-sidebar"
       sx={
         matchesSidebar
           ? {

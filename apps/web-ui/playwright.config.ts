@@ -5,7 +5,9 @@ const config: PlaywrightTestConfig = {
   testDir: "./test/",
   // forbidOnly: !!process.env.CI,
   // retries: process.env.CI ? 2 : 0,
+  //@ts-ignore
   globalSetup: require.resolve("./test/global-setup"),
+  workers: 1,
   use: {
     baseURL: BASE_URL,
     trace: "on-first-retry",

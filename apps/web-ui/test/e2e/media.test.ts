@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import authTest from "../fixtures/auth-test";
-import { STORAGE_STATE, TEST_USER } from "../test-consts";
 
 //test.use({ storageState: STORAGE_STATE.AUTH });
 

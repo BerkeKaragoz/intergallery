@@ -6,7 +6,7 @@ import { createQuery } from "@/lib/utils";
 import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
 import EditMediaDialog from "@/modules/Media/EditMediaDialog";
 import { MediaType } from "@/modules/Media/utils";
-import { getMediaSource } from "@/modules/Source";
+import { getMediaSource, getMediaSourceThumb } from "@/modules/Source";
 import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -118,7 +118,7 @@ const ViewMedia: React.FC<Props> = (props) => {
                 src={getMediaSource(data.sourceIds[sourceIndex])}
                 controls
                 preload="metadata"
-                //poster="thumbnailurl"
+                poster={getMediaSourceThumb(data.sourceIds[sourceIndex])}
               />
             )}
           </Box>

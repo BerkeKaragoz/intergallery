@@ -11,11 +11,20 @@ const minMediaWidth = 150; //TODO
 
 const MediaContainer = styled("div")`
   width: 100%;
+  height: 100%;
+  overflow: hidden;
 `;
 
 const MediaUl = styled("ul")`
+  width: 100%;
+  height: 100%;
+  max-height: 80vh;
+  overflow-y: scroll;
+  box-sizing: content-box;
+
+  padding: 0 17px 0 0;
+
   display: grid;
-  padding: 0px;
   margin: 1rem 0;
   list-style: none;
   grid-template-columns: repeat(auto-fit, minmax(${minMediaWidth}px, 1fr));

@@ -3,7 +3,7 @@ import { Link, styled } from "@mui/material";
 const subtitleHeight = 2.4; // rem
 
 export const MCContainer = styled("div")`
-  display: inline-block;
+  display: block;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -11,6 +11,8 @@ export const MCContainer = styled("div")`
   border-width: 1px;
   border-style: solid;
   border-color: rgba(0, 0, 0, 0);
+
+  box-sizing: border-box;
 
   &._isHighlighted {
     border-color: rgba(255, 255, 255, 0.2);
@@ -32,7 +34,7 @@ export const MCLink = styled(Link)`
 `;
 
 export const MCSource = styled("div")`
-  display: block;
+  display: inline-block;
   overflow: hidden;
   width: 100%;
   height: 100%;

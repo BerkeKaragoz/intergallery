@@ -4,6 +4,7 @@ import useQuery from "@/hooks/useQuery";
 import { createQuery } from "@/lib/utils";
 import MediaSidebar, {
   SIDEBAR_BREAKPOINT,
+  SIDEBAR_SMALL_BREAKPOINT,
 } from "@/modules/Browse/BrowseSidebar";
 import { MediaDTO } from "@/modules/Media";
 import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
@@ -48,6 +49,9 @@ const Browse = () => {
   const userState = useAppSelector((state) => state.user);
   const matchesSidebar = useMediaQuery(
     theme.breakpoints.up(SIDEBAR_BREAKPOINT),
+  );
+  const matchesSidebarSmall = useMediaQuery(
+    theme.breakpoints.up(SIDEBAR_SMALL_BREAKPOINT),
   );
 
   const [mediaPage, setMediaPage] = useState<GetMediaInputDTO["page"]>(
@@ -129,6 +133,8 @@ const Browse = () => {
         >
           <Box
             sx={{
+              position: "sticky",
+              top: "20px",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
@@ -163,6 +169,7 @@ const Browse = () => {
                   }}
                   disabled={!delFormik.isValid}
                   sx={{ ml: 2 }}
+                  size={matchesSidebarSmall ? "medium" : "small"}
                 >
                   Delete
                 </Button>
@@ -205,10 +212,7 @@ const Browse = () => {
       ) : (
         mediaFetchData && (
           <FormikProvider value={delFormik}>
-            <Form
-              onSubmit={delFormik.handleSubmit}
-              onReset={delFormik.handleReset}
-            >
+            <Form>
               <MediaGrid
                 mediaList={mediaFetchData.data}
                 highlightHandler={highlightHandler}

@@ -1,8 +1,12 @@
-import { Container } from "@mui/material";
+import { Container, ContainerProps } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
+export const DEFAULT_PAGE_MAXWIDTH: ContainerProps["maxWidth"] = "xl";
+
 type Props = {
+  maxWidth?: ContainerProps["maxWidth"];
+  disableGutters?: ContainerProps["disableGutters"];
   sidebar?: React.ReactNode;
 };
 
@@ -12,7 +16,12 @@ type Props = {
 // scrolling in DOM. Therefore we moke the main first in dom
 // and reverse the direction with flexbox
 const Page: React.FC<Props> = (props) => {
-  const { children, sidebar } = props;
+  const {
+    children,
+    sidebar,
+    maxWidth = DEFAULT_PAGE_MAXWIDTH,
+    disableGutters = false,
+  } = props;
 
   return (
     <Box
@@ -23,7 +32,11 @@ const Page: React.FC<Props> = (props) => {
         flexGrow: 1,
       }}
     >
-      <Container component={"main"} maxWidth={"xl"}>
+      <Container
+        component={"main"}
+        maxWidth={maxWidth}
+        disableGutters={disableGutters}
+      >
         {children}
       </Container>
       {sidebar && sidebar}

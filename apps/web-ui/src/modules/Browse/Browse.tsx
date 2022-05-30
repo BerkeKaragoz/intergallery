@@ -32,7 +32,7 @@ import { useNavigate } from "react-router";
 import * as Yup from "yup";
 import MediaGrid from "./BrowseGrid";
 
-const DEFAULT_PERPAGE = 20;
+const DEFAULT_PERPAGE = 25;
 const DEFAULT_PAGE = 1;
 
 const mediaIdSchema = Yup.string().default("");
@@ -82,7 +82,7 @@ const Browse = () => {
   const delFormik = useFormik({
     initialValues: deleteMediaSchema.getDefault(),
     validationSchema: deleteMediaSchema,
-    validateOnMount: true,
+    isInitialValid: false,
     onSubmit: (values) => {
       openDeleteModal();
     },
@@ -196,7 +196,7 @@ const Browse = () => {
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={25}>25</MenuItem>
                   <MenuItem value={50}>50</MenuItem>
                 </Select>
               </FormControl>

@@ -43,7 +43,7 @@ export class MediaService {
   async getUserMedia(
     user: UserEntity,
     page = 1,
-    perPage = 20,
+    perPage = 25,
   ): Promise<UserMediaDTO> {
     const [mediaList, total] = await this.mediaRepository.findAndCount({
       where: { owner: user.id },

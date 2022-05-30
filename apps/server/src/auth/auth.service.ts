@@ -1,123 +1,123 @@
-import { AppSessionEntity } from './../model/entities/session.entity';
-import { ValidateUserDto } from './dto/validate-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { AppSessionEntity } from "./../model/entities/session.entity"
+import { ValidateUserDto } from "./dto/validate-user.dto"
+import { CreateUserDto } from "./dto/create-user.dto"
 import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/model/entities/user.entity';
-import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import { Session } from 'express-session';
+   ConflictException,
+   Injectable,
+   InternalServerErrorException,
+   NotFoundException,
+} from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { UserEntity } from "src/model/entities/user.entity"
+import { Repository } from "typeorm"
+import * as bcrypt from "bcrypt"
+import { Session } from "express-session"
 
-const saltRounds = 12;
+const saltRounds = 12
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
-    @InjectRepository(AppSessionEntity, 'session')
-    private sessionsRepository: Repository<AppSessionEntity>,
-  ) {}
+   constructor(
+      @InjectRepository(UserEntity)
+      private usersRepository: Repository<UserEntity>,
+      @InjectRepository(AppSessionEntity, "session")
+      private sessionsRepository: Repository<AppSessionEntity>
+   ) {}
 
-  async validateUser(dto: ValidateUserDto): Promise<UserEntity | null> {
-    const { username, password } = dto;
+   async validateUser(dto: ValidateUserDto): Promise<UserEntity | null> {
+      const { username, password } = dto
 
-    try {
-      const user = await this.usersRepository
-        .createQueryBuilder('user')
-        .where('user.username = :username', { username })
-        .addSelect('user.passwordHash')
-        .getOneOrFail();
+      try {
+         const user = await this.usersRepository
+            .createQueryBuilder("user")
+            .where("user.username = :username", { username })
+            .addSelect("user.passwordHash")
+            .getOneOrFail()
 
-      if (await this.checkPassword(password, user.passwordHash)) {
-        delete user.passwordHash; // never forget to handle it
+         if (await this.checkPassword(password, user.passwordHash)) {
+            delete user.passwordHash // never forget to handle it
 
-        return user;
+            return user
+         }
+      } catch (ex) {
+         //console.error(ex);
       }
-    } catch (ex) {
-      //console.error(ex);
-    }
 
-    return null;
-  }
+      return null
+   }
 
-  async hashPassword(
-    plainPassword: string,
-  ): Promise<{ passwordSalt: string; passwordHash: string }> {
-    const enc = {
-      passwordSalt: '',
-      passwordHash: '',
-    };
+   async hashPassword(
+      plainPassword: string
+   ): Promise<{ passwordSalt: string; passwordHash: string }> {
+      const enc = {
+         passwordSalt: "",
+         passwordHash: "",
+      }
 
-    try {
-      enc.passwordSalt = await bcrypt.genSalt(saltRounds);
-      enc.passwordHash = await bcrypt.hash(plainPassword, enc.passwordSalt);
-    } catch (err) {
-      throw err;
-    }
+      try {
+         enc.passwordSalt = await bcrypt.genSalt(saltRounds)
+         enc.passwordHash = await bcrypt.hash(plainPassword, enc.passwordSalt)
+      } catch (err) {
+         throw err
+      }
 
-    return enc;
-  }
+      return enc
+   }
 
-  async checkPassword(
-    plainPassword: string,
-    encryptedPassword: string,
-  ): Promise<boolean> {
-    return await bcrypt.compare(plainPassword, encryptedPassword);
-  }
+   async checkPassword(
+      plainPassword: string,
+      encryptedPassword: string
+   ): Promise<boolean> {
+      return await bcrypt.compare(plainPassword, encryptedPassword)
+   }
 
-  async register(dto: CreateUserDto): Promise<UserEntity> {
-    const { username, password: passwordInput } = dto;
-    const { passwordHash } = await this.hashPassword(passwordInput).catch(
-      (err) => {
-        throw err;
-      },
-    );
+   async register(dto: CreateUserDto): Promise<UserEntity> {
+      const { username, password: passwordInput } = dto
+      const { passwordHash } = await this.hashPassword(passwordInput).catch(
+         (err) => {
+            throw err
+         }
+      )
 
-    const newUser = this.usersRepository.create({
-      username,
-      passwordHash,
-    });
-
-    return this.usersRepository
-      .save(newUser)
-      .then((res) => {
-        delete res.passwordHash;
-        return res;
+      const newUser = this.usersRepository.create({
+         username,
+         passwordHash,
       })
-      .catch((err) => {
-        if (err.errno === 19) {
-          throw new ConflictException(`The "${username}" username is taken.`);
-        }
-        console.error(username, err.driverError);
-        throw new InternalServerErrorException(null, err.driverError);
-      });
-  }
 
-  async getUserByUsername(username: string): Promise<UserEntity> {
-    return await this.usersRepository.findOne({ username }).catch(() => {
-      throw new NotFoundException();
-    });
-  }
+      return this.usersRepository
+         .save(newUser)
+         .then((res) => {
+            delete res.passwordHash
+            return res
+         })
+         .catch((err) => {
+            if (err.errno === 19) {
+               throw new ConflictException(`The "${username}" username is taken.`)
+            }
+            console.error(username, err.driverError)
+            throw new InternalServerErrorException(null, err.driverError)
+         })
+   }
 
-  logout(
-    session: Session,
-    callback: (err: any) => void,
-    deleteSessionFromDb = false,
-  ): Session {
-    if (deleteSessionFromDb) {
-      this.sessionsRepository
-        .delete(session.id)
-        .catch((res) =>
-          console.error('Could not delete session from the database: ', res),
-        );
-    }
+   async getUserByUsername(username: string): Promise<UserEntity> {
+      return await this.usersRepository.findOne({ username }).catch(() => {
+         throw new NotFoundException()
+      })
+   }
 
-    return session.destroy(callback);
-  }
+   logout(
+      session: Session,
+      callback: (err: any) => void,
+      deleteSessionFromDb = false
+   ): Session {
+      if (deleteSessionFromDb) {
+         this.sessionsRepository
+            .delete(session.id)
+            .catch((res) =>
+               console.error("Could not delete session from the database: ", res)
+            )
+      }
+
+      return session.destroy(callback)
+   }
 }

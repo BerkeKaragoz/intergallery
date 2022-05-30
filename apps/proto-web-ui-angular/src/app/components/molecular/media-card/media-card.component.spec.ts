@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing"
 
-import { MediaCardComponent } from './media-card.component';
+import { MediaCardComponent } from "./media-card.component"
 
-describe('MediaCardComponent', () => {
-  let component: MediaCardComponent;
-  let fixture: ComponentFixture<MediaCardComponent>;
+describe("MediaCardComponent", () => {
+   let component: MediaCardComponent
+   let fixture: ComponentFixture<MediaCardComponent>
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ MediaCardComponent ]
-    })
-    .compileComponents();
-  });
+   beforeEach(async () => {
+      await TestBed.configureTestingModule({
+         declarations: [MediaCardComponent],
+      }).compileComponents()
+   })
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(MediaCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+   beforeEach(() => {
+      fixture = TestBed.createComponent(MediaCardComponent)
+      component = fixture.componentInstance
+      fixture.detectChanges()
+   })
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+   it("should create", () => {
+      expect(component).toBeTruthy()
+   })
+})

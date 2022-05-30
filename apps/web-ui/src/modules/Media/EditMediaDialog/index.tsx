@@ -1,1 +1,1 @@
-export { default } from "./EditMediaDialog";
+export { default } from "./EditMediaDialog"

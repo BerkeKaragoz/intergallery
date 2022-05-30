@@ -1,1 +1,1 @@
-export type { UserEntity, UserDTO } from "./user";
+export type { UserEntity, UserDTO } from "./user"

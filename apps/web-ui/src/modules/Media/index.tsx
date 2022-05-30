@@ -1,3 +1,3 @@
-export type { MediaEntity, MediaDTO, CreateMediaInputDTO } from "./utils";
-export { MediaType } from "./utils";
-export { default } from "./ViewMedia";
+export type { MediaEntity, MediaDTO, CreateMediaInputDTO } from "./utils"
+export { MediaType } from "./utils"
+export { default } from "./ViewMedia"

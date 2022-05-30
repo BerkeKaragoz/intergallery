@@ -1,6 +1,6 @@
-import MediaEntity from '../media.entity';
-import { PaginatedDTO } from './../../api/dto/api.dto';
+import MediaEntity from "../media.entity"
+import { PaginatedDTO } from "./../../api/dto/api.dto"
 
-type UserMediaDTO = PaginatedDTO<Array<MediaEntity>>;
+type UserMediaDTO = PaginatedDTO<Array<MediaEntity>>
 
-export default UserMediaDTO;
+export default UserMediaDTO

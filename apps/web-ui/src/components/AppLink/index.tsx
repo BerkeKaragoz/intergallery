@@ -1,2 +1,2 @@
-export { default } from "./AppLink";
-export type { AppLinkProps } from "./AppLink";
+export { default } from "./AppLink"
+export type { AppLinkProps } from "./AppLink"

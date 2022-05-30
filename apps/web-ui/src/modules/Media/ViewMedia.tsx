@@ -1,256 +1,259 @@
-import Image from "@/components/Image";
-import Page, { DEFAULT_PAGE_MAXWIDTH } from "@/components/Page";
-import useAppModal from "@/hooks/useAppModal";
-import useQuery from "@/hooks/useQuery";
-import { createQuery } from "@/lib/utils";
-import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog";
-import EditMediaDialog from "@/modules/Media/EditMediaDialog";
-import { MediaType } from "@/modules/Media/utils";
-import { getMediaSource, getMediaSourceThumb } from "@/modules/Source";
-import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import Image from "@/components/Image"
+import Page, { DEFAULT_PAGE_MAXWIDTH } from "@/components/Page"
+import useAppModal from "@/hooks/useAppModal"
+import useQuery from "@/hooks/useQuery"
+import { createQuery } from "@/lib/utils"
+import DeleteMediaDialog from "@/modules/Media/DeleteMediaDialog"
+import EditMediaDialog from "@/modules/Media/EditMediaDialog"
+import { MediaType } from "@/modules/Media/utils"
+import { getMediaSource, getMediaSourceThumb } from "@/modules/Source"
+import { useGetMediaByIdQuery } from "@/redux/slice/mediaApiSlice"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
 import {
-  Button,
-  Container,
-  FormControl,
-  Grid,
-  LinearProgress,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import { Box, styled } from "@mui/system";
-import React from "react";
-import { useNavigate, useParams } from "react-router";
+   Button,
+   Container,
+   FormControl,
+   Grid,
+   LinearProgress,
+   MenuItem,
+   Select,
+   Typography,
+} from "@mui/material"
+import { Box, styled } from "@mui/system"
+import React from "react"
+import { useNavigate, useParams } from "react-router"
 
 const MediaInfo = ({
-  label,
-  info,
+   label,
+   info,
 }: {
-  label?: React.ReactNode;
-  info?: React.ReactNode;
+   label?: React.ReactNode
+   info?: React.ReactNode
 }) => (
-  <>
-    <Typography variant="subtitle2" children={label} />
-    <Typography variant="body2" component="span" children={info} mb={2} />
-  </>
-);
+   <>
+      <Typography variant="subtitle2" children={label} />
+      <Typography variant="body2" component="span" children={info} mb={2} />
+   </>
+)
 
 const Video = styled("video")`
-  display: block;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  flex-shrink: 0;
-  &::before {
-    text-align: center;
-    font-weight: lighter;
-    font-size: large;
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 0 0 1.125rem #fff;
-    line-height: initial;
-  }
-`;
+   display: block;
+   overflow: hidden;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   flex-shrink: 0;
+   &::before {
+      text-align: center;
+      font-weight: lighter;
+      font-size: large;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 0 1.125rem #fff;
+      line-height: initial;
+   }
+`
 
-const DEFAULT_SOURCE_INDEX = 0;
+const DEFAULT_SOURCE_INDEX = 0
 
-type Props = {};
+type Props = {}
 
 const ViewMedia: React.FC<Props> = (props) => {
-  const {} = props;
-  const navigate = useNavigate();
-  const query = useQuery();
-  const { mediaId } = useParams();
+   const {} = props
+   const navigate = useNavigate()
+   const query = useQuery()
+   const { mediaId } = useParams()
 
-  const [sourceIndex, setSourceIndex] = React.useState(
-    Number(query.get("source") ?? DEFAULT_SOURCE_INDEX),
-  );
+   const [sourceIndex, setSourceIndex] = React.useState(
+      Number(query.get("source") ?? DEFAULT_SOURCE_INDEX)
+   )
 
-  const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal();
-  const [DeleteMediaModal, openDeleteMedia, closeDeleteMedia] = useAppModal();
+   const [EditMediaModal, openEditMedia, closeEditMedia] = useAppModal()
+   const [DeleteMediaModal, openDeleteMedia, closeDeleteMedia] = useAppModal()
 
-  const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "");
+   const { data, isLoading, isError } = useGetMediaByIdQuery(mediaId ?? "")
 
-  const maxSourceId = data ? data.sourceIds.length - 1 : undefined;
+   const maxSourceId = data ? data.sourceIds.length - 1 : undefined
 
-  React.useEffect(() => {
-    if (!maxSourceId) return;
+   React.useEffect(() => {
+      if (!maxSourceId) return
 
-    if (sourceIndex > maxSourceId) {
-      const indexToSet = 0;
-      navigate(
-        {
-          search: createQuery(["source", indexToSet]),
-        },
-        { replace: true },
-      );
-      setSourceIndex(indexToSet);
-    }
-  }, [maxSourceId, navigate, sourceIndex]);
+      if (sourceIndex > maxSourceId) {
+         const indexToSet = 0
+         navigate(
+            {
+               search: createQuery(["source", indexToSet]),
+            },
+            { replace: true }
+         )
+         setSourceIndex(indexToSet)
+      }
+   }, [maxSourceId, navigate, sourceIndex])
 
-  return (
-    <Page maxWidth={false} disableGutters>
-      {isLoading && <LinearProgress />}
-      {isError && <pre>{`Something went wrong.`}</pre>}
-      {data && (
-        <>
-          <Box
-            sx={{
-              backgroundColor: "rgba(0,0,0,0.2)",
-              borderRadius: 1,
-              overflow: "hidden",
-            }}
-          >
-            {data.type !== MediaType.VIDEO ? (
-              <Image
-                src={getMediaSource(data.sourceIds[sourceIndex])}
-                alt={data.name}
-                sx={{
-                  display: "flex",
-                  maxHeight: "80vh",
-                  minHeight: "512px",
-                  height: "initial",
-                  width: "initial",
-                  maxWidth: "100%",
-                  objectFit: "scale-down",
-                  objectPosition: "center",
-                  mx: "auto",
-                }}
-              />
-            ) : (
-              <Video
-                src={getMediaSource(data.sourceIds[sourceIndex])}
-                controls
-                preload="metadata"
-                poster={getMediaSourceThumb(data.sourceIds[sourceIndex])}
-                sx={{
-                  display: "flex",
-                  maxHeight: "80vh",
-                  minHeight: "512px",
-                  height: "initial",
-                  width: "initial",
-                  maxWidth: "100%",
-                  objectFit: "contain",
-                  objectPosition: "center",
-                  mx: "auto",
-                }}
-              />
-            )}
-          </Box>
-          <Container maxWidth={DEFAULT_PAGE_MAXWIDTH}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                variant="h4"
-                component="h1"
-                sx={{
-                  wordWrap: "break-word",
-                  overflow: "auto",
-                  flexBasis: "90%",
-                  my: 2,
-                  mr: 2,
-                  fontWeight: "medium",
-                  fontSize: { xs: "1.5rem", md: "2rem" },
-                }}
-              >
-                {data.name}
-              </Typography>
-              <Button
-                onClick={openEditMedia}
-                color="secondary"
-                variant="contained"
-                endIcon={<EditIcon />}
-              >
-                Edit
-              </Button>
-            </Box>
-            <Grid container spacing={2} justifyContent="space-between">
-              <Grid item xs={12} md={6}>
-                <MediaInfo label="Type" info={MediaType[data.type]} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MediaInfo
-                  label="Creation Date"
-                  info={new Date(data.creationDate).toString()}
-                />
-              </Grid>
-              {data.updateDate !== data.creationDate && (
-                <Grid item xs={12} md={6}>
-                  <MediaInfo
-                    label="Last Update Date"
-                    info={new Date(data.updateDate).toString()}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12} md={6}>
-                <Typography variant="subtitle2" children="Source" />
-                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                  <FormControl>
-                    <Select
-                      labelId="media-source-label"
-                      id="media-source"
-                      variant="standard"
-                      value={sourceIndex}
-                      label="Source No"
-                      onChange={({ target }) => {
-                        setSourceIndex(target.value as number); // value is controlled
-                      }}
-                    >
-                      {data.sourceIds.map((id, i) => (
-                        <MenuItem key={`sourceIndex-${id}-${i}`} value={i}>
-                          {i + 1}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <Typography
-                    variant="body1"
-                    component="span"
-                    children={`out of ${data.sourceIds.length}`}
-                    ml={1}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MediaInfo label="Owner ID" info={data.ownerId} />
-              </Grid>
-            </Grid>
+   return (
+      <Page maxWidth={false} disableGutters>
+         {isLoading && <LinearProgress />}
+         {isError && <pre>{`Something went wrong.`}</pre>}
+         {data && (
+            <>
+               <Box
+                  sx={{
+                     backgroundColor: "rgba(0,0,0,0.2)",
+                     borderRadius: 1,
+                     overflow: "hidden",
+                  }}
+               >
+                  {data.type !== MediaType.VIDEO ? (
+                     <Image
+                        src={getMediaSource(data.sourceIds[sourceIndex])}
+                        alt={data.name}
+                        sx={{
+                           display: "flex",
+                           maxHeight: "80vh",
+                           minHeight: "512px",
+                           height: "initial",
+                           width: "initial",
+                           maxWidth: "100%",
+                           objectFit: "scale-down",
+                           objectPosition: "center",
+                           mx: "auto",
+                        }}
+                     />
+                  ) : (
+                     <Video
+                        src={getMediaSource(data.sourceIds[sourceIndex])}
+                        controls
+                        preload="metadata"
+                        poster={getMediaSourceThumb(data.sourceIds[sourceIndex])}
+                        sx={{
+                           display: "flex",
+                           maxHeight: "80vh",
+                           minHeight: "512px",
+                           height: "initial",
+                           width: "initial",
+                           maxWidth: "100%",
+                           objectFit: "contain",
+                           objectPosition: "center",
+                           mx: "auto",
+                        }}
+                     />
+                  )}
+               </Box>
+               <Container maxWidth={DEFAULT_PAGE_MAXWIDTH}>
+                  <Box
+                     sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                     }}
+                  >
+                     <Typography
+                        variant="h4"
+                        component="h1"
+                        sx={{
+                           wordWrap: "break-word",
+                           overflow: "auto",
+                           flexBasis: "90%",
+                           my: 2,
+                           mr: 2,
+                           fontWeight: "medium",
+                           fontSize: { xs: "1.5rem", md: "2rem" },
+                        }}
+                     >
+                        {data.name}
+                     </Typography>
+                     <Button
+                        onClick={openEditMedia}
+                        color="secondary"
+                        variant="contained"
+                        endIcon={<EditIcon />}
+                     >
+                        Edit
+                     </Button>
+                  </Box>
+                  <Grid container spacing={2} justifyContent="space-between">
+                     <Grid item xs={12} md={6}>
+                        <MediaInfo label="Type" info={MediaType[data.type]} />
+                     </Grid>
+                     <Grid item xs={12} md={6}>
+                        <MediaInfo
+                           label="Creation Date"
+                           info={new Date(data.creationDate).toString()}
+                        />
+                     </Grid>
+                     {data.updateDate !== data.creationDate && (
+                        <Grid item xs={12} md={6}>
+                           <MediaInfo
+                              label="Last Update Date"
+                              info={new Date(data.updateDate).toString()}
+                           />
+                        </Grid>
+                     )}
+                     <Grid item xs={12} md={6}>
+                        <Typography variant="subtitle2" children="Source" />
+                        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                           <FormControl>
+                              <Select
+                                 labelId="media-source-label"
+                                 id="media-source"
+                                 variant="standard"
+                                 value={sourceIndex}
+                                 label="Source No"
+                                 onChange={({ target }) => {
+                                    setSourceIndex(target.value as number) // value is controlled
+                                 }}
+                              >
+                                 {data.sourceIds.map((id, i) => (
+                                    <MenuItem
+                                       key={`sourceIndex-${id}-${i}`}
+                                       value={i}
+                                    >
+                                       {i + 1}
+                                    </MenuItem>
+                                 ))}
+                              </Select>
+                           </FormControl>
+                           <Typography
+                              variant="body1"
+                              component="span"
+                              children={`out of ${data.sourceIds.length}`}
+                              ml={1}
+                           />
+                        </Box>
+                     </Grid>
+                     <Grid item xs={12} md={6}>
+                        <MediaInfo label="Owner ID" info={data.ownerId} />
+                     </Grid>
+                  </Grid>
 
-            <Button
-              onClick={openDeleteMedia}
-              variant="outlined"
-              endIcon={<DeleteIcon />}
-              sx={{ mt: 4 }}
-            >
-              Delete
-            </Button>
+                  <Button
+                     onClick={openDeleteMedia}
+                     variant="outlined"
+                     endIcon={<DeleteIcon />}
+                     sx={{ mt: 4 }}
+                  >
+                     Delete
+                  </Button>
 
-            <EditMediaModal fullWidth>
-              <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
-            </EditMediaModal>
+                  <EditMediaModal fullWidth>
+                     <EditMediaDialog media={data} cancelHandler={closeEditMedia} />
+                  </EditMediaModal>
 
-            <DeleteMediaModal>
-              <DeleteMediaDialog
-                ids={[data.id]}
-                cancelHandler={closeDeleteMedia}
-              />
-            </DeleteMediaModal>
-          </Container>
-        </>
-      )}
-    </Page>
-  );
-};
+                  <DeleteMediaModal>
+                     <DeleteMediaDialog
+                        ids={[data.id]}
+                        cancelHandler={closeDeleteMedia}
+                     />
+                  </DeleteMediaModal>
+               </Container>
+            </>
+         )}
+      </Page>
+   )
+}
 
-export type { Props as MediaPageProps };
-export default ViewMedia;
+export type { Props as MediaPageProps }
+export default ViewMedia

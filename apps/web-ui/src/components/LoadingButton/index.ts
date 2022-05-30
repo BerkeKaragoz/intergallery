@@ -1,2 +1,2 @@
-export { default } from "./LoadingButton";
-export type { LoadingButtonProps } from "./LoadingButton";
+export { default } from "./LoadingButton"
+export type { LoadingButtonProps } from "./LoadingButton"

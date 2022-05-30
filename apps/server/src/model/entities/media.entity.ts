@@ -1,52 +1,52 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  RelationId,
-  UpdateDateColumn,
-} from 'typeorm';
-import { SourceEntity } from './source.entity';
-import { UserEntity } from './user.entity';
-import { ApiProperty } from '@nestjs/swagger';
+   Column,
+   CreateDateColumn,
+   Entity,
+   ManyToOne,
+   OneToMany,
+   PrimaryGeneratedColumn,
+   RelationId,
+   UpdateDateColumn,
+} from "typeorm"
+import { SourceEntity } from "./source.entity"
+import { UserEntity } from "./user.entity"
+import { ApiProperty } from "@nestjs/swagger"
 
 export enum MediaType {
-  UNKNOWN = 0,
-  PICTURE = 1,
-  VIDEO = 2,
+   UNKNOWN = 0,
+   PICTURE = 1,
+   VIDEO = 2,
 }
 
-@Entity('media')
+@Entity("media")
 export class MediaEntity {
-  @ApiProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+   @ApiProperty()
+   @PrimaryGeneratedColumn("uuid")
+   id: string
 
-  @Column()
-  name: string;
+   @Column()
+   name: string
 
-  @Column({ default: MediaType.UNKNOWN })
-  type: MediaType;
+   @Column({ default: MediaType.UNKNOWN })
+   type: MediaType
 
-  @CreateDateColumn()
-  creationDate: Date;
+   @CreateDateColumn()
+   creationDate: Date
 
-  @UpdateDateColumn()
-  updateDate: Date;
+   @UpdateDateColumn()
+   updateDate: Date
 
-  @RelationId((media: MediaEntity) => media.sources)
-  sourceIds: SourceEntity['id'][];
+   @RelationId((media: MediaEntity) => media.sources)
+   sourceIds: SourceEntity["id"][]
 
-  @OneToMany(() => SourceEntity, (source) => source.media, {
-    cascade: true,
-  })
-  sources: SourceEntity[];
+   @OneToMany(() => SourceEntity, (source) => source.media, {
+      cascade: true,
+   })
+   sources: SourceEntity[]
 
-  @RelationId((media: MediaEntity) => media.owner)
-  ownerId: string;
+   @RelationId((media: MediaEntity) => media.owner)
+   ownerId: string
 
-  @ManyToOne(() => UserEntity, (user) => user.mediaList, { nullable: false })
-  owner: UserEntity;
+   @ManyToOne(() => UserEntity, (user) => user.mediaList, { nullable: false })
+   owner: UserEntity
 }

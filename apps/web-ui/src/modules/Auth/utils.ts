@@ -1,1 +1,1 @@
-export const REGISTER_HASH = "#sign-up";
+export const REGISTER_HASH = "#sign-up"

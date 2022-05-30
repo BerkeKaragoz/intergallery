@@ -1,3 +1,3 @@
-import { SourceEntity } from './../media.entity';
+import { SourceEntity } from "./../media.entity"
 
-export type CreateSourceDTO = Omit<SourceEntity, 'id'>;
+export type CreateSourceDTO = Omit<SourceEntity, "id">

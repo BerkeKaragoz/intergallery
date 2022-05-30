@@ -1,1 +1,1 @@
-export { default } from "./AppDropzone";
+export { default } from "./AppDropzone"

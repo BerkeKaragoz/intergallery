@@ -21,6 +21,7 @@ export class FileService {
   servingPath = this.configService.get<string>('SERVING_PATH');
 
   internalDirName = '.intergallery';
+  thumbnailSize = 256;
 
   constructor(
     @Inject(forwardRef(() => ConfigService))
@@ -50,7 +51,7 @@ export class FileService {
       await fetch(source.url).then((res) =>
         res.arrayBuffer().then((buffer) => {
           sharp(Buffer.from(buffer))
-            .resize(200)
+            .resize(null, this.thumbnailSize)
             .toFormat('webp')
             .toFile(thumbPath)
             .catch((err) => console.error(err));
@@ -63,7 +64,7 @@ export class FileService {
             sourcePath,
             //{ animated: true },
           )
-            .resize(200)
+            .resize(this.thumbnailSize)
             .toFormat('webp')
             .toFile(thumbPath)
             .catch((err) => console.error(err));

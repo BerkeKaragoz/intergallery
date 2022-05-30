@@ -1,0 +1,4 @@
+extends:
+  - "prettier"
+  - "berkekaragoz/suggestions"
+  - "berkekaragoz/typescript"

@@ -74,7 +74,11 @@ const Browse = () => {
     },
   );
 
-  const { data: mediaFetchData, isLoading: isMediaLoading } = useGetMediaQuery({
+  const {
+    data: mediaFetchData,
+    isLoading: isMediaLoading,
+    isFetching: isMediaFetching,
+  } = useGetMediaQuery({
     page: mediaPage,
     perPage: mediaPerPage,
   });
@@ -205,7 +209,7 @@ const Browse = () => {
         </MediaSidebar>
       }
     >
-      {isMediaLoading ? (
+      {isMediaLoading && isMediaFetching ? (
         <Box sx={{ textAlign: "center", mb: 2 }}>
           <CircularProgress color="secondary" />
         </Box>

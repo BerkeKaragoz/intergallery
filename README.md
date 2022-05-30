@@ -49,7 +49,7 @@ Designed to be extensible, so that it can be used for any purpose.
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://reactjs.org/)
 - [MUI](https://mui.com/): Theming, components, styling. All used according to the material design system.
-- [Redux](https://redux.js.org/) (+[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)): Redux-Toolkit handles the user transactions.  RTK Query handles fetching the media to show has a good structure. It can handle caching with invalidation and data states.
+- [Redux](https://redux.js.org/) (+[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)): Redux-Toolkit handles the user transactions. RTK Query handles fetching the media to show with a good structure. It can handle caching with invalidation and data states.
 - [Formik](https://formik.org/): Formik is an important part of this application along with [Yup](https://github.com/jquense/yup). Most inputs leverage Formik's system with proper validation.
 - [Playwright](https://playwright.dev/): End to end testing in various browsers.
 - [Figma](https://www.figma.com/): Made the initial design with it

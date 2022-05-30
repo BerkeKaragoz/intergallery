@@ -1,15 +1,14 @@
 import { API_BASE_URL } from "@/lib/api"
 import { BaseReducerState } from "@/redux/store"
 import { getRequest, postRequest } from "@/lib/requests"
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { UserDTO } from "@/modules/User"
 
-export interface UserState extends BaseReducerState<UserDTO> {}
+export type UserState = BaseReducerState<UserDTO>
 
 export const fetchRegisterUser = createAsyncThunk(
    "user/fetchRegisterUser",
-   (user: { username: string; password: string }, { rejectWithValue }) => {
-      return postRequest(API_BASE_URL + "/auth/register", user, {
+   (user: { username: string; password: string }, { rejectWithValue }) => postRequest(API_BASE_URL + "/auth/register", user, {
          withCredentials: true,
       })
          .then((res) => res.data as UserDTO)
@@ -17,13 +16,11 @@ export const fetchRegisterUser = createAsyncThunk(
             const { statusCode, message, error } = err.response.data
             return rejectWithValue(message)
          })
-   }
 )
 
 export const fetchLoginUser = createAsyncThunk(
    "user/fetchLoginUser",
-   (user: { username: string; password: string }, { rejectWithValue }) => {
-      return postRequest(API_BASE_URL + "/auth/login", user, {
+   (user: { username: string; password: string }, { rejectWithValue }) => postRequest(API_BASE_URL + "/auth/login", user, {
          withCredentials: true,
       })
          .then((res) => res.data as UserDTO)
@@ -31,13 +28,11 @@ export const fetchLoginUser = createAsyncThunk(
             const { statusCode, message, error } = err.response.data
             return rejectWithValue(message)
          })
-   }
 )
 
 export const fetchGetUser = createAsyncThunk(
    "user/fetchGetUser",
-   (_, { rejectWithValue }) => {
-      return getRequest(API_BASE_URL + "/user/get", {
+   (_, { rejectWithValue }) => getRequest(API_BASE_URL + "/user/get", {
          withCredentials: true,
       })
          .then((res) => res.data as UserDTO)
@@ -50,7 +45,6 @@ export const fetchGetUser = createAsyncThunk(
 
             return rejectWithValue(message)
          })
-   }
 )
 
 const initialState: UserState = {

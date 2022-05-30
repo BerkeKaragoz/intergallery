@@ -42,7 +42,7 @@ const deleteMediaSchema = Yup.object({
 })
 
 const Browse = () => {
-   //const dispatch = useAppDispatch();
+   // const dispatch = useAppDispatch();
    const query = useQuery()
    const navigate = useNavigate()
    const theme = useTheme()

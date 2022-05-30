@@ -3,11 +3,11 @@ import MediaCard from "@/modules/Media/MediaCard"
 import { MediaDTO } from "@/modules/Media/utils"
 import DeleteIcon from "@mui/icons-material/Delete"
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined"
-import { Box, Checkbox, styled, Theme, Typography } from "@mui/material"
+import { Box, Checkbox, Theme, Typography, styled } from "@mui/material"
 import { Field } from "formik"
 import React from "react"
 
-const minMediaWidth = 150 //TODO
+const minMediaWidth = 150 // TODO
 
 const MediaContainer = styled("div")`
    width: 100%;

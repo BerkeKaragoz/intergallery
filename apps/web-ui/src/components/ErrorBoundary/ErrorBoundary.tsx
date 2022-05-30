@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component<Props, State> {
    }
 
    render() {
-      if (this.state.errorInfo) {
+      if (this.state.errorInfo) 
          // Error path
          return (
             <div>
@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component<Props, State> {
                </details>
             </div>
          )
-      }
+      
       // Normally, just render children
       return this.props.children
    }

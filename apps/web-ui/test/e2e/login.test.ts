@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test"
+import { expect, test } from "@playwright/test"
 import authTest from "../fixtures/auth-test"
 import { STORAGE_STATE, TEST_USER } from "../test-consts"
 

@@ -17,7 +17,6 @@ export interface SourceEntity {
    media: MediaEntity
 }
 
-export interface SourceDTO
-   extends Pick<SourceEntity, "id" | "url" | "thumbUrl" | "isLocal"> {}
+export type SourceDTO = Pick<SourceEntity, "id" | "url" | "thumbUrl" | "isLocal">
 
-export interface CreateSourceDTO extends Pick<SourceEntity, "url" | "isLocal"> {}
+export type CreateSourceDTO = Pick<SourceEntity, "url" | "isLocal">

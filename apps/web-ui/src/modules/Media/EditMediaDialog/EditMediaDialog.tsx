@@ -1,5 +1,5 @@
 import * as Yup from "yup"
-import { MediaType, MediaDTO, lengthMediaType } from "@/modules/Media/utils"
+import { MediaDTO, MediaType, lengthMediaType } from "@/modules/Media/utils"
 import { FastField, FieldArray, Form, Formik } from "formik"
 import {
    Box,
@@ -60,12 +60,12 @@ const EditMediaDialog: React.FC<Props> = (props) => {
       (acceptedFiles: Array<File & { path?: string }>) => {
          console.log(acceptedFiles)
 
-         for (const f of acceptedFiles) {
+         for (const f of acceptedFiles) 
             push({
                ...addedSourceSchema.getDefaultFromShape(),
                url: f.path || f.name,
             })
-         }
+         
       }
 
    return (
@@ -202,7 +202,7 @@ const EditMediaDialog: React.FC<Props> = (props) => {
                                                 fullWidth
                                                 autoComplete="off"
                                                 spellCheck="false"
-                                                //@ts-ignore undefined is expected anyway
+                                                // @ts-ignore undefined is expected anyway
                                                 error={Boolean(
                                                    errors?.addedSources?.[i]?.url
                                                 )}

@@ -3,7 +3,7 @@ import { TEST_USER } from "../test-consts"
 
 type Fixtures = {
    user: { username: string; password: string }
-   //login: (props: { page: Page; user: Fixtures["user"] }) => Promise<void>;
+   // login: (props: { page: Page; user: Fixtures["user"] }) => Promise<void>;
 }
 
 const authTest = base.extend<Fixtures>({

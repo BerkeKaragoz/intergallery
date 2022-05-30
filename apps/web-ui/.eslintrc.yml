@@ -1,4 +1,6 @@
 extends:
-  - "prettier"
-  - "berkekaragoz/suggestions"
-  - "berkekaragoz/typescript"
+   - "prettier"
+   - "berkekaragoz/suggestions"
+   - "berkekaragoz/typescript"
+rules:
+   sort-imports: off

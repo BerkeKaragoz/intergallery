@@ -5,9 +5,9 @@ export const createConditionalObject = (
 ) => {
    const obj: any = {}
 
-   for (let i = 0; i < tuple.length; i++) {
+   for (let i = 0; i < tuple.length; i++) 
       if (tuple[i][2] === undefined || tuple[i][2]) obj[tuple[i][0]] = tuple[i][1]
-   }
+   
 
    return obj
 }
@@ -37,9 +37,9 @@ export const sortAlphaNum = (a: string, b: string) => {
       const aN = parseInt(a.replace(numRegex, ""), 10)
       const bN = parseInt(b.replace(numRegex, ""), 10)
       return aN === bN ? 0 : aN > bN ? 1 : -1
-   } else {
+   } 
       return aA > bA ? 1 : -1
-   }
+   
 }
 
 /**

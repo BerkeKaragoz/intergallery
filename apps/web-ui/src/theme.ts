@@ -1,4 +1,4 @@
-import { alpha, LinkProps, PaletteMode } from "@mui/material"
+import { LinkProps, PaletteMode, alpha } from "@mui/material"
 import AppLink from "@/components/AppLink"
 
 const paletteLight = {

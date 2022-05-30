@@ -2,7 +2,7 @@ import AppLink from "@/components/AppLink"
 import LoadingButton from "@/components/LoadingButton"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { fetchRegisterUser } from "@/redux/slice/userSlice"
-import { VisibilityOff, Visibility } from "@mui/icons-material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab"
 import {
    Button,

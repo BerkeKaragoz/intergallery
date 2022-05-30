@@ -68,14 +68,14 @@ const BrowseSidebar: React.FC<Props> = (props) => {
       console.log(acceptedFiles)
       const mediaArr: typeof addMediaValues = []
 
-      for (const f of acceptedFiles) {
+      for (const f of acceptedFiles) 
          mediaArr.push({
             URL: f.path || f.name,
             Name: f.name,
             Type: decideMediaType(f.type),
             "Is Local": true,
          })
-      }
+      
 
       mediaArr.sort((a, b) => sortAlphaNum(a.Name, b.Name))
 

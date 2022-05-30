@@ -1,21 +1,21 @@
+import ErrorBoundary from "@/components/ErrorBoundary"
+import Footer from "@/components/Footer"
+import Header from "@/components/Header"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { fetchGetUser, setIsUserLoading } from "@/redux/slice/userSlice"
+import RoutesAuth from "@/RoutesAuth"
+import RoutesNonAuth from "@/RoutesNonAuth"
 import getDesignTokens from "@/theme"
 import {
-   createTheme,
    CssBaseline,
    LinearProgress,
    PaletteMode,
    ThemeProvider,
+   createTheme,
 } from "@mui/material"
-import React from "react"
-import RoutesNonAuth from "@/RoutesNonAuth"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
-import { fetchGetUser, setIsUserLoading } from "@/redux/slice/userSlice"
-import RoutesAuth from "@/RoutesAuth"
-import Footer from "@/components/Footer"
-import Header from "@/components/Header"
-import ErrorBoundary from "@/components/ErrorBoundary"
-import { useLocation } from "react-router"
 import GlobalStyles from "@mui/material/GlobalStyles"
+import React from "react"
+import { useLocation } from "react-router"
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} })
 
@@ -63,7 +63,7 @@ function App() {
             window.localStorage.getItem("lastLogin") ?? "{}"
          )
 
-         //TODO remove the item when logging out
+         // TODO remove the item when logging out
 
          if (lastLoginData["id"]) dispatch(fetchGetUser())
          else dispatch(setIsUserLoading(false))

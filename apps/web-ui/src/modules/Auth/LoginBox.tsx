@@ -19,7 +19,7 @@ import React from "react"
 import * as Yup from "yup"
 import { REGISTER_HASH } from "@/modules/Auth/utils"
 import LoadingButton from "@/components/LoadingButton"
-import { VisibilityOff, Visibility } from "@mui/icons-material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 const loginFormSchema = Yup.object({
    username: Yup.string().default("").required(),
@@ -65,8 +65,8 @@ const LoginBox = () => {
                         required
                         autoComplete="off"
                         spellCheck="false"
-                        //helperText={<ErrorMessage name="username" />}
-                        //error={Boolean(errors.username)}
+                        // helperText={<ErrorMessage name="username" />}
+                        // error={Boolean(errors.username)}
                      />
                      <Field
                         as={TextField}
@@ -76,8 +76,8 @@ const LoginBox = () => {
                         required
                         autoComplete="off"
                         spellCheck="false"
-                        //helperText={<ErrorMessage name="password" />}
-                        //error={Boolean(errors.password)}
+                        // helperText={<ErrorMessage name="password" />}
+                        // error={Boolean(errors.password)}
                         InputProps={{
                            endAdornment: (
                               <InputAdornment position="end">

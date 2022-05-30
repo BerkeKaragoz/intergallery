@@ -1,8 +1,8 @@
 import LoadingButton from "@/components/LoadingButton"
 import {
    CreateMediaInputDTO,
-   lengthMediaType,
    MediaType,
+   lengthMediaType,
 } from "@/modules/Media/utils"
 import { usePostMediaMutation } from "@/redux/slice/mediaApiSlice"
 import {
@@ -112,7 +112,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                         fullWidth
                         autoComplete="off"
                         spellCheck="false"
-                        //@ts-ignore undefined is expected anyway
+                        // @ts-ignore undefined is expected anyway
                         error={Boolean(errors["Root URL"])}
                         InputLabelProps={{
                            shrink: true,
@@ -183,7 +183,7 @@ const AddMediaDialog: React.FC<Props> = (props) => {
                                              fullWidth
                                              autoComplete="off"
                                              spellCheck="false"
-                                             //@ts-ignore undefined is expected anyway
+                                             // @ts-ignore undefined is expected anyway
                                              error={Boolean(
                                                 errors?.media?.[index]?.URL
                                              )}

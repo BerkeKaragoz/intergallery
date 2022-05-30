@@ -1,5 +1,5 @@
 import { PaginatedDTO, PickByType } from "@/lib/types"
-import { SourceEntity, CreateSourceDTO } from "@/modules/Source"
+import { CreateSourceDTO, SourceEntity } from "@/modules/Source"
 import { UserEntity } from "@/modules/User"
 
 export enum MediaType {

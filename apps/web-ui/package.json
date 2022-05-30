@@ -1,68 +1,70 @@
 {
-  "name": "intergallery-web-ui",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.6.2",
-    "@mui/material": "^5.7.0",
-    "@mui/system": "^5.7.0",
-    "@reduxjs/toolkit": "^1.7.1",
-    "axios": "^0.25.0",
-    "formik": "^2.2.9",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-dropzone": "^12.0.4",
-    "react-redux": "^7.2.8",
-    "react-router": "^6.3.0",
-    "react-router-dom": "6",
-    "react-scripts": "5.0.0",
-    "web-vitals": "^2.1.2",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.22.2",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
-    "@types/node": "^17.0.35",
-    "@types/react": "^17.0.38",
-    "@types/react-dom": "^17.0.11",
-    "@types/react-redux": "^7.1.24",
-    "@vitejs/plugin-react": "^1.0.7",
-    "eslint-config-berkekaragoz": "^0.4.2",
-    "playwright": "^1.22.2",
-    "typescript": "^4.5.4",
-    "vite": "^2.8.0"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "server": "start powershell.exe -ExecutionPolicy Bypass \"cd ../Intergallery-Server;ls;npm start\"",
-    "dev:all": "yarn server && yarn dev",
-    "test": "pnpx playwright test",
-    "test:dev": "pnpx playwright test --headed --project=chromium",
-    "test:dev:curr": "pnpx playwright test --headed --project=chromium --grep @curr"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+   "name": "intergallery-web-ui",
+   "version": "0.1.0",
+   "private": true,
+   "dependencies": {
+      "@emotion/react": "^11.9.0",
+      "@emotion/styled": "^11.8.1",
+      "@mui/icons-material": "^5.6.2",
+      "@mui/material": "^5.7.0",
+      "@mui/system": "^5.7.0",
+      "@reduxjs/toolkit": "^1.7.1",
+      "axios": "^0.25.0",
+      "formik": "^2.2.9",
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "react-dropzone": "^12.0.4",
+      "react-redux": "^7.2.8",
+      "react-router": "^6.3.0",
+      "react-router-dom": "6",
+      "react-scripts": "5.0.0",
+      "web-vitals": "^2.1.2",
+      "yup": "^0.32.11"
+   },
+   "devDependencies": {
+      "@playwright/test": "^1.22.2",
+      "@testing-library/jest-dom": "^5.16.1",
+      "@testing-library/react": "^12.1.2",
+      "@testing-library/user-event": "^13.5.0",
+      "@types/jest": "^27.4.0",
+      "@types/node": "^17.0.35",
+      "@types/react": "^17.0.38",
+      "@types/react-dom": "^17.0.11",
+      "@types/react-redux": "^7.1.24",
+      "@vitejs/plugin-react": "^1.0.7",
+      "eslint": "^8.16.0",
+      "eslint-config-berkekaragoz": "^0.4.2",
+      "playwright": "^1.22.2",
+      "typescript": "^4.5.4",
+      "vite": "^2.8.0"
+   },
+   "scripts": {
+      "dev": "vite",
+      "build": "tsc && vite build",
+      "preview": "vite preview",
+      "server": "start powershell.exe -ExecutionPolicy Bypass \"cd ../Intergallery-Server;ls;npm start\"",
+      "dev:all": "yarn server && yarn dev",
+      "lint": "eslint \"{src,apps,libs,test}/**/*.{ts,tsx}\" --fix",
+      "test": "pnpx playwright test",
+      "test:dev": "pnpx playwright test --headed --project=chromium",
+      "test:dev:curr": "pnpx playwright test --headed --project=chromium --grep @curr"
+   },
+   "eslintConfig": {
+      "extends": [
+         "react-app",
+         "react-app/jest"
+      ]
+   },
+   "browserslist": {
+      "production": [
+         ">0.2%",
+         "not dead",
+         "not op_mini all"
+      ],
+      "development": [
+         "last 1 chrome version",
+         "last 1 firefox version",
+         "last 1 safari version"
+      ]
+   }
 }

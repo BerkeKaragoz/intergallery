@@ -1,0 +1,14 @@
+version: "3"
+services:
+  api:
+    image: intergallery-content-server-docker
+    build: .
+    networks:
+      - intergallery-content-server
+    ports:
+      - "5005:5005"
+    volumes:
+      - .:/usr/src/intergallery/content-server
+networks:
+  backend:
+    driver: bridge

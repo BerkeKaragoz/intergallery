@@ -6,8 +6,8 @@ WORKDIR mkdir -p /usr/src/intergallery/content-server
 
 COPY package.json /usr/src/intergallery/content-server
 
-RUN pnpm install
+RUN npm install
 
 EXPOSE 5005
 
-CMD [ "pnpm", "start" ]
+CMD [ "npm", "start" ]

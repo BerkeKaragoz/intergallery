@@ -13,8 +13,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Container,
+  FormControl,
   Grid,
   LinearProgress,
+  MenuItem,
+  Select,
   Typography,
 } from "@mui/material";
 import { Box, styled } from "@mui/system";
@@ -30,7 +33,7 @@ const MediaInfo = ({
 }) => (
   <>
     <Typography variant="subtitle2" children={label} />
-    <Typography variant="body2" children={info} mb={2} />
+    <Typography variant="body2" component="span" children={info} mb={2} />
   </>
 );
 
@@ -190,7 +193,33 @@ const ViewMedia: React.FC<Props> = (props) => {
                 </Grid>
               )}
               <Grid item xs={12} md={6}>
-                <MediaInfo label="# of Sources" info={data.sourceIds.length} />
+                <Typography variant="subtitle2" children="Source" />
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                  <FormControl>
+                    <Select
+                      labelId="media-source-label"
+                      id="media-source"
+                      variant="standard"
+                      value={sourceIndex}
+                      label="Source No"
+                      onChange={({ target }) => {
+                        setSourceIndex(target.value as number); // value is controlled
+                      }}
+                    >
+                      {data.sourceIds.map((id, i) => (
+                        <MenuItem key={`sourceIndex-${id}-${i}`} value={i}>
+                          {i + 1}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    children={`out of ${data.sourceIds.length}`}
+                    ml={1}
+                  />
+                </Box>
               </Grid>
               <Grid item xs={12} md={6}>
                 <MediaInfo label="Owner ID" info={data.ownerId} />

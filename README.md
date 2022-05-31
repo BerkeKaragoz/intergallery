@@ -8,6 +8,10 @@ Host the media with the server included and/or upload the media to the content s
 
 Designed to be extensible, so that it can be used for any purpose.
 
+**Watch the video:** [youtu.be/F5Cwo4eiJpk](https://youtu.be/F5Cwo4eiJpk)
+
+[![Watch the video](https://img.youtube.com/vi/F5Cwo4eiJpk/mqdefault.jpg)](https://youtu.be/F5Cwo4eiJpk)
+
 ## Repository Structure
 
 |`intergallery-`| Description | Technologies |
